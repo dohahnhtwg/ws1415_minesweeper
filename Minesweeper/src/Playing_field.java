@@ -1,28 +1,55 @@
 /* The whole playing field */
 public class Playing_field {
 	
-	Field [][] fields;		//Field Matrix with [x][y]
+	private Field [][] fields;
+	private int numberOfMines;
+	private int lines;
+	private int columns;
 	
-	/* length and high define how big the playing field is */
+
 	public Playing_field(int length, int hight)	{
 		fields = new Field[length][hight];
 		createPlayingField(length, hight);
 	}
 	
-	/* Creates new Field elements and fill them in the field Matrix */
-	private void createPlayingField(int length, int hight)	{
-		for(int i = 0; i < length; i++)	{
-			for(int j = 0; j < hight; j++)	{
-				fields[i][j] =  new Field(i, j);
-			}
-		}
-	}
-	
-	/* Spread mines over the playing field 
-	private void setMines(int numberMines)	{
+	/**
+	 * creates a new playing Field
+	 * @param lines of the field
+	 * @param columns of the field
+	 */
+	public void createPlayingField(int lines, int columns)	{
 		
 	}
-	*/
+	
+	/**
+	 * checks the number of minesAround a field
+	 * @param field 
+	 * @return
+	 */
+	public int checkMinesAround(Field field)	{
+		return 0;
+	}
+	
+	/**
+	 * reveal a field and modifies the playing field
+	 * @param field which gets revealed
+	 */
+	public void revealField(Field field)	{
+		
+	}
+	
+	/**
+	 * addMines on the field
+	 * @param numberofMines how many mines
+	 */
+	public void addMines(int numberofMines)	{
+		
+	}
+	
+	/**
+	 * returns a field
+	 * @return the actual field
+	 */
 	public Field[][] getFields() {
 		return fields;
 	}

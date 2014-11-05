@@ -3,7 +3,7 @@ public class Field {
 
     int x;										//x Coordinate
     int y;										//y Coordinate
-    private int minesCount = 0;					//number of mines around this field
+    private int minesAround = 0;				//number of mines around this field
 	private boolean mine = false;  				//true if the field contains a mine, else false
 	private boolean revealed = false;			//true if the field is revealed, else false
 	
@@ -12,18 +12,27 @@ public class Field {
 		this.y = y;
 	}
 	
-	/* returns true if the Field contains a mine, else false */
-	public boolean isMine() {
-		return mine;
+	/**
+	 * returns number of Mines around the field
+	 * @return number of Mines around the field
+	 */
+	public int isMine() {
+		return minesAround;
 	}
 
-	/* returns Number of Mines around the Field */
-	public int getMinesCount() {
-		return minesCount;
+	/**
+	 * returns true if the Field contains a mine, else false
+	 * @return true if the field contains a mine
+	 */
+	public boolean getMine() {
+		return mine;
 	}
 	
-	/* returns true if the Field is revealed else false */
-	public boolean isRevealed() {
+	/**
+	 *  returns true if the Field is revealed else false 
+	 *  @return true if field is revealed
+	 */  
+	public boolean getRevealed() {
 		return revealed;
 	}
 	
