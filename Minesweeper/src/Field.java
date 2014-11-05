@@ -29,7 +29,6 @@ public class Field {
 	}
 	
 	/**
-	 *  test
 	 *  returns true if the Field is revealed else false 
 	 *  @return true if field is revealed
 	 */  
