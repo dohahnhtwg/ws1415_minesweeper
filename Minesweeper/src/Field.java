@@ -1,41 +1,36 @@
-/* A single field */
+package minesweeper;
+
+import java.util.Random;
+
 public class Field {
-
-    int x;										//x Coordinate
-    int y;										//y Coordinate
-    private int minesAround = 0;				//number of mines around this field
-	private boolean mine = false;  				//true if the field contains a mine, else false
-	private boolean revealed = false;			//true if the field is revealed, else false
-	
-	public Field(int x, int y)	{
-		this.x = x;
-		this.y = y;
+	private Cell field[][];
+	private int nMines;
+	public Field(int x, int y, int nMines) {
+		if (x < 1 || y < 1 || nMines < 0) {
+			return;
+		}
+		this.nMines = nMines;
+		fill(x, y);
 	}
 	
-	/**
-	 * returns number of Mines around the field
-	 * @return number of Mines around the field
-	 */
-	public int isMine() {
-		return minesAround;
+	private void fill(int x, int y) {
+		Long timeforhash = System.nanoTime();
+		int hash = timeforhash.hashCode();
+		Random rnd = new Random(hash);
+		for (int k = 0; k < nMines; k++) {
+			generateCell(x, y, rnd);
+		}
 	}
-
-	/**
-	 * returns true if the Field contains a mine, else false
-	 * @return true if the field contains a mine
-	 */
-	public boolean getMine() {
-		return mine;
+	private void generateCell(int x, int y, Random rnd) {
+		while (true) {
+			int row = rnd.nextInt(x);
+			int col = rnd.nextInt(y);
+			if (field[row][col].getValue() == 1) {
+				continue;
+			} else {
+				field[row][col] = new Cell(x, y, 1);
+				break;
+			}
+		}
 	}
-	
-	/**
-	 *  returns true if the Field is revealed else false 
-	 *  @return true if field is revealed
-	 */  
-	public boolean getRevealed() {
-		return revealed;
-	}
-	
-	
-	
 }
