@@ -1,3 +1,4 @@
+package minesweeper;
 import java.util.LinkedList;
 
 /* Shows the Higscore */
