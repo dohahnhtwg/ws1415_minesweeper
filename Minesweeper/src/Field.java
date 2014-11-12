@@ -5,6 +5,7 @@ import java.util.Random;
 public class Field {
 	private Cell field[][];
 
+
 	public Cell[][] getField() {
 		return field;
 	}
@@ -24,6 +25,7 @@ public class Field {
 		fill(x, y);
 	}
 
+
 	private void fill(int x, int y) {
 		Long timeforhash = System.nanoTime();
 		int hash = timeforhash.hashCode();
@@ -33,6 +35,7 @@ public class Field {
 		}
 		generateMinesAround();
 	}
+
 
 	private void generateMines(int x, int y, Random rnd) {
 		while (true) {
@@ -56,8 +59,8 @@ public class Field {
 			}
 		}
 	}
-	
-	
+
+
 	private int nMinesAroundAPoint(int x, int y) {
 		int mines = 0;
 		for (int i = 0; i < 3; i++)
