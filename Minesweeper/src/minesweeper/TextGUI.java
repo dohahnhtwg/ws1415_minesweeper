@@ -24,7 +24,7 @@ public class TextGUI {
 	 * paints the playing field in the console
 	 * @param playing_field is the actual playing field
 	 */
-	public void paintField(Playing_field playing_field)	{
+	public void paintField(Field playing_field)	{
 		
 	}
 
