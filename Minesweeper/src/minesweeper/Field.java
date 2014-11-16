@@ -3,16 +3,20 @@ package minesweeper;
 import java.util.Random;
 
 public class Field {
+	
 	private Cell field[][];
-
+	private int nMines;
+	private int lines;
+	private int columns;
 
 	public Cell[][] getField() {
 		return field;
 	}
 
 
-	private int nMines;
 	public Field(int x, int y, int nMines) {
+		lines = x;
+		columns = y;
 		if (x < 1 || y < 1 || nMines < 0) {
 			return;
 		}
@@ -70,4 +74,16 @@ public class Field {
 			}
 		return mines;
 	}
+
+
+	public int getLines() {
+		return lines;
+	}
+
+
+	public int getColumns() {
+		return columns;
+	}
+	
+	
 }

@@ -8,10 +8,7 @@ public class Player {
 		this.name = name;
 	}
 
-	/**
-	 * returns Name of player
-	 * @return name of player
-	 */
+	
 	public String getName() {
 		return name;
 	}

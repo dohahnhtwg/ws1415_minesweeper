@@ -3,6 +3,7 @@ package minesweeper;
 
 public class Cell {
 	private int value;
+	private boolean isRevealed = false;
 
 	public Cell(int value) {
 		this.value = value;
@@ -15,5 +16,15 @@ public class Cell {
 	public void setValue(int newValue) {
 		this.value = newValue;
 	}
+
+	public boolean isRevealed() {
+		return isRevealed;
+	}
+
+	public void setRevealed(boolean isRevealed) {
+		this.isRevealed = isRevealed;
+	}
+	
+	
 
 }
