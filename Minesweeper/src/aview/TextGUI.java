@@ -21,6 +21,12 @@ public class TextGUI {
 		
 	}
 	
+	public boolean test()	{
+		return true;
+	}
+	
+	
+	
 	public static void paintField(Field field)	{
 		int lines = field.getLines();
 		int columns = field.getColumns();
