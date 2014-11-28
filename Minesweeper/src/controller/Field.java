@@ -1,6 +1,8 @@
-package minesweeper;
+package controller;
 
 import java.util.Random;
+
+import model.Cell;
 
 public class Field {
 	

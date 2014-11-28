@@ -1,4 +1,4 @@
-package minesweeper;
+package model;
 
 import junit.framework.TestCase;
 

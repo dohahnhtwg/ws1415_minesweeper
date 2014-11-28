@@ -1,4 +1,4 @@
-package fieldtest;
+package controller;
 
 import junit.framework.TestCase;
 

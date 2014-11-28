@@ -1,4 +1,7 @@
-package minesweeper;
+package aview;
+
+import controller.Field;
+import model.Cell;
 
 /* Contains the TextGUI of Minesweeper */
 public class TextGUI {
@@ -6,12 +9,6 @@ public class TextGUI {
 	
 	public static void main(String[] arg)	{
 		Field f = new Field(10, 10, 20);
-		for (int i = 1; i <= 10; i++) {
-			for (int j = 1; j <= 10; j++)
-				System.out.printf(" %2d ", f.getField()[i][j].getValue()==0 ? 0 : f.getField()[i][j].getValue());
-			System.out.println();
-		}
-		System.out.println("");
 		f.getField()[1][1].setRevealed(true);
 		f.getField()[1][2].setRevealed(true);
 		f.getField()[9][5].setRevealed(true);
@@ -23,7 +20,6 @@ public class TextGUI {
 	public TextGUI()	{
 		
 	}
-	
 	
 	public static void paintField(Field field)	{
 		int lines = field.getLines();

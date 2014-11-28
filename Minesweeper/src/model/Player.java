@@ -1,4 +1,4 @@
-package minesweeper;
+package model;
 /* Player informations */
 public class Player {
 	

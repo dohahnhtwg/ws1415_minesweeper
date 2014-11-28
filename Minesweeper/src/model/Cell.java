@@ -1,4 +1,4 @@
-package minesweeper;
+package model;
 
 
 public class Cell {
