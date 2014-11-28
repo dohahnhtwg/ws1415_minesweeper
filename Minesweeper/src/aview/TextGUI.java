@@ -8,7 +8,7 @@ public class TextGUI {
 	
 	
 	public static void main(String[] arg)	{
-		Field f = new Field(10, 10, 15);
+		Field f = new Field(10, 10, 20);
 		f.getField()[1][1].setRevealed(true);
 		f.getField()[1][2].setRevealed(true);
 		f.getField()[9][5].setRevealed(true);
@@ -20,13 +20,7 @@ public class TextGUI {
 	public TextGUI()	{
 		
 	}
-	
-	public boolean test()	{
-		return true;
-	}
-	
-	
-	
+
 	public static void paintField(Field field)	{
 		int lines = field.getLines();
 		int columns = field.getColumns();
