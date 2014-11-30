@@ -1,30 +1,27 @@
 package model;
 
 
-public class Cell {
-	private int value;
-	private boolean isRevealed = false;
+public class Cell   {
+    private int value;
+    private boolean isRevealed = false;
 
-	public Cell(int value) {
-		this.value = value;
-	}
-	
-	public int getValue() {
-		return this.value;
-	}
-	
-	public void setValue(int newValue) {
-		this.value = newValue;
-	}
+    public Cell(int value) {
+        this.value = value;
+    }
 
-	public boolean isRevealed() {
-		return isRevealed;
-	}
+    public int getValue() {
+        return this.value;
+    }
 
-	public void setRevealed(boolean isRevealed) {
-		this.isRevealed = isRevealed;
-	}
-	
-	
+    public void setValue(int newValue) {
+        this.value = newValue;
+    }
 
+    public boolean isRevealed() {
+        return isRevealed;
+    }
+
+    public void setRevealed(boolean isRevealed) {
+        this.isRevealed = isRevealed;
+    }
 }
