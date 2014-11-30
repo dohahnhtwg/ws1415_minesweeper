@@ -1,10 +1,11 @@
 package controller;
 
+import java.util.Observable;
 import java.util.Random;
 
 import model.Cell;
 
-public class Field  {
+public class Field extends Observable {
 
     private Cell[][] playingField;
     private int nMines;
@@ -12,6 +13,7 @@ public class Field  {
     private int columns;
 
     public Field(int x, int y, int nMines)  {
+        super();
         lines = x;
         columns = y;
         if (x < 1 || y < 1 || nMines < 0)   {
@@ -82,6 +84,12 @@ public class Field  {
 
     public Cell[][] getField() {
         return playingField;
+    }
+
+    public void revealField(int x, int y) {
+        playingField[x][y].setRevealed(true);
+        super.setChanged();
+        super.notifyObservers();
     }
 
 }

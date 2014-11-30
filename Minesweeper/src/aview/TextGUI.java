@@ -1,23 +1,27 @@
 package aview;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import controller.Field;
 import model.Cell;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 /* Contains the TextGUI of Minesweeper */
-public class TextGUI {
+public class TextGUI implements Observer {
 
-    private static final Logger LOGGER = Logger.getLogger("aviw.TextGUI");
+    private Field field;
+    private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
 
-    private TextGUI()   {
-        PropertyConfigurator.configure("log4j.properties");
+    public TextGUI(Field field)   {
+        this.field = field;
+        field.addObserver(this);
     }
     
     public static void main(String[] arg)   {
-        TextGUI gui = new TextGUI();
         Field f = new Field(10, 10, 20);
+        TextGUI gui = new TextGUI(f);
         f.getField()[1][1].setRevealed(true);
         f.getField()[1][2].setRevealed(true);
         f.getField()[9][5].setRevealed(true);
@@ -55,5 +59,26 @@ public class TextGUI {
         } else {
             return String.format(" %2c ", '-');
         }
+    }
+
+    public boolean processInputLine(String next) {
+        boolean proceed = true;
+        switch(next)    {
+        case "q":
+            proceed = false;
+            break;
+        }
+        if (next.matches("[0-9][0-9]-[0-9][0-9]")) {
+            String[] parts = next.split("-");
+            field.revealField(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+        } else {
+            LOGGER.info("illegal argument");
+        }
+        return proceed;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+           paintField(field);
     }
 }
