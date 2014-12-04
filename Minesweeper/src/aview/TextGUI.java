@@ -18,16 +18,6 @@ public class TextGUI implements Observer {
         this.field = field;
         field.addObserver(this);
     }
-    
-    public static void main(String[] arg)   {
-        Field f = new Field(10, 10, 20);
-        TextGUI gui = new TextGUI(f);
-        f.getField()[1][1].setRevealed(true);
-        f.getField()[1][2].setRevealed(true);
-        f.getField()[9][5].setRevealed(true);
-        f.getField()[4][4].setRevealed(true);
-        gui.paintField(f);
-    }
 
     public void paintField(Field field) {
         StringBuilder sb = new StringBuilder("\n");

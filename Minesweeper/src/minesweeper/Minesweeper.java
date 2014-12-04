@@ -1,9 +1,7 @@
 package minesweeper;
 
 import java.util.Scanner;
-
 import org.apache.log4j.PropertyConfigurator;
-
 import controller.Field;
 import aview.TextGUI;
 
