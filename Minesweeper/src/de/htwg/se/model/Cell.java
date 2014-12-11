@@ -1,4 +1,4 @@
-package model;
+package de.htwg.se.model;
 
 
 public class Cell   {

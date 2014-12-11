@@ -1,9 +1,11 @@
-package minesweeper;
+package de.htwg.se.minesweeper;
 
 import java.util.Scanner;
+
 import org.apache.log4j.PropertyConfigurator;
-import controller.Field;
-import aview.TextGUI;
+
+import de.htwg.se.aview.TextGUI;
+import de.htwg.se.controller.Field;
 
 public class Minesweeper {
     

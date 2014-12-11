@@ -1,12 +1,12 @@
-package aview;
+package de.htwg.se.aview;
 
 import java.util.Observable;
 import java.util.Observer;
 
-import controller.Field;
-import model.Cell;
-
 import org.apache.log4j.Logger;
+
+import de.htwg.se.controller.Field;
+import de.htwg.se.model.Cell;
 
 /* Contains the TextGUI of Minesweeper */
 public class TextGUI implements Observer {
