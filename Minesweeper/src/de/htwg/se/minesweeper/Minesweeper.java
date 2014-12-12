@@ -13,11 +13,12 @@ public class Minesweeper {
     private static Scanner scanner;
     private static TextGUI tui;
     private Field field;
-    
+    private int fieldLen = 20;
+    private int nMines = 5;
     private Minesweeper()   {
         PropertyConfigurator.configure("log4j.properties");
         
-        field = new Field(20, 20, 5);
+        field = new Field(fieldLen, fieldLen, nMines);
         tui = new TextGUI(field);
         tui.paintField(field);
     }
