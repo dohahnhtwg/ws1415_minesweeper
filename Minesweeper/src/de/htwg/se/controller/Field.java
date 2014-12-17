@@ -1,5 +1,7 @@
 package de.htwg.se.controller;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
@@ -11,6 +13,7 @@ public class Field extends Observable {
     private int nMines;
     private int lines;
     private int columns;
+    private boolean gameOver = false;
 
     public Field(int x, int y, int nMines)  {
         super();
@@ -87,10 +90,52 @@ public class Field extends Observable {
         return playingField;
     }
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
     public void revealField(int x, int y) {
-        playingField[x][y].setRevealed(true);
-        super.setChanged();
-        super.notifyObservers();
+        if(playingField[x][y].getValue() == -1) {
+            playingField[x][y].setRevealed(true);
+            gameOver = true;
+            super.setChanged();
+            super.notifyObservers();
+        } else {
+            revealFieldHelp(x, y);
+            super.setChanged();
+            super.notifyObservers();
+        }
+    }
+    
+    private void revealFieldHelp(int x, int y)  {
+        if(playingField[x][y].getValue() > 0)  {
+            playingField[x][y].setRevealed(true);
+            return;
+        } else {
+            playingField[x][y].setRevealed(true);
+            ArrayList<Point> fieldsaround = getFieldsAround(x, y);
+            for(Point field : fieldsaround) {
+                if((field.getX() > 0 && field.getY() > 0) && (field.getX() < playingField.length-1 && field.getY() < playingField.length-1))    {
+                    if(!playingField[(int)field.getX()][(int)field.getY()].isRevealed())    {
+                        revealFieldHelp(field.x, field.y);
+                    }
+                }
+            }
+            return;
+        }
+    }
+
+    private ArrayList<Point> getFieldsAround(int x, int y) {
+        ArrayList<Point> fieldsAround = new ArrayList<Point>();
+        fieldsAround.add(new Point(x - 1, y));
+        fieldsAround.add(new Point(x + 1, y));
+        fieldsAround.add(new Point(x - 1, y - 1));
+        fieldsAround.add(new Point(x - 1, y + 1));
+        fieldsAround.add(new Point(x + 1, y + 1));
+        fieldsAround.add(new Point(x + 1, y - 1));
+        fieldsAround.add(new Point(x , y - 1));
+        fieldsAround.add(new Point(x , y + 1));
+        return fieldsAround;
     }
 
 }

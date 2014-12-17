@@ -64,6 +64,10 @@ public class TextGUI implements Observer {
         } else {
             LOGGER.info("illegal argument");
         }
+        if(field.isGameOver())  {
+            LOGGER.info("GAME OVER!!!");
+            proceed = false;
+        }
         return proceed;
     }
 
