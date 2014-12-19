@@ -17,7 +17,7 @@ public final class MinesweeperGUI extends JFrame {
         menu = new MinesweeperMenuBar();
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(menu, BorderLayout.NORTH);
-        mainPanel.add(new PlayingField(x, y), BorderLayout.CENTER);
+        mainPanel.add(new PlayingFieldPanel(x, y), BorderLayout.CENTER);
         mainPanel.add(new JPanel(), BorderLayout.EAST);
         mainPanel.add(new JPanel(), BorderLayout.WEST);
         bip = new BottomInfoPanel();
@@ -34,7 +34,7 @@ public final class MinesweeperGUI extends JFrame {
     
     
     public static void main(String[] args) {
-        new MinesweeperGUI(10, 20);
+        new MinesweeperGUI(10, 10);
 
     }
 

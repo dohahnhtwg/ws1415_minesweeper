@@ -1,7 +1,6 @@
 package de.htwg.se.aview.gui;
 
 import java.awt.Color;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -38,7 +37,7 @@ public final class BottomInfoPanel extends JPanel {
             Long time = new Long(0);
             @Override
             public void run() {
-                while (true) { //to modify: as long as the field is not revealed
+                while (time < 1000) { //to modify: as long as the field is not revealed
                     timer.setText((time++).toString());
                     try {
                         Thread.sleep(990);

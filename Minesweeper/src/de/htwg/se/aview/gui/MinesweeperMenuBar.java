@@ -75,15 +75,51 @@ public class MinesweeperMenuBar extends JMenuBar {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-//                int n = JOptionPane.showConfirmDialog(this,
-//                        "are u sure?",
-//                        "Bestaetigung",
-//                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-//                if (n == JOptionPane.YES_OPTION)
+                int n = JOptionPane.showConfirmDialog(MinesweeperMenuBar.this,
+                        "are u sure?",
+                        "Bestaetigung",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (n == JOptionPane.YES_OPTION)
                     System.exit(0);
                 
             }
         });
+        
+        newGame.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
+        statistik.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
+        info.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
+        license.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
     }
 
 }

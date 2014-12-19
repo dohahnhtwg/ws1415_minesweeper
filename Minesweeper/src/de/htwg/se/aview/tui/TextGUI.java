@@ -1,4 +1,4 @@
-package de.htwg.se.aview;
+package de.htwg.se.aview.tui;
 
 import java.util.Observable;
 import java.util.Observer;
