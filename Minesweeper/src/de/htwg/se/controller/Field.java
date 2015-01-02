@@ -17,6 +17,10 @@ public class Field extends Observable {
 
     public Field(int x, int y, int nMines)  {
         super();
+        create(x, y, nMines);
+    }
+
+    public void create(int x, int y, int nMines)    {
         lines = x;
         columns = y;
         if (x < 1 || y < 1 || nMines < 0)   {
@@ -31,7 +35,7 @@ public class Field extends Observable {
         this.nMines = nMines;
         fill(x, y);
     }
-
+    
     private void fill(int x, int y) {
         Long timeforhash = System.nanoTime();
         int hash = timeforhash.hashCode();
@@ -84,6 +88,10 @@ public class Field extends Observable {
 
     public int getColumns() {
         return columns;
+    }
+
+    public int getnMines() {
+        return nMines;
     }
 
     public Cell[][] getField() {

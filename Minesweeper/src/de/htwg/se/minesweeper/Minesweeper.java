@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import de.htwg.se.aview.TextGUI;
+import de.htwg.se.aview.tui.TextGUI;
 import de.htwg.se.controller.Field;
 
 public class Minesweeper {
@@ -13,8 +13,8 @@ public class Minesweeper {
     private static Scanner scanner;
     private static TextGUI tui;
     private Field field;
-    private int fieldLen = 9;
-    private int nMines = 10;
+    private final int fieldLen = 9;
+    private final int nMines = 10;
     private Minesweeper()   {
         PropertyConfigurator.configure("log4j.properties");
         
