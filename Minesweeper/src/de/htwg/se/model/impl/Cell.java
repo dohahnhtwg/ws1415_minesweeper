@@ -1,7 +1,9 @@
-package de.htwg.se.model;
+package de.htwg.se.model.impl;
+
+import de.htwg.se.model.ICell;
 
 
-public class Cell   {
+public class Cell implements ICell {
     private int value;
     private boolean isRevealed = false;
 

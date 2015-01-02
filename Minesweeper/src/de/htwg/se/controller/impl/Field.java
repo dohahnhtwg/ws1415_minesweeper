@@ -1,19 +1,21 @@
-package de.htwg.se.controller;
+package de.htwg.se.controller.impl;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
-import de.htwg.se.model.Cell;
+import de.htwg.se.controller.IField;
+import de.htwg.se.model.impl.Cell;
 
-public class Field extends Observable {
+public class Field extends Observable implements IField {
 
     private Cell[][] playingField;
     private int nMines;
     private int lines;
     private int columns;
     private boolean gameOver = false;
+    private boolean victory = false;
 
     public Field(int x, int y, int nMines)  {
         super();
@@ -94,6 +96,10 @@ public class Field extends Observable {
         return nMines;
     }
 
+    public boolean isVictory() {
+        return victory;
+    }
+
     public Cell[][] getField() {
         return playingField;
     }
@@ -106,13 +112,12 @@ public class Field extends Observable {
         if(playingField[x][y].getValue() == -1) {
             playingField[x][y].setRevealed(true);
             gameOver = true;
-            super.setChanged();
-            super.notifyObservers();
         } else {
             revealFieldHelp(x, y);
-            super.setChanged();
-            super.notifyObservers();
+            victory = checkVictory();
         }
+        super.setChanged();
+        super.notifyObservers();
     }
     
     private void revealFieldHelp(int x, int y)  {
@@ -144,6 +149,24 @@ public class Field extends Observable {
         fieldsAround.add(new Point(x , y - 1));
         fieldsAround.add(new Point(x , y + 1));
         return fieldsAround;
+    }
+    
+    private boolean checkVictory()  {
+        int requirement = lines * columns - nMines;
+        int current = 0;
+        
+        for (int i = 0; i < playingField.length; i++)   {
+            for (int j = 0; j < playingField[0].length; j ++)    {
+                if(playingField[i][j].isRevealed()) {
+                    current++;
+                }
+            }
+        }
+        
+        if(current == requirement)  {
+            return true;
+        }
+        return false; 
     }
 
 }

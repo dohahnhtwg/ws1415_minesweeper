@@ -5,8 +5,8 @@ import java.util.Observer;
 
 import org.apache.log4j.Logger;
 
-import de.htwg.se.controller.Field;
-import de.htwg.se.model.Cell;
+import de.htwg.se.controller.impl.Field;
+import de.htwg.se.model.impl.Cell;
 
 /* Contains the TextGUI of Minesweeper */
 public class TextGUI implements Observer {
@@ -83,6 +83,10 @@ public class TextGUI implements Observer {
             }
             if(field.isGameOver())  {
                 LOGGER.info("GAME OVER!!!");
+                proceed = false;
+            }
+            if(field.isVictory() == true)   {
+                LOGGER.info("Victory!!!");
                 proceed = false;
             }
         }

@@ -5,7 +5,7 @@ import java.util.Scanner;
 import org.apache.log4j.PropertyConfigurator;
 
 import de.htwg.se.aview.tui.TextGUI;
-import de.htwg.se.controller.Field;
+import de.htwg.se.controller.impl.Field;
 
 public class Minesweeper {
     
