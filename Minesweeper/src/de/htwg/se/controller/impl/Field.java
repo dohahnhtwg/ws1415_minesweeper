@@ -2,11 +2,15 @@ package de.htwg.se.controller.impl;
 
 import java.awt.Point;
 import java.util.ArrayList;
-//import java.util.Observable;
+import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.undo.UndoManager;
+
 import de.htwg.se.controller.IField;
+import de.htwg.se.controller.revealFieldCommand;
 import de.htwg.se.model.impl.Cell;
+import de.htwg.se.model.ICell;
 import de.htwg.se.util.observer.Observable;
 
 public class Field extends Observable implements IField {
@@ -17,10 +21,11 @@ public class Field extends Observable implements IField {
     private int columns;
     private boolean gameOver = false;
     private boolean victory = false;
+    private UndoManager undoManager;
 
     public Field(int x, int y, int nMines)  {
-        //super();
         create(x, y, nMines);
+        this.undoManager = new UndoManager();
     }
 
     public void create(int x, int y, int nMines)    {
@@ -114,25 +119,25 @@ public class Field extends Observable implements IField {
             playingField[x][y].setRevealed(true);
             gameOver = true;
         } else {
-            revealFieldHelp(x, y);
+            LinkedList<ICell> revelalFieldCommandList = new LinkedList<ICell>();
+            revealFieldHelp(x, y, revelalFieldCommandList);
             victory = checkVictory();
+            undoManager.addEdit(new revealFieldCommand(revelalFieldCommandList));
         }
-        //super.setChanged();
-        //super.notifyObservers();
         notifyObservers();
     }
     
-    private void revealFieldHelp(int x, int y)  {
+    private void revealFieldHelp(int x, int y, LinkedList<ICell> revelalFieldCommandList)  {
+        playingField[x][y].setRevealed(true);
+        revelalFieldCommandList.push(playingField[x][y]);
         if(playingField[x][y].getValue() > 0)  {
-            playingField[x][y].setRevealed(true);
             return;
         } else {
-            playingField[x][y].setRevealed(true);
             ArrayList<Point> fieldsaround = getFieldsAround(x, y);
             for(Point field : fieldsaround) {
                 if((field.getX() > 0 && field.getY() > 0) && (field.getX() < playingField.length-1 && field.getY() < playingField[(int)field.getX()].length-1))    {
                     if(!playingField[(int)field.getX()][(int)field.getY()].isRevealed())    {
-                        revealFieldHelp(field.x, field.y);
+                        revealFieldHelp(field.x, field.y, revelalFieldCommandList);
                     }
                 }
             }
@@ -170,5 +175,19 @@ public class Field extends Observable implements IField {
         }
         return false; 
     }
+    
+    public void undo() {
+        if (undoManager.canUndo()) {
+            undoManager.undo();
+        }
+        notifyObservers();
+    }
 
+    public void redo() {
+        if (undoManager.canRedo()) {
+            undoManager.redo();
+        }
+        notifyObservers();
+    }
+    
 }

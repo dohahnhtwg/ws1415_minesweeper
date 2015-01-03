@@ -36,7 +36,7 @@ public class TextGUI implements IObserver {
         }
         sb.append(String.format("\n       %s", "Column\n"));
         LOGGER.info(sb);
-        LOGGER.info("Possible commands: q = quit, n = new Game, sS = small Field, sM = medium Field, sL = Large Field, xx-yy = reveal Field");
+        LOGGER.info("Possible commands: q = quit, n = new Game, sS = small Field, sM = medium Field, sL = Large Field, xx-yy = reveal Field, u = undo, r = redo");
     }
 
     private static String paintCell(Cell cell)  {
@@ -72,6 +72,12 @@ public class TextGUI implements IObserver {
         case "sL":
             field.create(16, 30, 99);
             paintField(field);
+            break;
+        case "u":
+            field.undo();
+            break;
+        case "r":
+            field.redo();
             break;
         default:
             if (next.matches("[0-9][0-9]-[0-9][0-9]")) {
