@@ -1,6 +1,6 @@
 package de.htwg.se.controller;
 
-import de.htwg.se.model.impl.Cell;
+import de.htwg.se.model.ICell;
 import de.htwg.se.util.observer.IObservable;
 
 public interface IField extends IObservable {
@@ -40,7 +40,7 @@ public interface IField extends IObservable {
     /**
      * @return whole playing Field.
      */
-    Cell[][] getField();
+    ICell[][] getField();
     
     /**
      * reveal the Field with the given Coordinates.
@@ -48,4 +48,14 @@ public interface IField extends IObservable {
      * @param y is the y-Coordinate.
      */
     void revealField(int x, int y);
+    
+    /**
+     * undo the last revealeFieldCommand.
+     */
+    void undo();
+    
+    /**
+     * redo the last undo.
+     */
+    void redo();
 }

@@ -2,23 +2,22 @@ package de.htwg.se.aview.tui;
 
 import org.apache.log4j.Logger;
 
-import de.htwg.se.controller.impl.Field;
-import de.htwg.se.model.impl.Cell;
-
+import de.htwg.se.controller.IField;
+import de.htwg.se.model.ICell;
 import de.htwg.se.util.observer.Event;
 import de.htwg.se.util.observer.IObserver;
 
 public class TextGUI implements IObserver {
 
-    private Field field;
+    private IField field;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
 
-    public TextGUI(Field field)   {
+    public TextGUI(IField field)   {
         this.field = field;
         field.addObserver(this);
     }
 
-    public void paintField(Field field) {
+    public void paintField() {//Field field
         StringBuilder sb = new StringBuilder("\n");
         int lines = field.getLines();
         int columns = field.getColumns();
@@ -39,7 +38,7 @@ public class TextGUI implements IObserver {
         LOGGER.info("Possible commands: q = quit, n = new Game, sS = small Field, sM = medium Field, sL = Large Field, xx-yy = reveal Field, u = undo, r = redo");
     }
 
-    private static String paintCell(Cell cell)  {
+    private static String paintCell(ICell cell)  {
         if(cell.isRevealed())   {
             if(cell.getValue() == -1)   {
                 return String.format(" %2c ", '*');
@@ -59,19 +58,19 @@ public class TextGUI implements IObserver {
             break;
         case "n":
             field.create(field.getLines(), field.getColumns(), field.getnMines());
-            paintField(field);
+            //paintField(field);
             break;
         case "sS":
             field.create(9, 9, 10);
-            paintField(field);
+            //paintField(field);
             break;
         case "sM":
             field.create(16, 16, 40);
-            paintField(field);
+            //paintField(field);
             break;
         case "sL":
             field.create(16, 30, 99);
-            paintField(field);
+            //paintField(field);
             break;
         case "u":
             field.undo();
@@ -100,6 +99,6 @@ public class TextGUI implements IObserver {
 
     @Override
     public void update(Event e) {
-        paintField(field); 
+        paintField(); 
     }
 }

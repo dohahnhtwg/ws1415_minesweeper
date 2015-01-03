@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.apache.log4j.PropertyConfigurator;
 
 import de.htwg.se.aview.tui.TextGUI;
+import de.htwg.se.controller.IField;
 import de.htwg.se.controller.impl.Field;
 
 public class Minesweeper {
@@ -12,7 +13,7 @@ public class Minesweeper {
     private static Minesweeper instance = null;
     private static Scanner scanner;
     private static TextGUI tui;
-    private Field field;
+    private IField field;
     private final int fieldLen = 9;
     private final int nMines = 10;
     private Minesweeper()   {
@@ -20,7 +21,7 @@ public class Minesweeper {
         
         field = new Field(fieldLen, fieldLen, nMines);
         tui = new TextGUI(field);
-        tui.paintField(field);
+        tui.paintField();
     }
 
     public static Minesweeper getInstance() {

@@ -15,7 +15,7 @@ import de.htwg.se.util.observer.Observable;
 
 public class Field extends Observable implements IField {
 
-    private Cell[][] playingField;
+    private ICell[][] playingField;
     private int nMines;
     private int lines;
     private int columns;
@@ -34,7 +34,7 @@ public class Field extends Observable implements IField {
         if (x < 1 || y < 1 || nMines < 0)   {
             return;
         }
-        playingField = new Cell[x + 2][y + 2];
+        playingField = new ICell[x + 2][y + 2];
         for (int i = 0; i < playingField.length; i++)   {
             for (int j = 0; j < playingField[0].length; j ++)    {
                 playingField[i][j] = new Cell(0);
@@ -42,6 +42,7 @@ public class Field extends Observable implements IField {
         }
         this.nMines = nMines;
         fill(x, y);
+        notifyObservers();
     }
     
     private void fill(int x, int y) {
@@ -106,7 +107,7 @@ public class Field extends Observable implements IField {
         return victory;
     }
 
-    public Cell[][] getField() {
+    public ICell[][] getField() {
         return playingField;
     }
 
