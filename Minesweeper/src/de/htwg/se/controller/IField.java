@@ -1,8 +1,9 @@
 package de.htwg.se.controller;
 
 import de.htwg.se.model.impl.Cell;
+import de.htwg.se.util.observer.IObservable;
 
-public interface IField {
+public interface IField extends IObservable {
 
     /**
      * Creates a new playing Field

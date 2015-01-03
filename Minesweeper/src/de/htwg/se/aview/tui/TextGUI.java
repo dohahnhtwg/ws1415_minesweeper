@@ -1,15 +1,14 @@
 package de.htwg.se.aview.tui;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import org.apache.log4j.Logger;
 
 import de.htwg.se.controller.impl.Field;
 import de.htwg.se.model.impl.Cell;
 
-/* Contains the TextGUI of Minesweeper */
-public class TextGUI implements Observer {
+import de.htwg.se.util.observer.Event;
+import de.htwg.se.util.observer.IObserver;
+
+public class TextGUI implements IObserver {
 
     private Field field;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
@@ -94,7 +93,7 @@ public class TextGUI implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-           paintField(field);
+    public void update(Event e) {
+        paintField(field); 
     }
 }

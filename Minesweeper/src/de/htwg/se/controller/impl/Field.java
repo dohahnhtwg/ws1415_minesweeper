@@ -2,11 +2,12 @@ package de.htwg.se.controller.impl;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Observable;
+//import java.util.Observable;
 import java.util.Random;
 
 import de.htwg.se.controller.IField;
 import de.htwg.se.model.impl.Cell;
+import de.htwg.se.util.observer.Observable;
 
 public class Field extends Observable implements IField {
 
@@ -18,7 +19,7 @@ public class Field extends Observable implements IField {
     private boolean victory = false;
 
     public Field(int x, int y, int nMines)  {
-        super();
+        //super();
         create(x, y, nMines);
     }
 
@@ -116,8 +117,9 @@ public class Field extends Observable implements IField {
             revealFieldHelp(x, y);
             victory = checkVictory();
         }
-        super.setChanged();
-        super.notifyObservers();
+        //super.setChanged();
+        //super.notifyObservers();
+        notifyObservers();
     }
     
     private void revealFieldHelp(int x, int y)  {
