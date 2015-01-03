@@ -128,7 +128,7 @@ public class Field extends Observable implements IField {
             playingField[x][y].setRevealed(true);
             ArrayList<Point> fieldsaround = getFieldsAround(x, y);
             for(Point field : fieldsaround) {
-                if((field.getX() > 0 && field.getY() > 0) && (field.getX() < playingField.length-1 && field.getY() < playingField.length-1))    {
+                if((field.getX() > 0 && field.getY() > 0) && (field.getX() < playingField.length-1 && field.getY() < playingField[(int)field.getX()].length-1))    {
                     if(!playingField[(int)field.getX()][(int)field.getY()].isRevealed())    {
                         revealFieldHelp(field.x, field.y);
                     }
