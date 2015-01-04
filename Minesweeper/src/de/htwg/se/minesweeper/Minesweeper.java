@@ -5,23 +5,21 @@ import java.util.Scanner;
 import org.apache.log4j.PropertyConfigurator;
 
 import de.htwg.se.aview.tui.TextGUI;
-import de.htwg.se.controller.IField;
-import de.htwg.se.controller.impl.Field;
+import de.htwg.se.controller.IController;
+import de.htwg.se.controller.impl.Controller;
 
 public class Minesweeper {
     
     private static Minesweeper instance = null;
     private static Scanner scanner;
     private static TextGUI tui;
-    private IField field;
-    private final int fieldLen = 9;
-    private final int nMines = 10;
+    private IController controller;
     private Minesweeper()   {
         PropertyConfigurator.configure("log4j.properties");
         
-        field = new Field(fieldLen, fieldLen, nMines);
-        tui = new TextGUI(field);
-        tui.paintField();
+        controller = new Controller();
+        tui = new TextGUI(controller);
+        tui.paintTUI();
     }
 
     public static Minesweeper getInstance() {

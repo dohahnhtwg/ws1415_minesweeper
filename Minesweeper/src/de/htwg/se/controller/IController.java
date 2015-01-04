@@ -1,31 +1,21 @@
 package de.htwg.se.controller;
 
-import de.htwg.se.model.ICell;
 import de.htwg.se.util.observer.IObservable;
 
-public interface IField extends IObservable {
+public interface IController extends IObservable {
 
     /**
-     * Creates a new playing Field
-     * @param x is the number of lines.
-     * @param y is the number of columns.
-     * @param nMines is the number of Mines in the playing Field.
+     * Creates a playing Field with the same parameters as old ones.
      */
-    void create(int x, int y, int nMines);
+    void create();
     
     /**
-     * @return number of lines.
+     * Creates a new playing Field.
+     * @param lines number of lines.
+     * @param columns number of columns.
+     * @param nMines number of Mines.
      */
-    int getLines();
-    
-    /**
-     * @return number of columns.
-     */
-    int getColumns();
-    /**
-     * @return number of Mines.
-     */
-    int getnMines();
+    void create(int lines, int columns, int nMines);
     
     /**
      * @return true if the Player is victorious.
@@ -36,11 +26,6 @@ public interface IField extends IObservable {
      * @return true if the Player lost the game.
      */
     boolean isGameOver();
-    
-    /**
-     * @return whole playing Field.
-     */
-    ICell[][] getField();
     
     /**
      * reveal the Field with the given Coordinates.
@@ -58,4 +43,9 @@ public interface IField extends IObservable {
      * redo the last undo.
      */
     void redo();
+    
+    /**
+     * @return the painting of a Field.
+     */
+    String getField();
 }

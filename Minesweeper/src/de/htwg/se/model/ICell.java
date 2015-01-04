@@ -23,4 +23,9 @@ public interface ICell {
      * @param isRevealed
      */
     void setRevealed(boolean isRevealed);
+    
+    /**
+     * @return String representing a Cell.
+     */
+    String toString();
 }
