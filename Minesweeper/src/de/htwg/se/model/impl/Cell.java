@@ -4,6 +4,7 @@ import de.htwg.se.model.ICell;
 
 
 public class Cell implements ICell {
+    
     private int value;
     private boolean isRevealed = false;
 
@@ -11,17 +12,7 @@ public class Cell implements ICell {
         this.value = value;
     }
 
-    public String toString()    {
-        if(isRevealed())   {
-            if(value == -1)   {
-                return String.format(" %2c ", '*');
-            } else {
-                return String.format(" %2s ", value);
-            }
-        } else {
-            return String.format(" %2c ", '-');
-        }
-    }
+    
     
     public int getValue() {
         return this.value;
@@ -37,5 +28,17 @@ public class Cell implements ICell {
 
     public void setRevealed(boolean isRevealed) {
         this.isRevealed = isRevealed;
+    }
+    
+    public String toString()    {
+        if(isRevealed())   {
+            if(value == -1)   {
+                return String.format(" %2c ", '*');
+            } else {
+                return String.format(" %2s ", value);
+            }
+        } else {
+            return String.format(" %2c ", '-');
+        }
     }
 }

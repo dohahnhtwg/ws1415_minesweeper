@@ -1,10 +1,10 @@
-package controller;
+package de.htwg.se.controller.impl;
 
 import junit.framework.TestCase;
 
-public class FieldTest extends TestCase {
+public class ControllerTest extends TestCase {
 
-	public FieldTest(String name) {
+	public ControllerTest(String name) {
 		super(name);
 	}
 
