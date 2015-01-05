@@ -2,7 +2,12 @@ package de.htwg.se.aview.tui;
 
 import org.apache.log4j.Logger;
 
+import de.htwg.se.controller.IHandler;
 import de.htwg.se.controller.IController;
+import de.htwg.se.controller.impl.ConcreteHandlerInput;
+import de.htwg.se.controller.impl.ConcreteHandlerNew;
+import de.htwg.se.controller.impl.ConcreteHandlerSize;
+import de.htwg.se.controller.impl.ConcreteHandlerUnReDo;
 import de.htwg.se.util.observer.Event;
 import de.htwg.se.util.observer.IObserver;
 
@@ -10,10 +15,24 @@ public class TextGUI implements IObserver {
 
     private IController controller;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
+    IHandler handlerNew;
+    IHandler handlerSize;
+    IHandler handlerUnReDo;
+    IHandler handlerInput;
 
     public TextGUI(IController controller)   {
         this.controller = controller;
         controller.addObserver(this);
+        
+        handlerNew = new ConcreteHandlerNew();
+        handlerSize = new ConcreteHandlerSize();
+        handlerUnReDo = new ConcreteHandlerUnReDo();
+        handlerInput = new ConcreteHandlerInput();
+        handlerNew.setSuccesor(handlerSize);
+        handlerSize.setSuccesor(handlerUnReDo);
+        handlerUnReDo.setSuccesor(handlerInput);
+        handlerInput.setSuccesor(null);
+        
     }
 
     public void paintTUI() {
@@ -23,44 +42,59 @@ public class TextGUI implements IObserver {
 
     public boolean processInputLine(String next) {
         boolean proceed = true;
-        switch(next)    {
-        case "q":
+        
+        if(next.equals("q")) {
             proceed = false;
-            break;
-        case "n":
-            controller.create();
-            break;
-        case "sS":
-            controller.create(9, 9, 10);
-            break;
-        case "sM":
-            controller.create(16, 16, 40);
-            break;
-        case "sL":
-            controller.create(16, 30, 99);
-            break;
-        case "u":
-            controller.undo();
-            break;
-        case "r":
-            controller.redo();
-            break;
-        default:
-            if (next.matches("[0-9][0-9]-[0-9][0-9]")) {
-                String[] parts = next.split("-");
-                controller.revealField(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-            } else {
-                LOGGER.info("illegal argument");
-            }
-            if(controller.isGameOver())  {
-                LOGGER.info("GAME OVER!!!");
-                proceed = false;
-            }
-            if(controller.isVictory() == true)   {
-                LOGGER.info("Victory!!!");
-                proceed = false;
-            }
+        } else if(!handlerNew.handleRequest(next, controller))  {
+            LOGGER.info("illegal argument");
         }
+        
+        if(controller.isGameOver())  {
+            LOGGER.info("GAME OVER!!!");
+            proceed = false;
+        }
+        if(controller.isVictory() == true)   {
+            LOGGER.info("Victory!!!");
+            proceed = false;
+        }
+//        switch(next)    {
+//        case "q":
+//            proceed = false;
+//            break;
+//        case "n":
+//            controller.create();
+//            break;
+//        case "sS":
+//            controller.create(9, 9, 10);
+//            break;
+//        case "sM":
+//            controller.create(16, 16, 40);
+//            break;
+//        case "sL":
+//            controller.create(16, 30, 99);
+//            break;
+//        case "u":
+//            controller.undo();
+//            break;
+//        case "r":
+//            controller.redo();
+//            break;
+//        default:
+//            if (next.matches("[0-9][0-9]-[0-9][0-9]")) {
+//                String[] parts = next.split("-");
+//                controller.revealField(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+//            } else {
+//                LOGGER.info("illegal argument");
+//            }
+//            if(controller.isGameOver())  {
+//                LOGGER.info("GAME OVER!!!");
+//                proceed = false;
+//            }
+//            if(controller.isVictory() == true)   {
+//                LOGGER.info("Victory!!!");
+//                proceed = false;
+//            }
+//        }
         return proceed;
     }
 

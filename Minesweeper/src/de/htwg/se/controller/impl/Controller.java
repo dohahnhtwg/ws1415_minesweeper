@@ -10,18 +10,19 @@ import de.htwg.se.controller.IController;
 import de.htwg.se.controller.revealFieldCommand;
 import de.htwg.se.model.impl.Field;
 import de.htwg.se.model.ICell;
+import de.htwg.se.model.IField;
 import de.htwg.se.util.observer.Observable;
 
 public class Controller extends Observable implements IController {
 
-    private Field playingField;
+    private IField playingField;
     private boolean gameOver = false;
     private boolean victory = false;
     private UndoManager undoManager;
 
     public Controller()  {
         playingField = new Field();
-        this.undoManager = new UndoManager();
+        undoManager = new UndoManager();
     }
 
     public boolean isVictory() {
@@ -53,7 +54,7 @@ public class Controller extends Observable implements IController {
         } else {
             ArrayList<Point> fieldsaround = getFieldsAround(x, y);
             for(Point field : fieldsaround) {
-                if((field.getX() > 0 && field.getY() > 0) && (field.getX() < playingField.getField().length-1 && field.getY() < playingField.getField()[(int)field.getX()].length-1))    {
+                if(checkCellInField(field))    {
                     if(!playingField.getField()[(int)field.getX()][(int)field.getY()].isRevealed())    {
                         revealFieldHelp(field.x, field.y, revelalFieldCommandList);
                     }
@@ -74,6 +75,13 @@ public class Controller extends Observable implements IController {
         fieldsAround.add(new Point(x , y - 1));
         fieldsAround.add(new Point(x , y + 1));
         return fieldsAround;
+    }
+    
+    private boolean checkCellInField(Point cell)    {
+        if((cell.getX() > 0 && cell.getY() > 0) && (cell.getX() < playingField.getField().length-1 && cell.getY() < playingField.getField()[(int)cell.getX()].length-1))    {
+            return true;
+        }
+        return false;
     }
     
     private boolean checkVictory()  {

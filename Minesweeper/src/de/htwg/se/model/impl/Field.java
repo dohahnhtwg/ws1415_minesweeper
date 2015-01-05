@@ -3,8 +3,9 @@ package de.htwg.se.model.impl;
 import java.util.Random;
 
 import de.htwg.se.model.ICell;
+import de.htwg.se.model.IField;
 
-public class Field {
+public class Field implements IField{
 
     private ICell[][] playingField;
     private int nMines;
