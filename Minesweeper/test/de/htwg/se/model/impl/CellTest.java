@@ -32,17 +32,15 @@ public class CellTest {
         assertFalse(cell.isRevealed());
     }
     
+    @Test
     public void testToString()  {
         cell.setRevealed(true);
         cell.setValue(-1);
-        String testString = " *";
-        assertEquals(testString, cell.toString());
-        cell.setValue(2);
-        testString = " 2";
-        assertEquals(testString, cell.toString());
+        assertTrue(cell.toString().equals("  * "));
         cell.setRevealed(false);
-        testString = " -";
-        assertEquals(testString, cell.toString());
+        cell.setValue(2);
+        assertTrue(cell.toString().equals("  - "));
+        cell.setRevealed(true);
+        assertTrue(cell.toString().equals("  2 "));
     }
-
 }
