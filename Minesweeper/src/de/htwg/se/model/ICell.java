@@ -28,4 +28,9 @@ public interface ICell {
      * @return String representing a Cell.
      */
     String toString();
+    
+    /**
+     * @return true if given Cells are equals.
+     */
+    boolean equals(Object obj);
 }

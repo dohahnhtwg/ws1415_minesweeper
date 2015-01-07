@@ -43,4 +43,18 @@ public class CellTest {
         cell.setRevealed(true);
         assertTrue(cell.toString().equals("  2 "));
     }
+    
+    @Test
+    public void testEquals()  {
+        Cell testCell = new Cell(1);
+        assertTrue(cell.equals(cell));
+        assertFalse(cell.equals(null));
+        assertFalse(cell.equals(new Integer(0)));
+        assertFalse(cell.equals(testCell));
+        testCell.setRevealed(true);
+        testCell.setValue(0);
+        assertFalse(cell.equals(testCell));
+        testCell.setRevealed(false);
+        assertTrue(cell.equals(testCell));
+    }
 }

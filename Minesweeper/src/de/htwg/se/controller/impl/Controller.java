@@ -120,6 +120,9 @@ public class Controller extends Observable implements IController {
         return playingField.toString();
     }
 
+    public IField getPlayingField()  {
+        return playingField;
+    }
     
     public void create() {
         playingField.create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());

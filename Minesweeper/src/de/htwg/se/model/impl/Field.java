@@ -112,5 +112,5 @@ public class Field implements IField{
     
     public ICell[][] getField() {
         return playingField;
-    }
+    }   
 }
