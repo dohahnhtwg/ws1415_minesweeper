@@ -41,4 +41,22 @@ public class Cell implements ICell {
             return String.format(" %2c ", '-');
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Cell other = (Cell) obj;
+        if (isRevealed != other.isRevealed)
+            return false;
+        if (value != other.value)
+            return false;
+        return true;
+    }
+    
+    
 }

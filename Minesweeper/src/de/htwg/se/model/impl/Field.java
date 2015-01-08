@@ -47,8 +47,8 @@ public class Field implements IField{
     }
     
     private void generateMines(int lines, int columns, Random rnd)    {
-        int x = rnd.nextInt(lines - 1) + 1;
-        int y = rnd.nextInt(columns - 1) + 1;
+        int x = rnd.nextInt(lines /*- 1*/) + 1;
+        int y = rnd.nextInt(columns /*- 1*/) + 1;
         if (playingField[x][y].getValue() != -1)    {
             playingField[x][y].setValue(-1);
         } else  {
@@ -112,5 +112,5 @@ public class Field implements IField{
     
     public ICell[][] getField() {
         return playingField;
-    }
+    }   
 }
