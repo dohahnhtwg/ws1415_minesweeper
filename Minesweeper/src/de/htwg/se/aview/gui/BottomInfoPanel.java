@@ -46,7 +46,8 @@ public final class BottomInfoPanel extends JPanel {
             @Override
             public void run() {
                 time = new Long(0);
-                while (time < 1000 || !controller.isGameOver() || !controller.isVictory() || stop) {
+                while (!controller.isGameOver() || !controller.isVictory()) {
+                	if (stop) break;
                     timer.setText((time++).toString());
                     try {
                         Thread.sleep(990);
@@ -60,7 +61,7 @@ public final class BottomInfoPanel extends JPanel {
     }
     
     public static void stopTimer() {
-        if (timerThread.isAlive())
+//        if (timerThread.isAlive())
             stop = true;
     }
     

@@ -1,5 +1,6 @@
 package de.htwg.se.controller;
 
+import de.htwg.se.model.IField;
 import de.htwg.se.util.observer.IObservable;
 
 public interface IController extends IObservable {
@@ -48,4 +49,6 @@ public interface IController extends IObservable {
      * @return the painting of a Field.
      */
     String getField();
+    
+    IField getPlayingField();
 }
