@@ -34,6 +34,9 @@ public class Controller extends Observable implements IController {
     }
 
     public void revealField(int x, int y) {
+        if(gameOver == true || isVictory() == true){
+            return;
+        }
         if(playingField.getField()[x][y].getValue() == -1) {
             playingField.getField()[x][y].setRevealed(true);
             gameOver = true;
@@ -125,6 +128,8 @@ public class Controller extends Observable implements IController {
     }
     
     public void create() {
+        gameOver = false;
+        victory = false;
         playingField.create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
         notifyObservers();
     }

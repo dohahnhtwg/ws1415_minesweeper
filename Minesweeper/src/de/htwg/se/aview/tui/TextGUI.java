@@ -48,15 +48,6 @@ public class TextGUI implements IObserver {
         } else if(!handlerNew.handleRequest(next, controller))  {
             LOGGER.info("illegal argument");
         }
-        
-        if(controller.isGameOver())  {
-            LOGGER.info("GAME OVER!!!");
-            proceed = false;
-        }
-        if(controller.isVictory() == true)   {
-            LOGGER.info("Victory!!!");
-            proceed = false;
-        }
 //        switch(next)    {
 //        case "q":
 //            proceed = false;
@@ -100,6 +91,12 @@ public class TextGUI implements IObserver {
 
     @Override
     public void update(Event e) {
-        paintTUI(); 
+        paintTUI();
+        if(controller.isGameOver())  {
+            LOGGER.info("GAME OVER!!!");
+        }
+        if(controller.isVictory() == true)   {
+            LOGGER.info("Victory!!!");
+        }
     }
 }

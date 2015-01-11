@@ -1,9 +1,12 @@
 package de.htwg.se.aview.gui;
 
 import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import de.htwg.se.controller.IController;
 import de.htwg.se.util.observer.Event;
@@ -62,6 +65,14 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
     public void update(Event e) {
     	constructMinesweeperGUI(controller);
         repaint();
+        if (controller.isVictory())
+            action("Congratulation! You win the game!");
+        if (controller.isGameOver())
+            action("GAME OVER!!!");
     }
-
+    
+    private void action(final String text) {
+        BottomInfoPanel.stopTimer();
+        JOptionPane.showMessageDialog(null, text, "Spiel beendet", JOptionPane.INFORMATION_MESSAGE);
+    }
 }
