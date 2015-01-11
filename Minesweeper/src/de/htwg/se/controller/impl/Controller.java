@@ -142,5 +142,4 @@ public class Controller extends Observable implements IController {
         playingField.create(lines, columns, nMines);
         notifyObservers();
     }
-    
 }

@@ -29,4 +29,9 @@ public class ConcreteHandlerSize implements IHandler {
         return successor.handleRequest(request, controller);
     }
 
+    @Override
+    public IHandler getSuccesor() {
+        return successor;
+    }
+
 }

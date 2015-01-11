@@ -5,7 +5,6 @@ import de.htwg.se.controller.IController;
 
 public class ConcreteHandlerInput implements IHandler {
 
-    @SuppressWarnings("unused")
     private IHandler successor;
 
     @Override
@@ -21,6 +20,11 @@ public class ConcreteHandlerInput implements IHandler {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public IHandler getSuccesor() {
+        return successor;
     }
 
 }

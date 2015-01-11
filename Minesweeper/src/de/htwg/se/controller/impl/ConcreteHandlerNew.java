@@ -21,4 +21,9 @@ public class ConcreteHandlerNew implements IHandler {
         return successor.handleRequest(request, controller);
     }
 
+    @Override
+    public IHandler getSuccesor() {
+        return successor;
+    }
+
 }

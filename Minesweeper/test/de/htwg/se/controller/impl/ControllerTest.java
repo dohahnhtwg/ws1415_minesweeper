@@ -2,13 +2,11 @@ package de.htwg.se.controller.impl;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import de.htwg.se.controller.IHandler;
 import de.htwg.se.model.ICell;
-import de.htwg.se.model.impl.Cell;
 
 public class ControllerTest {
 
@@ -46,6 +44,21 @@ public class ControllerTest {
             controller.revealField(1, 1);
             assertTrue(field[1][1].getValue() == 1);
         }
+        controller.create(2, 2, 4);
+        controller.revealField(1, 1);
+        controller.revealField(1, 2);
+        assertFalse(field[1][2].isRevealed());
+        controller.create(2, 2, 1);
+        field = controller.getPlayingField().getField();
+        if(field[1][1].getValue() == -1)    {
+            controller.revealField(2, 1);
+            controller.revealField(1, 1);
+            assertFalse(field[1][1].isRevealed());
+        } else {
+            controller.revealField(1, 1);
+            controller.revealField(2, 1);
+            assertFalse(field[2][1].isRevealed());
+        }
     }
     
     @Test
@@ -58,22 +71,63 @@ public class ControllerTest {
     }
     
     @Test
-    public void testUndo()  {
-        int x = 4;
-        int y = 4;
-        controller.create(x, y, 2);
+    public void testUndoRedo()  {
+        controller.create(5, 5, 0);
+        controller.revealField(1, 1);
+        controller.undo();
         ICell[][] field = controller.getPlayingField().getField();
-        ICell[][] testField = new ICell[x+2][y+2];
-        for (int i = 0; i < field.length; i++)   {
-            for (int j = 0; j < field[0].length; j ++)    {
-                testField[i][j] = new Cell(field[i][j].getValue());
-                testField[i][j].setRevealed(field[i][j].isRevealed());
-                
+        for (int i = 1; i < field.length - 1; i++)   {
+            for (int j = 1; j < field[0].length - 1; j ++)    {
+                assertFalse(field[i][j].isRevealed()); 
             }
         }
-        boolean test = Arrays.deepEquals(field, testField);
-        assertTrue(test);
-        
+        controller.redo();
+        field = controller.getPlayingField().getField();
+        for (int i = 1; i < field.length - 1; i++)   {
+            for (int j = 1; j < field[0].length - 1; j ++)    {
+                assertTrue(field[i][j].isRevealed()); 
+            }
+        }
     }
     
+    @Test
+    public void testGetField()  {
+        controller.create(2, 2, 4);
+        String actual = controller.getField();
+        String expected = "\n Line\n    1  -   - \n    2  -   - \n       1   2 \n       Column\n";
+        assertTrue(expected.equals(actual));
+    }  
+    
+    @Test
+    public void testConcreteHandler() {
+        IHandler handlerNew = new ConcreteHandlerNew();
+        IHandler handlerSize = new ConcreteHandlerSize();
+        IHandler handlerUnReDo = new ConcreteHandlerUnReDo();
+        IHandler handlerInput = new ConcreteHandlerInput();
+        
+        handlerNew.setSuccesor(handlerSize);
+        handlerSize.setSuccesor(handlerUnReDo);
+        handlerUnReDo.setSuccesor(handlerInput);
+        handlerInput.setSuccesor(null);
+        
+        assertEquals(handlerSize, handlerNew.getSuccesor());
+        assertEquals(handlerUnReDo, handlerSize.getSuccesor());
+        assertEquals(handlerInput, handlerUnReDo.getSuccesor());
+        assertEquals(null, handlerInput.getSuccesor());
+        
+        assertTrue(handlerNew.handleRequest("n", controller));
+        assertFalse(handlerNew.handleRequest("test", controller));
+        
+        assertTrue(handlerSize.handleRequest("sS", controller));
+        assertTrue(handlerSize.handleRequest("sM", controller));
+        assertTrue(handlerSize.handleRequest("sL", controller));
+        assertFalse(handlerSize.handleRequest("test", controller));
+        
+        assertTrue(handlerUnReDo.handleRequest("u", controller));
+        assertTrue(handlerUnReDo.handleRequest("r", controller));
+        assertFalse(handlerUnReDo.handleRequest("test", controller));
+
+        assertTrue(handlerInput.handleRequest("01-01", controller));
+        assertFalse(handlerInput.handleRequest("test", controller));
+    }
 }

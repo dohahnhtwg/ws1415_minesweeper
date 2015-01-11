@@ -17,10 +17,10 @@ public class TextGUI implements IObserver {
 
     private IController controller;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
-    IHandler handlerNew;
-    IHandler handlerSize;
-    IHandler handlerUnReDo;
-    IHandler handlerInput;
+    private IHandler handlerNew;
+    private IHandler handlerSize;
+    private IHandler handlerUnReDo;
+    private IHandler handlerInput;
 
     @Inject
     public TextGUI(IController controller)   {
@@ -101,5 +101,9 @@ public class TextGUI implements IObserver {
         if(controller.isVictory() == true)   {
             LOGGER.info("Victory!!!");
         }
+    }
+    
+    public IHandler getChainOfResponsibility()    {
+        return handlerNew;
     }
 }
