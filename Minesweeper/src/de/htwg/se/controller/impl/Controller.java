@@ -6,6 +6,8 @@ import java.util.LinkedList;
 
 import javax.swing.undo.UndoManager;
 
+import com.google.inject.Singleton;
+
 import de.htwg.se.controller.IController;
 import de.htwg.se.controller.revealFieldCommand;
 import de.htwg.se.model.impl.Field;
@@ -13,6 +15,7 @@ import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.util.observer.Observable;
 
+@Singleton
 public class Controller extends Observable implements IController {
 
     private IField playingField;

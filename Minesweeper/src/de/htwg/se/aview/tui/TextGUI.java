@@ -2,6 +2,8 @@ package de.htwg.se.aview.tui;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+
 import de.htwg.se.controller.IHandler;
 import de.htwg.se.controller.IController;
 import de.htwg.se.controller.impl.ConcreteHandlerInput;
@@ -20,6 +22,7 @@ public class TextGUI implements IObserver {
     IHandler handlerUnReDo;
     IHandler handlerInput;
 
+    @Inject
     public TextGUI(IController controller)   {
         this.controller = controller;
         controller.addObserver(this);

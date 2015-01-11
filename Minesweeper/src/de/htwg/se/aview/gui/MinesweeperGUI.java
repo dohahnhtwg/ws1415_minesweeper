@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.google.inject.Inject;
+
 import de.htwg.se.controller.IController;
 import de.htwg.se.util.observer.Event;
 import de.htwg.se.util.observer.IObserver;
@@ -23,6 +25,8 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
     private JMenuBar menu;
     private BottomInfoPanel bip;
     private PlayingFieldPanel field;
+    
+    @Inject
     public MinesweeperGUI(final IController controller) {
         this.controller = controller;
         controller.addObserver(this);

@@ -4,23 +4,30 @@ import java.util.Scanner;
 
 import org.apache.log4j.PropertyConfigurator;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.TextGUI;
 import de.htwg.se.controller.IController;
-import de.htwg.se.controller.impl.Controller;
 
 public class Minesweeper {
     
     private static Minesweeper instance = null;
     private static Scanner scanner;
     private static TextGUI tui;
+    @SuppressWarnings("unused")
     private IController controller;
     private Minesweeper()   {
+        
         PropertyConfigurator.configure("log4j.properties");
 
-        controller = new Controller();
-        new MinesweeperGUI(controller);
-        tui = new TextGUI(controller);
+        Injector injector = Guice.createInjector(new MinesweeperModule());
+        
+        controller = injector.getInstance(IController.class);
+        @SuppressWarnings("unused")
+        MinesweeperGUI gui = injector.getInstance(MinesweeperGUI.class);
+        tui = injector.getInstance(TextGUI.class);
         tui.paintTUI();
     }
 
