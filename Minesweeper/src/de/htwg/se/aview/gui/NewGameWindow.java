@@ -15,7 +15,7 @@ public final class NewGameWindow extends JDialog {
     private static final long serialVersionUID = 1L;
 
     public NewGameWindow(final MinesweeperMenuBar menu, final IController controller) {
-        
+
         super();
         setTitle("New Game Mode");
         setModal(true);
@@ -39,11 +39,11 @@ public final class NewGameWindow extends JDialog {
             controller.create(MEDIUMSIZE, LARGESIZE, LARGEMINES);
             setVisible(false);
         });
-        
+
         panel.add(small);
         panel.add(medium);
         panel.add(large);
-        
+
         setAlwaysOnTop(true);
         setLocationRelativeTo(menu);
 

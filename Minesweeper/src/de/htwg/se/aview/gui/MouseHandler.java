@@ -18,7 +18,8 @@ public final class MouseHandler extends MouseAdapter {
         field = panel;
     }
 
-    public void mouseClicked(MouseEvent event) {
+    @Override
+    public void mouseClicked(final MouseEvent event) {
 
         if (event.getButton() == MouseEvent.BUTTON3 && field.getButtons()[x][y].isEnabled()) {
             index = ++index % Constances.BUTTONTEXT.length;

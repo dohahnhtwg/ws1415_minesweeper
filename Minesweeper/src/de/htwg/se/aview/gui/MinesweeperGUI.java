@@ -18,13 +18,13 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
 
     private int x = Constances.DEFDIMENSIONX;
     private int y = Constances.DEFDIMENSIONY;
-	private IController controller;
+    private IController controller;
     private JPanel mainPanel;
-    private JPanel puppy = new JPanel();
+    private JPanel sidePanel1, sidePanel2;
     private JMenuBar menu;
     private BottomInfoPanel bip;
     private PlayingFieldPanel field;
-    
+
     @Inject
     public MinesweeperGUI(final IController controller) {
         this.controller = controller;
@@ -35,46 +35,55 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         constructMinesweeperGUI(controller);
-        bip = new BottomInfoPanel(controller);
     }
 
-    public final void constructMinesweeperGUI(final IController controller) {
-    	x = controller.getPlayingField().getLines();
-    	y = controller.getPlayingField().getColumns();
-    	if (menu != null)
-    		mainPanel.remove(menu);
-    	menu = new MinesweeperMenuBar(controller);
-    	mainPanel.add(menu, BorderLayout.NORTH);
-    	if (puppy != null)
-    		mainPanel.remove(puppy);
-        mainPanel.add(puppy, BorderLayout.EAST);
-        mainPanel.add(puppy, BorderLayout.WEST);
-        if (field != null)
-        	mainPanel.remove(field);
+    public void constructMinesweeperGUI(final IController controller) {
+        x = controller.getPlayingField().getLines();
+        y = controller.getPlayingField().getColumns();
+        if (menu != null) {
+            mainPanel.remove(menu);
+        }
+        menu = new MinesweeperMenuBar(controller);
+        mainPanel.add(menu, BorderLayout.NORTH);
+        if (sidePanel1 != null) {
+            mainPanel.remove(sidePanel1);
+        }
+        sidePanel1 = new JPanel();
+        mainPanel.add(sidePanel1, BorderLayout.EAST);
+        if (sidePanel2 != null) {
+            mainPanel.remove(sidePanel2);
+        }
+        sidePanel2 = new JPanel();
+        mainPanel.add(sidePanel2, BorderLayout.WEST);
+        if (field != null) {
+            mainPanel.remove(field);
+        }
         field = new PlayingFieldPanel(x, y, controller);
         mainPanel.add(field, BorderLayout.CENTER);
         if (bip != null) {
-        	mainPanel.remove(bip);
-        } else
-            bip = new BottomInfoPanel(controller);
+            mainPanel.remove(bip);
+        }
+        bip = new BottomInfoPanel(controller);
         mainPanel.add(bip, BorderLayout.SOUTH);
         setResizable(false);
         setVisible(true);
         pack();
         repaint();
     }
-    
-    
+
+
     @Override
-    public void update(Event e) {
-    	constructMinesweeperGUI(controller);
+    public void update(final Event e) {
+        constructMinesweeperGUI(controller);
         repaint();
-        if (controller.isVictory())
+        if (controller.isVictory()) {
             action("Congratulation! You win the game!");
-        if (controller.isGameOver())
+        }
+        if (controller.isGameOver()) {
             action("GAME OVER!!!");
+        }
     }
-    
+
     private void action(final String text) {
         TimerThread.stopTimer();
         JOptionPane.showMessageDialog(null, text + "\nTime: " + TimerThread.getTime() + " Seconds",

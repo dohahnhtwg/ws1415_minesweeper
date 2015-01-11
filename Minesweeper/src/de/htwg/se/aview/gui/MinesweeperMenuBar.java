@@ -49,7 +49,7 @@ public class MinesweeperMenuBar extends JMenuBar {
         menu.addSeparator();
         menu.add(exit);
         add(menu);
-        
+
         menu2 = new JMenu("?");
         menu2.setMnemonic(KeyEvent.VK_I);
         info = new JMenuItem("Info");
@@ -61,22 +61,22 @@ public class MinesweeperMenuBar extends JMenuBar {
         menu2.add(info);
         menu2.add(license);
         add(menu2);
-        
-        
+
         undo.addActionListener(ActionListener -> controller.undo());
 
         redo.addActionListener(ActionListener -> controller.redo());
 
         exit.addActionListener(new ActionListener() {
-            
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 int n = JOptionPane.showConfirmDialog(MinesweeperMenuBar.this,
                         "are u sure?",
                         "Bestaetigung",
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                if (n == JOptionPane.YES_OPTION)
+                if (n == JOptionPane.YES_OPTION) {
                     System.exit(0);
+                }
             }
         });
 
@@ -84,12 +84,12 @@ public class MinesweeperMenuBar extends JMenuBar {
 
         statistik.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
                 "Time spend: " + TimerThread.getTime(),
-			    "Statistic", JOptionPane.INFORMATION_MESSAGE));
+                "Statistic", JOptionPane.INFORMATION_MESSAGE));
 
 
         info.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-				        "This game was created by\nDominik Hahn & Pavel Kravetskiy\n\n Software Engineering", "Information",
-				        JOptionPane.INFORMATION_MESSAGE));
+                "This game was created by\nDominik Hahn & Pavel Kravetskiy\n\n Software Engineering", "Information",
+                JOptionPane.INFORMATION_MESSAGE));
 
         license.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
                 "under construction", "License", JOptionPane.PLAIN_MESSAGE));

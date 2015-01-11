@@ -37,7 +37,7 @@ public class Controller extends Observable implements IController {
     }
 
     public void revealField(int x, int y) {
-        if(gameOver == true || isVictory() == true){
+        if(gameOver == true || isVictory() == true) {
             return;
         }
         if(playingField.getField()[x][y].getValue() == -1) {
@@ -51,7 +51,7 @@ public class Controller extends Observable implements IController {
         }
         notifyObservers();
     }
-    
+
     private void revealFieldHelp(int x, int y, LinkedList<ICell> revelalFieldCommandList)  {
         playingField.getField()[x][y].setRevealed(true);
         revelalFieldCommandList.push(playingField.getField()[x][y]);
@@ -131,14 +131,14 @@ public class Controller extends Observable implements IController {
     }
     
     public void create() {
-        gameOver = false;
-        victory = false;
-        playingField.create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
+        create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
         notifyObservers();
     }
 
     
     public void create(int lines, int columns, int nMines) {
+        gameOver = false;
+        victory = false;
         playingField.create(lines, columns, nMines);
         notifyObservers();
     }

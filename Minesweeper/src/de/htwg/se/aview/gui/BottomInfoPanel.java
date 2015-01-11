@@ -13,9 +13,9 @@ public final class BottomInfoPanel extends JPanel {
 
     private static JTextField timer;
     static {
-        timer = new JTextField("0", Constances.THREE);
+        timer = new JTextField("", Constances.THREE);
     }
-    public BottomInfoPanel(IController controller) {
+    public BottomInfoPanel(final IController controller) {
         JTextField counter;
         JLabel counterLabel, timerLabel;
         new JPanel();
@@ -23,7 +23,7 @@ public final class BottomInfoPanel extends JPanel {
         timerLabel = new JLabel("Seconds");
         Integer nMines = controller.getPlayingField().getnMines();
         counter = new JTextField(nMines.toString(), Constances.THREE);
-        timer = new JTextField(TimerThread.getTime().toString(), Constances.THREE);
+        timer = new JTextField("", Constances.THREE);
         counter.setBackground(Color.black);
         counter.setDisabledTextColor(Color.YELLOW);
         counter.setEnabled(false);
@@ -39,7 +39,7 @@ public final class BottomInfoPanel extends JPanel {
         add(timer);
     }
 
-    public static void setTimer(Long time) {
+    public static void setTimer(final Long time) {
         timer.setText(time.toString());
     }
 }
