@@ -11,20 +11,20 @@ import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.TextGUI;
 import de.htwg.se.controller.IController;
 
-public class Minesweeper {
+public final class Minesweeper {
     
     private static Minesweeper instance = null;
     private static Scanner scanner;
     private static TextGUI tui;
-    @SuppressWarnings("unused")
-    private IController controller;
+
     private Minesweeper()   {
         
         PropertyConfigurator.configure("log4j.properties");
 
         Injector injector = Guice.createInjector(new MinesweeperModule());
         
-        controller = injector.getInstance(IController.class);
+        @SuppressWarnings("unused")
+        IController controller = injector.getInstance(IController.class);
         @SuppressWarnings("unused")
         MinesweeperGUI gui = injector.getInstance(MinesweeperGUI.class);
         tui = injector.getInstance(TextGUI.class);

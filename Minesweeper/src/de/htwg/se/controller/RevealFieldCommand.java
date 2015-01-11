@@ -1,25 +1,26 @@
 package de.htwg.se.controller;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
 import de.htwg.se.model.ICell;
 
-public class revealFieldCommand extends AbstractUndoableEdit    {
+public class RevealFieldCommand extends AbstractUndoableEdit    {
 
-    private LinkedList<ICell> cellList;
-    private LinkedList<Integer> undobuffer;
+    private List<ICell> cellList;
+    private List<Integer> undobuffer;
     private static final long serialVersionUID = 1L;
 
-    public revealFieldCommand(LinkedList<ICell> cellList)    {
+    public RevealFieldCommand(List<ICell> cellList)    {
         this.cellList = cellList;
         undobuffer = new LinkedList<Integer>();
     }
     
     public void undo()  {
         for(ICell x : cellList)  {
-            undobuffer.push(x.getValue());
+            ((LinkedList<Integer>) undobuffer).push(x.getValue());
             x.setValue(0);
             x.setRevealed(false);
         }
@@ -27,7 +28,7 @@ public class revealFieldCommand extends AbstractUndoableEdit    {
     
     public void redo()  {
         for(ICell x : cellList)  {
-            x.setValue(undobuffer.pollLast());
+            x.setValue(((LinkedList<Integer>) undobuffer).pollLast());
             x.setRevealed(true);
         }
     }

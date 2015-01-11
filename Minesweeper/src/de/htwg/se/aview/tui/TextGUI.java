@@ -51,44 +51,6 @@ public class TextGUI implements IObserver {
         } else if(!handlerNew.handleRequest(next, controller))  {
             LOGGER.info("illegal argument");
         }
-//        switch(next)    {
-//        case "q":
-//            proceed = false;
-//            break;
-//        case "n":
-//            controller.create();
-//            break;
-//        case "sS":
-//            controller.create(9, 9, 10);
-//            break;
-//        case "sM":
-//            controller.create(16, 16, 40);
-//            break;
-//        case "sL":
-//            controller.create(16, 30, 99);
-//            break;
-//        case "u":
-//            controller.undo();
-//            break;
-//        case "r":
-//            controller.redo();
-//            break;
-//        default:
-//            if (next.matches("[0-9][0-9]-[0-9][0-9]")) {
-//                String[] parts = next.split("-");
-//                controller.revealField(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-//            } else {
-//                LOGGER.info("illegal argument");
-//            }
-//            if(controller.isGameOver())  {
-//                LOGGER.info("GAME OVER!!!");
-//                proceed = false;
-//            }
-//            if(controller.isVictory() == true)   {
-//                LOGGER.info("Victory!!!");
-//                proceed = false;
-//            }
-//        }
         return proceed;
     }
 
@@ -98,7 +60,7 @@ public class TextGUI implements IObserver {
         if(controller.isGameOver())  {
             LOGGER.info("GAME OVER!!!");
         }
-        if(controller.isVictory() == true)   {
+        if(controller.isVictory())   {
             LOGGER.info("Victory!!!");
         }
     }

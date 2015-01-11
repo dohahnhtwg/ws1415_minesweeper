@@ -16,8 +16,6 @@ import de.htwg.se.util.observer.IObserver;
 public final class MinesweeperGUI extends JFrame implements IObserver {
     private static final long serialVersionUID = 1L;
 
-    private int x = Constances.DEFDIMENSIONX;
-    private int y = Constances.DEFDIMENSIONY;
     private IController controller;
     private JPanel mainPanel;
     private JPanel sidePanel1, sidePanel2;
@@ -38,8 +36,8 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
     }
 
     public void constructMinesweeperGUI(final IController controller) {
-        x = controller.getPlayingField().getLines();
-        y = controller.getPlayingField().getColumns();
+        int x = controller.getPlayingField().getLines();
+        int y = controller.getPlayingField().getColumns();
         if (menu != null) {
             mainPanel.remove(menu);
         }

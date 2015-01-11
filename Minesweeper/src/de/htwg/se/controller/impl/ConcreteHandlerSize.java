@@ -6,6 +6,12 @@ import de.htwg.se.controller.IController;
 public class ConcreteHandlerSize implements IHandler {
 
     private IHandler successor;
+    private int smallDimens = 9;
+    private int medDimens = 16;
+    private int largeDimens = 30;
+    private int smallMines = 10;
+    private int medMines = 40;
+    private int largeMines = 99;
 
     @Override
     public void setSuccesor(IHandler successor) {
@@ -15,15 +21,15 @@ public class ConcreteHandlerSize implements IHandler {
     @Override
     public boolean handleRequest(String request, IController controller) {
         if(request.equals("sS"))   {
-            controller.create(9, 9, 10);
+            controller.create(smallDimens, smallDimens, smallMines);
             return true;
         }
         if(request.equals("sM"))  {
-            controller.create(16, 16, 40);
+            controller.create(medDimens, medDimens, medMines);
             return true;
         }
         if(request.equals("sL"))  {
-            controller.create(16, 30, 99);
+            controller.create(medDimens, largeDimens, largeMines);
             return true;
         }
         return successor.handleRequest(request, controller);

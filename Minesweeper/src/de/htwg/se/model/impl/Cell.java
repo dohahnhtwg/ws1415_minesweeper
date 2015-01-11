@@ -43,11 +43,13 @@ public class Cell implements ICell {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
         Cell other = (Cell) obj;
-        if (obj == null || getClass() != obj.getClass() || isRevealed != other.isRevealed || value != other.value)
+        if (obj == null || getClass() != obj.getClass() || isRevealed != other.isRevealed || value != other.value) {
             return false;
+        }
         return true;
     }
     
