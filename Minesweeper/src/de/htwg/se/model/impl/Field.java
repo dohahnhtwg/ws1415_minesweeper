@@ -8,12 +8,14 @@ import de.htwg.se.model.IField;
 public class Field implements IField{
 
     private ICell[][] playingField;
-    private int nMines = 10;
-    private int lines = 9;
-    private int columns = 9;
+    private final int defDimens = 9;
+    private final int defNMines = 10;
+    private int nMines;
+    private int lines;
+    private int columns;
     
     public Field()  {
-        create(lines, columns, nMines);
+        create(defDimens, defDimens, defNMines);
     }
     
     public Field(int lines, int columns, int nMines)  {

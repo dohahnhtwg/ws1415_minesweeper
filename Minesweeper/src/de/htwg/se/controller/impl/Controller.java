@@ -61,10 +61,8 @@ public class Controller extends Observable implements IController {
         } else {
             List<Point> fieldsaround = getFieldsAround(x, y);
             for(Point field : fieldsaround) {
-                if(checkCellInField(field))    {
-                    if(!playingField.getField()[field.x][field.y].isRevealed())    {
-                        revealFieldHelp(field.x, field.y, revelalFieldCommandList);
-                    }
+                if(checkCellInField(field) && !playingField.getField()[field.x][field.y].isRevealed()) {
+                    revealFieldHelp(field.x, field.y, revelalFieldCommandList);
                 }
             }
             return;

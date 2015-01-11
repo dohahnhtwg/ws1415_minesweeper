@@ -6,12 +6,12 @@ import de.htwg.se.controller.IController;
 public class ConcreteHandlerSize implements IHandler {
 
     private IHandler successor;
-    private int smallDimens = 9;
-    private int medDimens = 16;
-    private int largeDimens = 30;
-    private int smallMines = 10;
-    private int medMines = 40;
-    private int largeMines = 99;
+    private final int smallDimens = 9;
+    private final int medDimens = 16;
+    private final int largeDimens = 30;
+    private final int smallMines = 10;
+    private final int medMines = 40;
+    private final int largeMines = 99;
 
     @Override
     public void setSuccesor(IHandler successor) {
