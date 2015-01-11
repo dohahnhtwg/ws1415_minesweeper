@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -19,8 +18,8 @@ public class MinesweeperMenuBar extends JMenuBar {
 
     private JMenu menu, menu2;
     private JMenuItem undo, redo, exit, newGame, statistik, info,  license;
-    private JFileChooser fc;
-    
+
+    @SuppressWarnings("unused")
     private final IController controller;
 
     public MinesweeperMenuBar(final IController controller) {
@@ -42,8 +41,6 @@ public class MinesweeperMenuBar extends JMenuBar {
         statistik = new JMenuItem("Statistic");
         statistik.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 InputEvent.CTRL_DOWN_MASK));
-        fc = new JFileChooser(".");
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         menu.add(newGame);
         menu.addSeparator();
         menu.add(undo);
@@ -83,16 +80,15 @@ public class MinesweeperMenuBar extends JMenuBar {
             }
         });
 
-        newGame.addActionListener(ActionListener -> controller.create());
-
+        newGame.addActionListener(ActionListener -> new NewGameWindow(this, controller));
 
         statistik.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                "Time spend: " + BottomInfoPanel.getTime(),
+                "Time spend: " + TimerThread.getTime(),
 			    "Statistic", JOptionPane.INFORMATION_MESSAGE));
 
 
         info.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-				        "This program was created by\nDominik Hahn & Pavel Kravetskiy", "Information",
+				        "This game was created by\nDominik Hahn & Pavel Kravetskiy\n\n Software Engineering", "Information",
 				        JOptionPane.INFORMATION_MESSAGE));
 
         license.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,

@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import com.google.inject.Inject;
 
@@ -17,8 +16,8 @@ import de.htwg.se.util.observer.IObserver;
 public final class MinesweeperGUI extends JFrame implements IObserver {
     private static final long serialVersionUID = 1L;
 
-    private int x = Constances.defaultDimensionX;
-    private int y = Constances.defaultDimensionY;
+    private int x = Constances.DEFDIMENSIONX;
+    private int y = Constances.DEFDIMENSIONY;
 	private IController controller;
     private JPanel mainPanel;
     private JPanel puppy = new JPanel();
@@ -36,6 +35,7 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         constructMinesweeperGUI(controller);
+        bip = new BottomInfoPanel(controller);
     }
 
     public final void constructMinesweeperGUI(final IController controller) {
@@ -53,11 +53,11 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         	mainPanel.remove(field);
         field = new PlayingFieldPanel(x, y, controller);
         mainPanel.add(field, BorderLayout.CENTER);
-        if (bip != null)
+        if (bip != null) {
         	mainPanel.remove(bip);
-        bip = new BottomInfoPanel(controller);
+        } else
+            bip = new BottomInfoPanel(controller);
         mainPanel.add(bip, BorderLayout.SOUTH);
-        bip.runTimer();
         setResizable(false);
         setVisible(true);
         pack();
@@ -76,7 +76,8 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
     }
     
     private void action(final String text) {
-        BottomInfoPanel.stopTimer();
-        JOptionPane.showMessageDialog(null, text, "Spiel beendet", JOptionPane.INFORMATION_MESSAGE);
+        TimerThread.stopTimer();
+        JOptionPane.showMessageDialog(null, text + "\nTime: " + TimerThread.getTime() + " Seconds",
+                "Spiel beendet", JOptionPane.INFORMATION_MESSAGE);
     }
 }

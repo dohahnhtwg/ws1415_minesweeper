@@ -3,29 +3,33 @@ package de.htwg.se.aview.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JOptionPane;
-
 import de.htwg.se.controller.IController;
 
 public final class ButtonHandler implements ActionListener {
 
-	private int x, y;
+	private static TimerThread timerThread;
+    private int x, y;
 	private IController controller;
 	private PlayingFieldPanel field;
-	private int retVal;
 	
+	static {
+        timerThread = new TimerThread();
+	}
 	public ButtonHandler(final int x, final int y, PlayingFieldPanel p,  IController controller) {
 		this.x = x;
 		this.y = y;
 		field = p;
 		this.controller = controller;
-		retVal = - Constances.ONE;
 	}
 	
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+	    
 	    if (arg0.getSource() == field.getButtons()[x][y]) {
+	        if (!timerThread.isStarted() && !controller.isGameOver() && !controller.isVictory()) {
+	            timerThread.startTimer();
+	        }
             controller.revealField(x + Constances.ONE, y + Constances.ONE);
         }
 	}
