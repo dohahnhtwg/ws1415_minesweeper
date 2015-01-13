@@ -28,7 +28,6 @@ public class Cell implements ICell {
         this.value = value;
     }
 
-
     public int getValue() {
         return this.value;
     }
@@ -59,9 +58,6 @@ public class Cell implements ICell {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
         Cell other = (Cell) obj;
         if (obj == null || getClass() != obj.getClass() || isRevealed != other.isRevealed || value != other.value) {
             return false;

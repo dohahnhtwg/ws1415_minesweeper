@@ -44,14 +44,17 @@ public final class NewGameWindow extends JDialog {
         medium.setPreferredSize(new Dimension(DEF_BUT_SIZEX, DEF_BUT_SIZEY));
         large.setPreferredSize(new Dimension(DEF_BUT_SIZEX, DEF_BUT_SIZEY));
         small.addActionListener(ActionListener -> {
+            PlayingFieldPanel.zeroMarked();
             controller.create(SMALLSIZE, SMALLSIZE, SMALLMINES);
             setVisible(false);
         });
         medium.addActionListener(ActionListener -> {
+            PlayingFieldPanel.zeroMarked();
             controller.create(MEDIUMSIZE, MEDIUMSIZE, MEDIUMMINES);
             setVisible(false);
         });
         large.addActionListener(ActionListener -> {
+            PlayingFieldPanel.zeroMarked();
             controller.create(MEDIUMSIZE, LARGESIZE, LARGEMINES);
             setVisible(false);
         });

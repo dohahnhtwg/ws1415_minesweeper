@@ -34,15 +34,14 @@ public class TextGUI implements IObserver {
     private IController controller;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
     private IHandler handlerNew;
-    private IHandler handlerSize;
-    private IHandler handlerUnReDo;
-    private IHandler handlerInput;
 
     @Inject
     public TextGUI(IController controller)   {
         this.controller = controller;
         controller.addObserver(this);
-        
+        IHandler handlerSize;
+        IHandler handlerUnReDo;
+        IHandler handlerInput;
         handlerNew = new ConcreteHandlerNew();
         handlerSize = new ConcreteHandlerSize();
         handlerUnReDo = new ConcreteHandlerUnReDo();

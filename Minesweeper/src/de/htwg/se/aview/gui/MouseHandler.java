@@ -40,7 +40,10 @@ public final class MouseHandler extends MouseAdapter {
         if (event.getButton() == MouseEvent.BUTTON3 && field.getButtons()[x][y].isEnabled()) {
             index = ++index % Constances.BUTTONTEXT.length;
             field.getButtons()[x][y].setText(Constances.BUTTONTEXT[index]);
-            field.getMarked().put(x, new TreeMap<Integer, String>());
+            if (!field.getMarked().containsKey(x)) {
+                field.getMarked().put(x, new TreeMap<Integer, String>());
+            } 
+//            field.getMarked().get(x).put(y, Constances.BUTTONTEXT[index]);
             field.getMarked().get(x).put(y, Constances.BUTTONTEXT[index]);
         }
     }

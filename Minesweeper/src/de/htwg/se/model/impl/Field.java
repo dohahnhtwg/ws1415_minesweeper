@@ -24,8 +24,8 @@ import de.htwg.se.model.IField;
 public class Field implements IField{
 
     private ICell[][] playingField;
-    private final int defDimens = 9;
-    private final int defNMines = 10;
+    private static final int defDimens = 9;
+    private static final int defNMines = 10;
     private int nMines;
     private int lines;
     private int columns;
@@ -86,7 +86,7 @@ public class Field implements IField{
     
     private int nMinesAroundAPoint(int x, int y)    {
         int mines = 0;
-        int smallFieldLen = 3; 
+        final int smallFieldLen = 3; 
         for (int i = 0; i < smallFieldLen; i++) {
             for (int j = 0; j < smallFieldLen; j++) {
                 if (playingField[x - 1 + i][y - 1 + j].getValue() == -1)    {

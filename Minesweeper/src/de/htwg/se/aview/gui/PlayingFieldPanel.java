@@ -49,9 +49,6 @@ public final class PlayingFieldPanel extends JPanel {
             for (int j = ZERO; j < y; j++) {
 
                 buttons[i][j] = new JButton();
-                if (marked.containsKey(i) && marked.get(i).containsKey(j)) {
-                    buttons[i][j].setText(marked.get(i).get(j));
-                }
                 buttons[i][j].setFocusPainted(true);
                 buttons[i][j].setFont(new Font("Times New Roman", Font.BOLD, Constances.FONTSIZE));
                 buttons[i][j].setMargin(new Insets(ZERO, ZERO, ZERO, ZERO));
@@ -59,13 +56,16 @@ public final class PlayingFieldPanel extends JPanel {
                 buttons[i][j].addActionListener(new ButtonHandler(i , j, controller));
                 buttons[i][j].setPreferredSize(new Dimension(Constances.DEFBUTTONSIZE, Constances.DEFBUTTONSIZE));
                 add(buttons[i][j]);
-                reorganizeButton(controller, i, j);
+                reorgTextOnButton(controller, i, j);
             }
         }
     }
 
-    private void reorganizeButton(final IController controller, final int i, final int j) {
+    private void reorgTextOnButton(final IController controller, final int i, final int j) {
         ICell cell = controller.getPlayingField().getField()[i + ONE][j + ONE];
+        if (marked.containsKey(i) && marked.get(i).containsKey(j)) {
+            buttons[i][j].setText(marked.get(i).get(j));
+        }
         if (cell.isRevealed()) {
             buttons[i][j].setEnabled(false);
             if (cell.getValue() != 0) {
@@ -80,5 +80,9 @@ public final class PlayingFieldPanel extends JPanel {
 
     public Map<Integer, Map<Integer, String>> getMarked() {
         return marked;
+    }
+
+    public static void zeroMarked() {
+        marked = new HashMap<Integer, Map<Integer, String>>();
     }
 }

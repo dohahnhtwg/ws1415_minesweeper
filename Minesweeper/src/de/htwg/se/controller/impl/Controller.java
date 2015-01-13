@@ -72,19 +72,16 @@ public class Controller extends Observable implements IController {
     private void revealFieldHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
         playingField.getField()[x][y].setRevealed(true);
         ((LinkedList<ICell>) revelalFieldCommandList).push(playingField.getField()[x][y]);
-        if(playingField.getField()[x][y].getValue() > 0)  {
-            return;
-        } else {
+        if(playingField.getField()[x][y].getValue() <= 0)  {
             List<Point> fieldsaround = getFieldsAround(x, y);
             for(Point field : fieldsaround) {
                 if(checkCellInField(field) && !playingField.getField()[field.x][field.y].isRevealed()) {
                     revealFieldHelp(field.x, field.y, revelalFieldCommandList);
                 }
             }
-            return;
         }
     }
-
+    
     private List<Point> getFieldsAround(int x, int y) {
         List<Point> fieldsAround = new ArrayList<Point>();
         fieldsAround.add(new Point(x - 1, y));

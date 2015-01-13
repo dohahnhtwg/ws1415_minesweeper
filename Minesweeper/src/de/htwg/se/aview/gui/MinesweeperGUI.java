@@ -17,11 +17,15 @@
 package de.htwg.se.aview.gui;
 
 import java.awt.BorderLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
 
@@ -80,7 +84,13 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         bip = new BottomInfoPanel(controller);
         mainPanel.add(bip, BorderLayout.SOUTH);
         setResizable(false);
-        setVisible(true);
+        setVisible(true); 
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            Logger.getLogger(MinesweeperGUI.class.getName()).log(Level.SEVERE, null, e);
+        }
         pack();
         repaint();
     }
@@ -91,9 +101,11 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         constructMinesweeperGUI(controller);
         repaint();
         if (controller.isVictory()) {
+            PlayingFieldPanel.zeroMarked();
             action("Congratulation! You win the game!");
         }
         if (controller.isGameOver()) {
+            PlayingFieldPanel.zeroMarked();
             action("GAME OVER!!!");
         }
     }
@@ -101,6 +113,6 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
     private void action(final String text) {
         TimerThread.stopTimer();
         JOptionPane.showMessageDialog(null, text + "\nTime: " + TimerThread.getTime() + " Seconds",
-                "Spiel beendet", JOptionPane.INFORMATION_MESSAGE);
+                "Game ended", JOptionPane.INFORMATION_MESSAGE);
     }
 }
