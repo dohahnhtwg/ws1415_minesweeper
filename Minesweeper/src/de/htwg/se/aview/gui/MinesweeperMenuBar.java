@@ -1,3 +1,19 @@
+/* This file is part of Minesweeper.
+ * 
+ * Minesweeper is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Minesweeper is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Minesweeper.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package de.htwg.se.aview.gui;
 
 import java.awt.event.ActionEvent;
@@ -52,7 +68,7 @@ public class MinesweeperMenuBar extends JMenuBar {
 
         menu2 = new JMenu("?");
         menu2.setMnemonic(KeyEvent.VK_I);
-        info = new JMenuItem("Info");
+        info = new JMenuItem("About...");
         info.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
                 InputEvent.CTRL_DOWN_MASK));
         license = new JMenuItem("License");
@@ -71,11 +87,11 @@ public class MinesweeperMenuBar extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int n = JOptionPane.showConfirmDialog(MinesweeperMenuBar.this,
-                        "are u sure?",
-                        "Bestaetigung",
+                        "Exit Minesweeper?",
+                        "Confirm Exit",
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (n == JOptionPane.YES_OPTION) {
-                    System.exit(0);
+                System.exit(0);
                 }
             }
         });
@@ -86,13 +102,22 @@ public class MinesweeperMenuBar extends JMenuBar {
                 "Time spend: " + TimerThread.getTime(),
                 "Statistic", JOptionPane.INFORMATION_MESSAGE));
 
-
+        
+        
         info.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                "This game was created by\nDominik Hahn & Pavel Kravetskiy\n\n Software Engineering", "Information",
+                "<html><body>" + "<h3>Minesweeper</h3>"
+                + "<p>This game was created to improve</p>"+"<p>understanding of the software engineering basics</p>"
+                + "<p>like <i>life cycle of a software project</i>, <i>version control project</i>,</p>"
+                + "<p><i>task management<i> etc.</p>"
+                + "<p><b>by Dominik Hahn & Pavel Kravetskiy</b></p>" + "<hr />Software Engineering WS2014/2015"
+                + "</body></html>", "Information",
                 JOptionPane.INFORMATION_MESSAGE));
-
+        
         license.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                "under construction", "License", JOptionPane.PLAIN_MESSAGE));
+                "<html>" + "<body>" + "<h1><font color='green'>Minesweeper</font></h1>"
+                + "Copyright (C) 2015 " +"<p>Dominik Hahn & Pavel Kravetskiy</p>"
+                + "<a href='http://www.gnu.org/licenses/gpl.txt'>Under GNU GPL v3 license</a>"
+                + "</body></html>", "License", JOptionPane.INFORMATION_MESSAGE));
     }
 
 }
