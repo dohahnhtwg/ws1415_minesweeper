@@ -43,7 +43,6 @@ public final class MouseHandler extends MouseAdapter {
             if (!field.getMarked().containsKey(x)) {
                 field.getMarked().put(x, new TreeMap<Integer, String>());
             } 
-//            field.getMarked().get(x).put(y, Constances.BUTTONTEXT[index]);
             field.getMarked().get(x).put(y, Constances.BUTTONTEXT[index]);
         }
     }

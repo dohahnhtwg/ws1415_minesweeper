@@ -24,14 +24,14 @@ import de.htwg.se.model.IField;
 public class Field implements IField{
 
     private ICell[][] playingField;
-    private static final int defDimens = 9;
-    private static final int defNMines = 10;
+    private static final int DEFDIMENS = 9;
+    private static final int DEFNMINES = 10;
     private int nMines;
     private int lines;
     private int columns;
     
     public Field()  {
-        create(defDimens, defDimens, defNMines);
+        create(DEFDIMENS, DEFDIMENS, DEFNMINES);
     }
     
     public Field(int lines, int columns, int nMines)  {

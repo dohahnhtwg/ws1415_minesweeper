@@ -64,5 +64,9 @@ public class Cell implements ICell {
         }
         return true;
     }
-    
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
