@@ -26,6 +26,8 @@ public class Field implements IField{
     private ICell[][] playingField;
     private static final int DEFDIMENS = 9;
     private static final int DEFNMINES = 10;
+    private static final int BORDER = 2;
+    private static final int THREE_CELL_LEN = 3;
     private int nMines;
     private int lines;
     private int columns;
@@ -45,7 +47,7 @@ public class Field implements IField{
         if (lines < 1 || columns < 1 || nMines < 0)   {
             throw new IllegalArgumentException("lines, columns or nMines too small.");
         }
-        playingField = new ICell[lines + 2][columns + 2];
+        playingField = new ICell[lines + BORDER][columns + BORDER];
         for (int i = 0; i < playingField.length; i++)   {
             for (int j = 0; j < playingField[0].length; j ++)    {
                 playingField[i][j] = new Cell(0);
@@ -86,9 +88,8 @@ public class Field implements IField{
     
     private int nMinesAroundAPoint(int x, int y)    {
         int mines = 0;
-        final int smallFieldLen = 3; 
-        for (int i = 0; i < smallFieldLen; i++) {
-            for (int j = 0; j < smallFieldLen; j++) {
+        for (int i = 0; i < THREE_CELL_LEN; i++) {
+            for (int j = 0; j < THREE_CELL_LEN; j++) {
                 if (playingField[x - 1 + i][y - 1 + j].getValue() == -1)    {
                     mines++;
                 }

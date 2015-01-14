@@ -61,7 +61,7 @@ public class TextGUI implements IObserver {
     public boolean processInputLine(String next) {
         boolean proceed = true;
         
-        if(next.equals("q")) {
+        if("q".equals(next)) {
             proceed = false;
         } else if(!handlerNew.handleRequest(next, controller))  {
             LOGGER.info("illegal argument");

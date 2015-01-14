@@ -67,6 +67,6 @@ public class Cell implements ICell {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Integer.hashCode(value) + Boolean.hashCode(isRevealed);
     }
 }

@@ -16,37 +16,54 @@
 
 package de.htwg.se.model;
 
+/**
+ * This interface represent a simple cell.
+ * @author Dominik Hahn & Pavel Kravetskiy
+ *
+ */
 public interface ICell {
 
     /**
-     * @return the Value of the Cell. -1 stands for a Mine and 0-6 for the 
-     *         number of Mines around.
+     * This Method returns a number between -1 and 6. -1 stands for a Mine
+     * while 0-6 for the number of Mines around the actual field.
+     * @return the Value of the Cell. 
      */
     int getValue();
     
     /** 
+     * With this Method the value of a Cell can be changed.
      * @param newValue is the new Value. -1 stands for a Mine and 0-6 for the 
      *        number of Mines around.
      */
     void setValue(int newValue);
     
     /**
+     * This Method says whether this cell is revealed or not.
      * @return true if the Cell is Revealed.
      */
     boolean isRevealed();
     
     /**
+     * This Method changed the actual is Revealed status of the Cell.
      * @param isRevealed
      */
     void setRevealed(boolean isRevealed);
     
     /**
+     * Returns a formatted String for a given Cell.
      * @return String representing a Cell.
      */
     String toString();
     
     /**
+     * Indicates whether some other Cell is "equal to" this one.
      * @return true if given Cells are equals.
      */
     boolean equals(Object obj);
+    
+    /**
+     * Returns a hash code value for the object.
+     * @return a hash code.
+     */
+    int hashCode();
 }

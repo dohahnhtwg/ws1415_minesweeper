@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static de.htwg.se.aview.gui.Constances.ZERO;
-import static de.htwg.se.aview.gui.Constances.ONE;
+import static de.htwg.se.aview.gui.Constants.ZERO;
+import static de.htwg.se.aview.gui.Constants.ONE;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -50,11 +50,11 @@ public final class PlayingFieldPanel extends JPanel {
 
                 buttons[i][j] = new JButton();
                 buttons[i][j].setFocusPainted(true);
-                buttons[i][j].setFont(new Font("Times New Roman", Font.BOLD, Constances.FONTSIZE));
+                buttons[i][j].setFont(new Font("Times New Roman", Font.BOLD, Constants.FONTSIZE));
                 buttons[i][j].setMargin(new Insets(ZERO, ZERO, ZERO, ZERO));
                 buttons[i][j].addMouseListener(new MouseHandler(i, j, this));
                 buttons[i][j].addActionListener(new ButtonHandler(i , j, controller));
-                buttons[i][j].setPreferredSize(new Dimension(Constances.DEFBUTTONSIZE, Constances.DEFBUTTONSIZE));
+                buttons[i][j].setPreferredSize(new Dimension(Constants.DEFBUTTONSIZE, Constants.DEFBUTTONSIZE));
                 add(buttons[i][j]);
                 reorgTextOnButton(controller, i, j);
             }

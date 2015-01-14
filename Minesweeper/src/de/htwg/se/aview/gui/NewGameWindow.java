@@ -24,7 +24,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import de.htwg.se.controller.IController;
-import static de.htwg.se.aview.gui.Constances.*;
+import static de.htwg.se.aview.gui.Constants.*;
 
 public final class NewGameWindow extends JDialog {
 

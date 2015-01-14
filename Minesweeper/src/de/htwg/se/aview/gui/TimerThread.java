@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public final class TimerThread implements Runnable {
 
     private static Thread thread;
-    private static Long time = new Long(Constances.ZERO);
+    private static Long time = new Long(Constants.ZERO);
     private static boolean stop = false;
     private static boolean started = false;
 
@@ -32,11 +32,11 @@ public final class TimerThread implements Runnable {
 
     @Override
     public void run() {
-        time = new Long(Constances.ZERO);
+        time = new Long(Constants.ZERO);
         try {
             while (!stop) {
                 BottomInfoPanel.setTimer(time++);
-                Thread.sleep(Constances.SLEEP_TIME);
+                Thread.sleep(Constants.SLEEP_TIME);
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(BottomInfoPanel.class.getName()).log(Level.SEVERE, null, ex);

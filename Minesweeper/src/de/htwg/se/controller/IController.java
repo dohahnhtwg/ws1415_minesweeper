@@ -19,6 +19,11 @@ package de.htwg.se.controller;
 import de.htwg.se.model.IField;
 import de.htwg.se.util.observer.IObservable;
 
+/**
+ * This interface represent a Controller for the Minesweeper Game.
+ * @author Dominik Hahn & Pavel Kravetskiy
+ *
+ */
 public interface IController extends IObservable {
 
     /**
@@ -66,5 +71,9 @@ public interface IController extends IObservable {
      */
     String getField();
     
+    /**
+     * Returns the actual playing field of the controller.
+     * @return the actual playing Field.
+     */
     IField getPlayingField();
 }

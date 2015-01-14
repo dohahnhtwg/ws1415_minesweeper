@@ -16,6 +16,11 @@
 
 package de.htwg.se.model;
 
+/**
+ * This interface represent a playing field build of Cells.
+ * @author Dominik Hahn & Pavel Kravetskiy
+ *
+ */
 public interface IField {
 
     /**
@@ -27,26 +32,31 @@ public interface IField {
     void create(int x, int y, int nMines);
     
     /**
+     * This Method returns the number of lines in the actual playing field.
      * @return number of lines.
      */
     int getLines();
     
     /**
+     * This Method returns the number of columns in the actual playing field.
      * @return number of columns.
      */
     int getColumns();
     
     /**
+     * This Method returns the number of mines in the actual playing field.
      * @return number of Mines.
      */
     int getnMines();
     
     /**
+     * This Method returns the actual playing field.
      * @return whole playing Field.
      */
     ICell[][] getField();
     
     /**
+     * This Method returns the actual playing field as formated String.
      * @return String representing a Field.
      */
     String toString();

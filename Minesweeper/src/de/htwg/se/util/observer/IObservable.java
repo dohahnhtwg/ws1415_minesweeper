@@ -16,6 +16,11 @@
 
 package de.htwg.se.util.observer;
 
+/**
+ * This Interface provides a Observable object.
+ * @author Dominik Hahn & Pavel Kravetskiy
+ *
+ */
 public interface IObservable {
 
     /**

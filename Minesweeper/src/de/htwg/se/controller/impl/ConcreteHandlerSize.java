@@ -36,15 +36,15 @@ public class ConcreteHandlerSize implements IHandler {
 
     @Override
     public boolean handleRequest(String request, IController controller) {
-        if(request.equals("sS"))   {
+        if("sS".equals(request))   {
             controller.create(SMALLDIMENS, SMALLDIMENS, SMALLMINES);
             return true;
         }
-        if(request.equals("sM"))  {
+        if("sM".equals(request))  {
             controller.create(MEDIUMDIMENS, MEDIUMDIMENS, MEDIUMMINES);
             return true;
         }
-        if(request.equals("sL"))  {
+        if("sL".equals(request))  {
             controller.create(MEDIUMDIMENS, LARGEDIMENS, LARGEMINES);
             return true;
         }

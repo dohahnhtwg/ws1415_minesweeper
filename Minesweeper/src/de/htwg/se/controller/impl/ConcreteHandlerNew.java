@@ -30,7 +30,7 @@ public class ConcreteHandlerNew implements IHandler {
     
     @Override
     public boolean handleRequest(String request, IController controller) {
-        if (request.equals("n"))  {
+        if ("n".equals(request))  {
             controller.create();
             return true;
         }

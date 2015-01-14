@@ -16,10 +16,27 @@
 
 package de.htwg.se.controller;
 
+/**
+ * This Interface represent the pattern of a Chain of Responsibility. 
+ * @author Dominik Hahn & Pavel Kravetskiy
+ *
+ */
 public interface IHandler {
     
+    /**
+     * Sets the next successor in a Chain of Responsibility
+     * @param successor is the next Handler in the link.
+     */
     void setSuccesor(IHandler successor);
     
+    /**
+     * This Method tries to handle the given Request. If this is not possible the
+     * request is sent to the next link in the chain.
+     * @param request is the String which should be handled by the actual link.
+     * @param controller is the actual controller which this chain belongs.
+     * @return returns true if the chain was able to handle the given request
+     *         else false.
+     */
     boolean handleRequest(String request, IController controller);
     
     IHandler getSuccesor();

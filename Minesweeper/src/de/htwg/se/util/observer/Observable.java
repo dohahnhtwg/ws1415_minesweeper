@@ -22,7 +22,9 @@ import java.util.List;
 
 public class Observable implements IObservable {
 
-    private List<IObserver> subscribers = new ArrayList<IObserver>(2);
+    private static final int INITIAL_CAPACITY = 2;
+    
+    private List<IObserver> subscribers = new ArrayList<IObserver>(INITIAL_CAPACITY);
     
     public void addObserver(IObserver s) {
         subscribers.add(s);

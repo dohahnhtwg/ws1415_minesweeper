@@ -30,11 +30,11 @@ public class ConcreteHandlerUnReDo implements IHandler {
 
     @Override
     public boolean handleRequest(String request, IController controller) {
-        if(request.equals("u"))  {
+        if("u".equals(request))  {
             controller.undo();
             return true;
         }
-        if(request.equals("r"))  {
+        if("r".equals(request))  {
             controller.redo();
             return true;
         }

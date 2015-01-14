@@ -16,6 +16,15 @@
 
 package de.htwg.se.util.observer;
 
+/**
+ * This Interface provides a Observer.
+ * @author Dominik Hahn & Pavel Kravetskiy
+ *
+ */
 public interface IObserver {
+    /**
+     * This Method is called if a Event occurred.
+     * @param e is the event which occurred.
+     */
     void update(Event e);
 }

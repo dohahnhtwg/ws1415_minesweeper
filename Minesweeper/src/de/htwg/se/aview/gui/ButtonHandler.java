@@ -43,7 +43,7 @@ public final class ButtonHandler implements ActionListener {
         if (!timerThread.isStarted() && !controller.isGameOver() && !controller.isVictory()) {
             timerThread.startTimer();
         }
-        controller.revealField(x + Constances.ONE, y + Constances.ONE);
+        controller.revealField(x + Constants.ONE, y + Constants.ONE);
     }
 
 }

@@ -25,7 +25,6 @@ import com.google.inject.Injector;
 
 import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.TextGUI;
-import de.htwg.se.controller.IController;
 
 public final class Minesweeper {
     
@@ -39,10 +38,7 @@ public final class Minesweeper {
 
         Injector injector = Guice.createInjector(new MinesweeperModule());
         
-        @SuppressWarnings("unused")
-        IController controller = injector.getInstance(IController.class);
-        @SuppressWarnings("unused")
-        MinesweeperGUI gui = injector.getInstance(MinesweeperGUI.class);
+        injector.getInstance(MinesweeperGUI.class);
         tui = injector.getInstance(TextGUI.class);
         tui.paintTUI();
     }

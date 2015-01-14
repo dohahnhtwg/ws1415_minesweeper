@@ -25,10 +25,9 @@ public final class MouseHandler extends MouseAdapter {
     private int x, y;
     private PlayingFieldPanel field;
 
-    private int index = Constances.ZERO;
+    private int index = Constants.ZERO;
 
-    public MouseHandler(final int x, final int y, final PlayingFieldPanel panel)
-    {
+    public MouseHandler(final int x, final int y, final PlayingFieldPanel panel)    {
         this.x = x;
         this.y = y;
         field = panel;
@@ -38,12 +37,12 @@ public final class MouseHandler extends MouseAdapter {
     public void mouseClicked(final MouseEvent event) {
 
         if (event.getButton() == MouseEvent.BUTTON3 && field.getButtons()[x][y].isEnabled()) {
-            index = ++index % Constances.BUTTONTEXT.length;
-            field.getButtons()[x][y].setText(Constances.BUTTONTEXT[index]);
+            index = ++index % Constants.BUTTONTEXT.length;
+            field.getButtons()[x][y].setText(Constants.BUTTONTEXT[index]);
             if (!field.getMarked().containsKey(x)) {
                 field.getMarked().put(x, new TreeMap<Integer, String>());
             } 
-            field.getMarked().get(x).put(y, Constances.BUTTONTEXT[index]);
+            field.getMarked().get(x).put(y, Constants.BUTTONTEXT[index]);
         }
     }
 
