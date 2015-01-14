@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.swing.undo.UndoManager;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import de.htwg.se.controller.IController;
@@ -40,6 +41,7 @@ public class Controller extends Observable implements IController {
     private boolean victory = false;
     private UndoManager undoManager;
 
+    @Inject
     public Controller()  {
         playingField = new Field();
         undoManager = new UndoManager();
