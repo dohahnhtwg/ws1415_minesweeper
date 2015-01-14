@@ -20,6 +20,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,18 +49,35 @@ public final class PlayingFieldPanel extends JPanel {
 
         for (int i = ZERO; i < x; i++) {
             for (int j = ZERO; j < y; j++) {
-
                 buttons[i][j] = new JButton();
                 buttons[i][j].setFocusPainted(true);
                 buttons[i][j].setFont(new Font("Times New Roman", Font.BOLD, Constants.FONTSIZE));
                 buttons[i][j].setMargin(new Insets(ZERO, ZERO, ZERO, ZERO));
-                buttons[i][j].addMouseListener(new MouseHandler(i, j, this));
-                buttons[i][j].addActionListener(new ButtonHandler(i , j, controller));
+                addListeners(controller, i, j);
                 buttons[i][j].setPreferredSize(new Dimension(Constants.DEFBUTTONSIZE, Constants.DEFBUTTONSIZE));
                 add(buttons[i][j]);
                 reorgTextOnButton(controller, i, j);
             }
         }
+    }
+
+    private void addListeners(final IController controller, final int i, final int j) {
+        buttons[i][j].addMouseListener(new MouseAdapter() {
+            int index = ZERO;
+            @Override
+            public void mouseClicked(final MouseEvent event) {
+
+                if (event.getButton() == MouseEvent.BUTTON3 && buttons[i][j].isEnabled()) {
+                    index = ++index % Constants.BUTTONTEXT.length;
+                    buttons[i][j].setText(Constants.BUTTONTEXT[index]);
+                    if (!marked.containsKey(i)) {
+                        marked.put(i, new TreeMap<Integer, String>());
+                    } 
+                    marked.get(i).put(j, Constants.BUTTONTEXT[index]);
+                }
+            }
+        });
+        buttons[i][j].addActionListener(new ButtonHandler(i , j, controller));
     }
 
     private void reorgTextOnButton(final IController controller, final int i, final int j) {
@@ -85,4 +104,6 @@ public final class PlayingFieldPanel extends JPanel {
     public static void zeroMarked() {
         marked = new HashMap<Integer, Map<Integer, String>>();
     }
+    
+
 }

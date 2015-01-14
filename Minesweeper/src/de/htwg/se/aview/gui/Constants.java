@@ -22,7 +22,7 @@ package de.htwg.se.aview.gui;
  *
  */
 public final class Constants {
-    
+
     public static final String[] BUTTONTEXT = {"", "*", "?"};
     public static final int DEF_BUT_SIZEX = 100;
     public static final int DEF_BUT_SIZEY = 50;
@@ -41,9 +41,10 @@ public final class Constants {
     public static final int TWO = 2;
     public static final int THREE = 3;
     public static final int ZERO = 0;
-    
+    public static final int BOUNDS = 300;
+
     private Constants() {
-        
+
     }
 
 }

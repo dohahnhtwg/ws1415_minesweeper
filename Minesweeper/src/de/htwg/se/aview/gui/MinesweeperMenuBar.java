@@ -96,7 +96,7 @@ public class MinesweeperMenuBar extends JMenuBar {
             }
         });
 
-        newGame.addActionListener(ActionListener -> new NewGameWindow(this, controller));
+        newGame.addActionListener(ActionListener -> new NewGameWindow(controller));
 
         statistik.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
                 "Time spend: " + TimerThread.getTime(),
