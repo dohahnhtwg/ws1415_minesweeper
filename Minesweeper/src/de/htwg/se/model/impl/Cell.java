@@ -56,17 +56,31 @@ public class Cell implements ICell {
         }
     }
 
+    
+
     @Override
     public boolean equals(Object obj) {
-        Cell other = (Cell) obj;
-        if (obj == null || getClass() != obj.getClass() || isRevealed != other.isRevealed || value != other.value) {
+        if (this == obj)    {
+            return true;
+        } 
+        if (obj == null)    {
             return false;
-        }
+        } 
+        if (getClass() != obj.getClass())   {
+            return false;
+        }  
+        Cell other = (Cell) obj;
+        if (isRevealed != other.isRevealed) {
+            return false;
+        }      
+        if (value != other.value)   {
+            return false;
+        }       
         return true;
     }
 
     @Override
     public int hashCode() {
-        return Integer.hashCode(value) + Boolean.hashCode(isRevealed);
+        return Boolean.hashCode(isRevealed) + Integer.hashCode(value);
     }
 }

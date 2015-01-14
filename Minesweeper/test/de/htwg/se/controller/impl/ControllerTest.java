@@ -53,11 +53,11 @@ public class ControllerTest {
         if(field[1][1].getValue() == -1)    {
             controller.revealField(2, 1);
             controller.revealField(1, 1);
-            assertFalse(field[1][1].isRevealed());
+            assertTrue(field[1][1].isRevealed());
         } else {
             controller.revealField(1, 1);
             controller.revealField(2, 1);
-            assertFalse(field[2][1].isRevealed());
+            assertTrue(field[2][1].isRevealed());
         }
     }
     

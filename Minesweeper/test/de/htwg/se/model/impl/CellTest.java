@@ -56,5 +56,9 @@ public class CellTest {
         assertFalse(cell.equals(testCell));
         testCell.setRevealed(false);
         assertTrue(cell.equals(testCell));
+        assertTrue(cell.hashCode() == testCell.hashCode());
+        testCell.setRevealed(true);
+        cell.setRevealed(true);
+        assertTrue(cell.hashCode() == testCell.hashCode());
     }
 }
