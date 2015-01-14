@@ -16,8 +16,9 @@ import de.htwg.se.util.observer.Observable;
 @Singleton
 public class Controller extends Observable implements IController {
 
-    private Logger logger = Logger
-            .getLogger("de.htwg.se.controller.wrapperimpl");
+    private static final int STACKDEPTH = 2;
+    private static final Logger LOGGER = Logger
+            .getLogger("controller.logwrapper");
     private IController realController;
     private long startTime;
     
@@ -27,21 +28,21 @@ public class Controller extends Observable implements IController {
     }
     
     private void pre() {
-        logger.debug("Controller method " + getMethodName(1) + " was called.");
+        LOGGER.debug("Controller method " + getMethodName(1) + " was called.");
         startTime = System.nanoTime();
     }
 
     private void post() {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
-        logger.debug("Controller method " + getMethodName(1)
+        LOGGER.debug("Controller method " + getMethodName(1)
                 + " was finished in " + duration + " nanoSeconds.");
     }
 
     private static String getMethodName(final int depth) {
         final StackTraceElement[] stack = Thread.currentThread()
                 .getStackTrace();
-        return stack[2 + depth].getMethodName();
+        return stack[STACKDEPTH + depth].getMethodName();
     }
     
     public void create() {
@@ -67,7 +68,7 @@ public class Controller extends Observable implements IController {
     @Override
     public void revealField(int x, int y) {
         pre();
-        realController.revealField(x, y);;
+        realController.revealField(x, y);
         post();
     }
 
