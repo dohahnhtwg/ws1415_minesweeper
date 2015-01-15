@@ -28,7 +28,6 @@ import com.google.inject.Singleton;
 
 import de.htwg.se.controller.IController;
 import de.htwg.se.controller.RevealFieldCommand;
-import de.htwg.se.model.impl.Field;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.util.observer.Observable;
@@ -42,8 +41,8 @@ public class Controller extends Observable implements IController {
     private UndoManager undoManager;
 
     @Inject
-    public Controller()  {
-        playingField = new Field();
+    public Controller(IField playingfield)  {
+        playingField = playingfield;
         undoManager = new UndoManager();
     }
 
@@ -146,7 +145,6 @@ public class Controller extends Observable implements IController {
     
     public void create() {
         create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
-        notifyObservers();
     }
 
     

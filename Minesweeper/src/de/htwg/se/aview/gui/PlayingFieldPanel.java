@@ -63,7 +63,7 @@ public final class PlayingFieldPanel extends JPanel {
 
     private void addListeners(final IController controller, final int i, final int j) {
         buttons[i][j].addMouseListener(new MouseAdapter() {
-            int index = ZERO;
+            private int index = ZERO;
             @Override
             public void mouseClicked(final MouseEvent event) {
 

@@ -7,14 +7,17 @@ import org.junit.Test;
 
 import de.htwg.se.controller.IHandler;
 import de.htwg.se.model.ICell;
+import de.htwg.se.model.impl.Field;
 
 public class ControllerTest {
 
     Controller controller;
+    Field field;
     
     @Before
     public void setUp() throws Exception {
-        controller = new Controller();
+    	field = new Field();
+        controller = new Controller(field);
     }
     
     @Test

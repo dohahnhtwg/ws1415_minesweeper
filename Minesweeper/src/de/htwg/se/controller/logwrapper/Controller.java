@@ -23,8 +23,8 @@ public class Controller extends Observable implements IController {
     private long startTime;
     
     @Inject
-    public Controller() {
-        realController = new de.htwg.se.controller.impl.Controller();
+    public Controller(IField playingField) {
+        realController = new de.htwg.se.controller.impl.Controller(playingField);
     }
     
     private void pre() {

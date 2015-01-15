@@ -18,6 +18,8 @@ package de.htwg.se.model.impl;
 
 import java.util.Random;
 
+import com.google.inject.Inject;
+
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 
@@ -32,6 +34,7 @@ public class Field implements IField{
     private int lines;
     private int columns;
     
+    @Inject
     public Field()  {
         create(DEFDIMENS, DEFDIMENS, DEFNMINES);
     }
