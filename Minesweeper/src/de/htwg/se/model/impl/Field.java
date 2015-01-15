@@ -43,7 +43,8 @@ public class Field implements IField{
         create(lines, columns, nMines);
     }
     
-    public void create(int lines, int columns, int nMines)    {
+    
+    public final void create(int lines, int columns, int nMines)    {
         this.lines = lines;
         this.columns = columns;
         this.nMines = nMines;
