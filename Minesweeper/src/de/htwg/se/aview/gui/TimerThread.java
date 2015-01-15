@@ -69,8 +69,4 @@ public final class TimerThread implements Runnable {
     public boolean isStarted() {
         return started;
     }
-    
-    public static void resetTimer() {
-        time = new Long(0);
-    }
 }
