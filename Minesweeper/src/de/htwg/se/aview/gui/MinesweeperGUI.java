@@ -101,12 +101,12 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         constructMinesweeperGUI(controller);
         repaint();
         if (controller.isVictory()) {
-            PlayingFieldPanel.zeroMarked();
             action("Congratulation! You win the game!");
+            PlayingFieldPanel.zeroMarked();
         }
         if (controller.isGameOver()) {
-            PlayingFieldPanel.zeroMarked();
             action("GAME OVER!!!");
+            PlayingFieldPanel.zeroMarked();
         }
     }
 
