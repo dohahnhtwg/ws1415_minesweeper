@@ -98,12 +98,22 @@ public class MinesweeperMenuBar extends JMenuBar {
 
         newGame.addActionListener(ActionListener -> new NewGameWindow(controller));
 
-        statistik.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                "Time spend: " + TimerThread.getTime(),
-                "Statistic", JOptionPane.INFORMATION_MESSAGE));
+        statistik.addActionListener(ActionListener -> {
+            final int loses = controller.getLoses();
+            final int wins = controller.getVictories();
+            double percentage = 0;
+            if ((loses + wins) != 0) {
+                percentage = wins * Constants.DEF_BUT_SIZEX/(loses + wins);
+            }
+            JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
+                    "Last time spend: " + TimerThread.getTime()
+                    + "\nPlayed Games: " + (loses + wins)
+                    + "\nWins: " + wins
+                    + "\nPercentage: " + percentage + "%",
+                    "Statistic", JOptionPane.INFORMATION_MESSAGE);
+        });
 
-        
-        
+
         info.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
                 "<html><body>" + "<h3>Minesweeper</h3>"
                 + "<p>This game was created to improve</p>"+"<p>understanding of the software engineering basics</p>"

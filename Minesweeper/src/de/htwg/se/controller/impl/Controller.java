@@ -39,6 +39,16 @@ public class Controller extends Observable implements IController {
     private boolean gameOver = false;
     private boolean victory = false;
     private UndoManager undoManager;
+    private int victories = 0;
+    private int loses = 0;
+
+    public int getVictories() {
+        return victories;
+    }
+
+    public int getLoses() {
+        return loses;
+    }
 
     @Inject
     public Controller(IField playingfield)  {
@@ -61,6 +71,7 @@ public class Controller extends Observable implements IController {
         if(playingField.getField()[x][y].getValue() == -1) {
             playingField.getField()[x][y].setRevealed(true);
             gameOver = true;
+            loses++;
         } else {
             List<ICell> revelalFieldCommandList = new LinkedList<ICell>();
             revealFieldHelp(x, y, revelalFieldCommandList);
@@ -116,6 +127,7 @@ public class Controller extends Observable implements IController {
         }
         
         if(current == requirement)  {
+            victories++;
             return true;
         }
         return false; 

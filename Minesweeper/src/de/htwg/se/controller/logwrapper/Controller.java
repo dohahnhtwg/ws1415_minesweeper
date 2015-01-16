@@ -127,4 +127,14 @@ public class Controller extends Observable implements IController {
         realController.notifyObservers(e);
         post();
     }
+
+    @Override
+    public int getVictories() {
+        return realController.getVictories();
+    }
+
+    @Override
+    public int getLoses() {
+        return realController.getLoses();
+    }
 }

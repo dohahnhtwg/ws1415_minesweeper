@@ -76,4 +76,15 @@ public interface IController extends IObservable {
      * @return the actual playing Field.
      */
     IField getPlayingField();
+
+    /**
+     * @return the number of victories.
+     */
+    int getVictories();
+
+    /**
+     * 
+     * @return the number of loses.
+     */
+    int getLoses();
 }
