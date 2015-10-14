@@ -78,9 +78,19 @@ public class MinesweeperMenuBar extends JMenuBar {
         menu2.add(license);
         add(menu2);
 
-        undo.addActionListener(ActionListener -> controller.undo());
+        undo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+				controller.undo();
+			}
+		});
 
-        redo.addActionListener(ActionListener -> controller.redo());
+        redo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+				controller.redo();
+			}
+		});
 
         exit.addActionListener(new ActionListener() {
 
@@ -96,38 +106,56 @@ public class MinesweeperMenuBar extends JMenuBar {
             }
         });
 
-        newGame.addActionListener(ActionListener -> new NewGameWindow(controller));
+        newGame.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+				new NewGameWindow(controller);
+			}
+		});
 
-        statistik.addActionListener(ActionListener -> {
-            final int loses = controller.getLoses();
-            final int wins = controller.getVictories();
-            double percentage = 0;
-            if ((loses + wins) != 0) {
-                percentage = wins * Constants.DEF_BUT_SIZEX/(loses + wins);
-            }
-            JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                    "Last time spend: " + TimerThread.getTime()
-                    + "\nPlayed Games: " + (loses + wins)
-                    + "\nWins: " + wins
-                    + "\nPercentage: " + percentage + "%",
-                    "Statistic", JOptionPane.INFORMATION_MESSAGE);
-        });
+        statistik.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+			    final int loses = controller.getLoses();
+			    final int wins = controller.getVictories();
+			    double percentage = 0;
+			    if ((loses + wins) != 0) {
+			        percentage = wins * Constants.DEF_BUT_SIZEX/(loses + wins);
+			    }
+			    JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
+			            "Last time spend: " + TimerThread.getTime()
+			            + "\nPlayed Games: " + (loses + wins)
+			            + "\nWins: " + wins
+			            + "\nPercentage: " + percentage + "%",
+			            "Statistic", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 
 
-        info.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                "<html><body>" + "<h3>Minesweeper</h3>"
-                + "<p>This game was created to improve</p>"+"<p>understanding of the software engineering basics</p>"
-                + "<p>like <i>life cycle of a software project</i>, <i>version control project</i>,</p>"
-                + "<p><i>task management<i> etc.</p>"
-                + "<p><b>by Dominik Hahn & Pavel Kravetskiy</b></p>" + "<hr />Software Engineering WS2014/2015"
-                + "</body></html>", "Information",
-                JOptionPane.INFORMATION_MESSAGE));
+        info.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+				JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
+				        "<html><body>" + "<h3>Minesweeper</h3>"
+				        + "<p>This game was created to improve</p>"+"<p>understanding of the software engineering basics</p>"
+				        + "<p>like <i>life cycle of a software project</i>, <i>version control project</i>,</p>"
+				        + "<p><i>task management<i> etc.</p>"
+				        + "<p><b>by Dominik Hahn & Pavel Kravetskiy</b></p>" + "<hr />Software Engineering WS2014/2015"
+				        + "</body></html>", "Information",
+				        JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
         
-        license.addActionListener(ActionListener -> JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                "<html>" + "<body>" + "<h1><font color='green'>Minesweeper</font></h1>"
-                + "Copyright (C) 2015 " +"<p>Dominik Hahn & Pavel Kravetskiy</p>"
-                + "<a href='http://www.gnu.org/licenses/gpl.txt'>Under GNU GPL v3 license</a>"
-                + "</body></html>", "License", JOptionPane.INFORMATION_MESSAGE));
+        license.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+				JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
+				        "<html>" + "<body>" + "<h1><font color='green'>Minesweeper</font></h1>"
+				        + "Copyright (C) 2015 " +"<p>Dominik Hahn & Pavel Kravetskiy</p>"
+				        + "<a href='http://www.gnu.org/licenses/gpl.txt'>Under GNU GPL v3 license</a>"
+				        + "</body></html>", "License", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
     }
 
 }

@@ -18,6 +18,8 @@ package de.htwg.se.aview.gui;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -43,21 +45,30 @@ public final class NewGameWindow extends JDialog {
         small.setPreferredSize(new Dimension(DEF_BUT_SIZEX, DEF_BUT_SIZEY));
         medium.setPreferredSize(new Dimension(DEF_BUT_SIZEX, DEF_BUT_SIZEY));
         large.setPreferredSize(new Dimension(DEF_BUT_SIZEX, DEF_BUT_SIZEY));
-        small.addActionListener(ActionListener -> {
-            PlayingFieldPanel.zeroMarked();
-            controller.create(SMALLSIZE, SMALLSIZE, SMALLMINES);
-            setVisible(false);
-        });
-        medium.addActionListener(ActionListener -> {
-            PlayingFieldPanel.zeroMarked();
-            controller.create(MEDIUMSIZE, MEDIUMSIZE, MEDIUMMINES);
-            setVisible(false);
-        });
-        large.addActionListener(ActionListener -> {
-            PlayingFieldPanel.zeroMarked();
-            controller.create(MEDIUMSIZE, LARGESIZE, LARGEMINES);
-            setVisible(false);
-        });
+        small.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+			    PlayingFieldPanel.zeroMarked();
+			    controller.create(SMALLSIZE, SMALLSIZE, SMALLMINES);
+			    setVisible(false);
+			}
+		});
+        medium.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+			    PlayingFieldPanel.zeroMarked();
+			    controller.create(MEDIUMSIZE, MEDIUMSIZE, MEDIUMMINES);
+			    setVisible(false);
+			}
+		});
+        large.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ActionListener) {
+			    PlayingFieldPanel.zeroMarked();
+			    controller.create(MEDIUMSIZE, LARGESIZE, LARGEMINES);
+			    setVisible(false);
+			}
+		});
 
         panel.add(small);
         panel.add(medium);
