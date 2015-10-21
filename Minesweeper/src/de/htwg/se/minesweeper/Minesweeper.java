@@ -49,8 +49,12 @@ public final class Minesweeper {
         }
         return instance;
     }
-    
-    public static void main(String[] args) {
+
+    public static TextGUI getTui() {
+		return tui;
+	}
+
+	public static void main(String[] args) {
         Minesweeper.getInstance();
         
         boolean proceed = true;
