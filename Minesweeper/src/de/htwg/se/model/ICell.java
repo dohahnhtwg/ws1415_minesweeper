@@ -66,4 +66,5 @@ public interface ICell {
      * @return a hash code.
      */
     int hashCode();
+
 }

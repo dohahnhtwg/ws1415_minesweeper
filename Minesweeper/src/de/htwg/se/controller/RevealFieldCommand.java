@@ -37,7 +37,6 @@ public class RevealFieldCommand extends AbstractUndoableEdit    {
     public void undo()  {
         for(ICell x : cellList)  {
             ((LinkedList<Integer>) undobuffer).push(x.getValue());
-            x.setValue(0);
             x.setRevealed(false);
         }
     }

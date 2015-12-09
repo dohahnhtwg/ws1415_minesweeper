@@ -23,7 +23,7 @@ import org.apache.log4j.PropertyConfigurator;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import de.htwg.se.aview.gui.MinesweeperGUI;
+//import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.TextGUI;
 
 public final class Minesweeper {
@@ -33,12 +33,12 @@ public final class Minesweeper {
     private static TextGUI tui;
 
     private Minesweeper()   {
-        
+
         PropertyConfigurator.configure("log4j.properties");
 
         Injector injector = Guice.createInjector(new MinesweeperModule());
         
-        injector.getInstance(MinesweeperGUI.class);
+//        injector.getInstance(MinesweeperGUI.class);
         tui = injector.getInstance(TextGUI.class);
         tui.paintTUI();
     }
@@ -49,8 +49,12 @@ public final class Minesweeper {
         }
         return instance;
     }
-    
-    public static void main(String[] args) {
+
+    public static TextGUI getTui() {
+		return tui;
+	}
+
+	public static void main(String[] args) {
         Minesweeper.getInstance();
         
         boolean proceed = true;

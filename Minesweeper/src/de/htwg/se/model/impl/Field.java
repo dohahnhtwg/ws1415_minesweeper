@@ -104,7 +104,7 @@ public class Field implements IField{
     
     public String toString()    {
         StringBuilder sb = new StringBuilder("\n");
-        sb.append(String.format("%5s\n", "Line"));
+        sb.append(String.format("%5s\n", "Line\n"));
         for (int i = 1; i <= lines; i++) {
             sb.append(String.format("%5d", i));
             for (int j = 1; j <= columns; j++)  {
@@ -116,7 +116,7 @@ public class Field implements IField{
         for (int j = 1; j <= columns; j++)  {
             sb.append(String.format(" %2d ", j));
         }
-        sb.append(String.format("\n       %s", "Column\n"));
+        sb.append(String.format("       %s", "Column\n"));
         return sb.toString();
     }
     
@@ -135,5 +135,9 @@ public class Field implements IField{
     
     public ICell[][] getField() {
         return playingField;
-    }   
+    }
+    
+    public ICell getCell(int x, int y) {
+    	return playingField[x][y];
+    }
 }

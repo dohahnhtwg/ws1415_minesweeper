@@ -32,6 +32,7 @@ import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.util.observer.Observable;
 
+
 @Singleton
 public class Controller extends Observable implements IController {
 
@@ -166,4 +167,5 @@ public class Controller extends Observable implements IController {
         playingField.create(lines, columns, nMines);
         notifyObservers();
     }
+
 }
