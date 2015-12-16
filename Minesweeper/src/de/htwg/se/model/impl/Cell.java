@@ -56,8 +56,6 @@ public class Cell implements ICell {
         }
     }
 
-    
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)    {

@@ -87,4 +87,5 @@ public interface IController extends IObservable {
      * @return the number of loses.
      */
     int getLoses();
+
 }

@@ -61,5 +61,11 @@ public interface IField {
      */
     String toString();
     
+    /**
+     * 
+     * @return
+     */
+    ICell getCell(int x, int y);
+    
     
 }

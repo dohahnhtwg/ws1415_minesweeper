@@ -137,4 +137,5 @@ public class Controller extends Observable implements IController {
     public int getLoses() {
         return realController.getLoses();
     }
+
 }

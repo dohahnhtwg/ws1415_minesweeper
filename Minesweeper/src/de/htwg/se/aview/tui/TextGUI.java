@@ -80,6 +80,10 @@ public class TextGUI implements IObserver {
         }
     }
     
+    public IController getController() {
+    	return this.controller;
+    }
+
     public IHandler getChainOfResponsibility()    {
         return handlerNew;
     }
