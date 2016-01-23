@@ -27,40 +27,37 @@ import com.google.inject.Injector;
 import de.htwg.se.aview.tui.TextGUI;
 
 public final class Minesweeper {
-    
-    private static Minesweeper instance = null;
-    private static Scanner scanner;
-    private static TextGUI tui;
-
+	
+	private TextGUI webTui;
+	
     private Minesweeper()   {
-
         PropertyConfigurator.configure("log4j.properties");
-
-        Injector injector = Guice.createInjector(new MinesweeperModule());
         
-//        injector.getInstance(MinesweeperGUI.class);
-        tui = injector.getInstance(TextGUI.class);
-        tui.paintTUI();
+        Injector injector = Guice.createInjector(new MinesweeperModule());
+        webTui = injector.getInstance(TextGUI.class);
     }
 
     public static Minesweeper getInstance() {
-        if (instance == null)   {
-            instance = new Minesweeper();
-        }
-        return instance;
+        return new Minesweeper();
     }
 
-    public static TextGUI getTui() {
-		return tui;
+    public TextGUI getTui() {
+		return webTui;
 	}
 
 	public static void main(String[] args) {
         Minesweeper.getInstance();
         
+        Injector injector = Guice.createInjector(new MinesweeperModule());
+        
+        TextGUI tui = injector.getInstance(TextGUI.class);
+        tui.paintTUI();
+        
         boolean proceed = true;
-        scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         while (proceed) {
             proceed = tui.processInputLine(scanner.next());
         }
+        scanner.close();
     }
 }
