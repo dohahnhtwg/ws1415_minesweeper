@@ -31,7 +31,7 @@ public final class Minesweeper {
 	private TextGUI webTui;
 	
     private Minesweeper()   {
-        PropertyConfigurator.configure("log4j.properties");
+//        PropertyConfigurator.configure("log4j.properties");
         
         Injector injector = Guice.createInjector(new MinesweeperModule());
         webTui = injector.getInstance(TextGUI.class);
