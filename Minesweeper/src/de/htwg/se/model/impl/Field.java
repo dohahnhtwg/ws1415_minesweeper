@@ -25,6 +25,7 @@ import de.htwg.se.model.IField;
 
 public class Field implements IField{
 
+	private final int iD = 0;
     private ICell[][] playingField;
     private static final int DEFDIMENS = 9;
     private static final int DEFNMINES = 10;
@@ -140,4 +141,8 @@ public class Field implements IField{
     public ICell getCell(int x, int y) {
     	return playingField[x][y];
     }
+
+	public int getiD() {
+		return iD;
+	}
 }

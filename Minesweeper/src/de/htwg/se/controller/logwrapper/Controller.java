@@ -138,4 +138,11 @@ public class Controller extends Observable implements IController {
         return realController.getLoses();
     }
 
+	@Override
+	public void finishGame() {
+		pre();
+		realController.finishGame();
+		post();	
+	}
+
 }

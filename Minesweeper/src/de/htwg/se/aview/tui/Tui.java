@@ -62,6 +62,7 @@ public class Tui implements IObserver {
         boolean proceed = true;
         
         if("q".equals(next)) {
+        	controller.finishGame();
             proceed = false;
         } else if(!handlerNew.handleRequest(next, controller))  {
             LOGGER.info("illegal argument");

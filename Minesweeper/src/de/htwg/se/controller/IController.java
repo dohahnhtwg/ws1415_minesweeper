@@ -88,4 +88,9 @@ public interface IController extends IObservable {
      */
     int getLoses();
 
+    /**
+     * All action before game is finished
+     */
+	void finishGame();
+
 }
