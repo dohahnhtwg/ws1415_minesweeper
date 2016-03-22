@@ -5,13 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.htwg.se.aview.tui.TextGUI;
+import de.htwg.se.aview.tui.Tui;
 import de.htwg.se.controller.impl.Controller;
 import de.htwg.se.model.impl.Field;
 
 public class TextGUITest {
 
-    TextGUI tui;
+    Tui tui;
     Controller controller;
     Field field;
     
@@ -19,7 +19,7 @@ public class TextGUITest {
     public void setUp() throws Exception {
     	field = new Field();
         controller = new Controller(field);
-        tui = new TextGUI(controller);
+        tui = new Tui(controller);
     }
     
     @Test

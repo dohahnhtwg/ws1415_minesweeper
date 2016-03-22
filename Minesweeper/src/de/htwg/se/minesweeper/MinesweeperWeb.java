@@ -18,44 +18,34 @@ package de.htwg.se.minesweeper;
 
 import java.util.Scanner;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.Tui;
 
-public final class Minesweeper {
-	
+public final class MinesweeperWeb {
+
 	private Tui tui;
-	private static Minesweeper instance = null;
 	
-    private Minesweeper()   {
-        PropertyConfigurator.configure("log4j.properties");
-        
+	private MinesweeperWeb()   {      
         Injector injector = Guice.createInjector(new MinesweeperModule());
         tui = injector.getInstance(Tui.class);
     }
-
-    public static Minesweeper getInstance() {
-        if (instance == null)	{
-        	instance = new Minesweeper();
-        }
-        return instance;
+	
+	public static MinesweeperWeb getInstance() {
+        return new MinesweeperWeb();
     }
-
-    public Tui getTui() {
+	
+	public Tui getTui() {
 		return tui;
 	}
-
+	
 	public static void main(String[] args) {
         Minesweeper.getInstance();
         
         Injector injector = Guice.createInjector(new MinesweeperModule());
         
         Tui tui = injector.getInstance(Tui.class);
-        new MinesweeperGUI(tui.getController());
         tui.paintTUI();
         
         boolean proceed = true;

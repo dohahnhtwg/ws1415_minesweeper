@@ -29,14 +29,14 @@ import de.htwg.se.controller.impl.ConcreteHandlerUnReDo;
 import de.htwg.se.util.observer.Event;
 import de.htwg.se.util.observer.IObserver;
 
-public class TextGUI implements IObserver {
+public class Tui implements IObserver {
 
     private IController controller;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
     private IHandler handlerNew;
 
     @Inject
-    public TextGUI(IController controller)   {
+    public Tui(IController controller)   {
         this.controller = controller;
         controller.addObserver(this);
         IHandler handlerSize;
