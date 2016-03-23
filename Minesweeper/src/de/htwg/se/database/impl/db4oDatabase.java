@@ -33,7 +33,7 @@ public class db4oDatabase implements DataAccessObject {
 					return field.getiD() == 0;
 				}
 			});
-			return fields.get(0);
+			return fields.get(fields.size() - 1);
 		}
 		finally {
 			db.close();
@@ -43,14 +43,13 @@ public class db4oDatabase implements DataAccessObject {
 	public void update(IField field) {
 		ObjectContainer db = Db4o.openFile(DB4OFILENAME);
 		try {
+			//Fields for later update
 			List<Field> fields = db.query(new Predicate<Field>() {
 				public boolean match(Field field) {
 					return field.getiD() == 0;
 				}
 			});
-			IField old = fields.get(0);
-			old = field;
-			db.store(old);
+			db.store(field);
 			
 		}
 		finally {

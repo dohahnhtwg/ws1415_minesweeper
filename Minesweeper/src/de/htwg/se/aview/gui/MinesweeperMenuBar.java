@@ -101,7 +101,8 @@ public class MinesweeperMenuBar extends JMenuBar {
                         "Confirm Exit",
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (n == JOptionPane.YES_OPTION) {
-                System.exit(0);
+                    controller.finishGame();
+                    System.exit(0);
                 }
             }
         });

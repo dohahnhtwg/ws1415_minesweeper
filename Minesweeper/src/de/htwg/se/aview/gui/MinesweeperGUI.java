@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import com.db4o.internal.Null;
 import com.google.inject.Inject;
 
 import de.htwg.se.controller.IController;
@@ -53,6 +54,8 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         constructMinesweeperGUI(controller);
+        this.update(new Event() {
+        });
     }
 
     public void constructMinesweeperGUI(final IController controller) {
