@@ -18,8 +18,6 @@ package de.htwg.se.minesweeper;
 
 import java.util.Scanner;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -27,12 +25,11 @@ import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.Tui;
 
 public final class Minesweeper {
-	
-	private Tui tui;
-	private static Minesweeper instance = null;
-	
-    private Minesweeper()   {
-        PropertyConfigurator.configure("log4j.properties");
+
+    private Tui tui;
+    private static Minesweeper instance = null;
+
+    private Minesweeper() {
         
         Injector injector = Guice.createInjector(new MinesweeperModule());
         tui = injector.getInstance(Tui.class);
