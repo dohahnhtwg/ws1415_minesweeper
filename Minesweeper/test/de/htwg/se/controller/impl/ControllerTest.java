@@ -4,8 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-
+import static org.mockito.Mockito.*;
 import de.htwg.se.controller.IHandler;
+import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.impl.Field;
 
@@ -13,11 +14,13 @@ public class ControllerTest {
 
     Controller controller;
     Field field;
+    DataAccessObject databaseMock;
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
     	field = new Field();
-        controller = new Controller(field);
+    	databaseMock = mock(DataAccessObject.class);
+        controller = new Controller(field, databaseMock);
     }
     
     @Test
@@ -97,7 +100,7 @@ public class ControllerTest {
     public void testGetField()  {
         controller.create(2, 2, 4);
         String actual = controller.getField();
-        String expected = "\n Line\n    1  -   - \n    2  -   - \n       1   2 \n       Column\n";
+        String expected = "\nLine\n\n    1  -   - \n    2  -   - \n       1   2        Column\n";
         assertTrue(expected.equals(actual));
     }  
     
@@ -132,5 +135,24 @@ public class ControllerTest {
 
         assertTrue(handlerInput.handleRequest("01-01", controller));
         assertFalse(handlerInput.handleRequest("test", controller));
+    }
+    
+    @Test
+    public void getVictoriesShouldReturnVictories()	{
+    	assertEquals(0, controller.getVictories());
+    }
+    
+    @Test
+    public void getLosesShouldReturnLoses()	{
+    	assertEquals(0, controller.getLoses());
+    }
+    
+    @Test
+    public void finishGameShouldUpdateDatabase()	{
+    	//Execute
+    	controller.finishGame();
+    	
+    	//Assert
+    	verify(databaseMock, times(1)).update(null);
     }
 }

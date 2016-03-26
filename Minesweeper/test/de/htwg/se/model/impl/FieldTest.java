@@ -78,7 +78,7 @@ public class FieldTest {
     public void testToString()  {
         field = new Field(2, 2, 4);
         String actual = field.toString();
-        String expected = "\n Line\n    1  -   - \n    2  -   - \n       1   2 \n       Column\n";
+        String expected = "\nLine\n\n    1  -   - \n    2  -   - \n       1   2        Column\n";
         System.out.println(actual);
         System.out.println(expected);
         assertTrue(expected.equals(actual));

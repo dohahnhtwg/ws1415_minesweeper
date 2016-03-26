@@ -4,6 +4,7 @@ import java.util.List;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.query.Predicate;
+import com.google.inject.Inject;
 
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.IUser;
@@ -13,6 +14,11 @@ public class db4oDatabase implements DataAccessObject {
 	
 	private final String DB4OFILENAME = ".\\db4oDatabase";
 
+	@Inject
+	public db4oDatabase()	{
+		
+	}
+	
 	@Override
 	public void create(IUser user) {
 		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded	

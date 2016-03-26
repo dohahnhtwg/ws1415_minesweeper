@@ -29,7 +29,6 @@ import com.google.inject.Singleton;
 import de.htwg.se.controller.IController;
 import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.database.DataAccessObject;
-import de.htwg.se.database.impl.db4oDatabase;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.model.IUser;
@@ -49,7 +48,7 @@ public class Controller extends Observable implements IController {
     private int loses = 0;
     private DataAccessObject database;
 
-    public int getVictories() {
+	public int getVictories() {
         return victories;
     }
 
@@ -58,9 +57,10 @@ public class Controller extends Observable implements IController {
     }
 
     @Inject
-    public Controller(IField playingfield)  {
+    public Controller(IField playingfield, DataAccessObject database)  {
         undoManager = new UndoManager();
-        database = new db4oDatabase();
+        this.database = database;
+        this.playingField = playingfield;
     }
 
     public boolean isVictory() {
@@ -197,5 +197,4 @@ public class Controller extends Observable implements IController {
 		playingField = userFromDb.getPlayingField();
 		return true;
 	}
-
 }

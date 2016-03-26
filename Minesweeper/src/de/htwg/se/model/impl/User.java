@@ -17,7 +17,9 @@ public class User implements IUser {
     private byte[] salt;
     private IField playingField;
     private IStatistic statistic;
-    // TODO password will be probably changed to char[]
+    private String algorithm = "PBKDF2WithHmacSHA1";
+
+	// TODO password will be probably changed to char[]
     public User(String name, String password) {
         this.name = name;
         try {
@@ -76,7 +78,6 @@ public class User implements IUser {
 
     private byte[] generateEncryptedPassword(String password)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String algorithm = "PBKDF2WithHmacSHA1";
         int derivedKeyLength = 160;
         int iterations = 20000;
         KeySpec spec = new PBEKeySpec(password.toCharArray(), this.salt, iterations, derivedKeyLength);
@@ -98,4 +99,9 @@ public class User implements IUser {
 	public void setPlayingField(IField playingField) {
 		this.playingField = playingField;
 	}
+	
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+	
 }
