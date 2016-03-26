@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import com.db4o.internal.Null;
 import com.google.inject.Inject;
 
 import de.htwg.se.controller.IController;

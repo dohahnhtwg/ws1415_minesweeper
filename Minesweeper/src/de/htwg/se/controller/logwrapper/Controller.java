@@ -145,4 +145,14 @@ public class Controller extends Observable implements IController {
 		post();	
 	}
 
+	@Override
+	public boolean addNewAccount(String username, String password) {
+		return realController.addNewAccount(username, password);
+	}
+
+	@Override
+	public boolean logIn(String username, String password) {
+		return realController.logIn(username, password);
+	}
+
 }

@@ -1,5 +1,6 @@
 package de.htwg.se.model.impl;
 
+import de.htwg.se.model.IField;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import java.security.SecureRandom;
@@ -14,6 +15,7 @@ public class User implements IUser {
     private String name;
     private byte[] encryptedPassword;
     private byte[] salt;
+    private IField playingField;
     private IStatistic statistic;
     // TODO password will be probably changed to char[]
     public User(String name, String password) {
@@ -24,6 +26,7 @@ public class User implements IUser {
         } catch (NoSuchAlgorithmException | InvalidKeySpecException exc) {
             exc.printStackTrace();
         }
+        playingField = new Field();
     }
 
     @Override
@@ -87,4 +90,12 @@ public class User implements IUser {
         random.nextBytes(salt);
         return salt;
     }
+
+	public IField getPlayingField() {
+		return playingField;
+	}
+
+	public void setPlayingField(IField playingField) {
+		this.playingField = playingField;
+	}
 }

@@ -32,6 +32,8 @@ import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.database.impl.db4oDatabase;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
+import de.htwg.se.model.IUser;
+import de.htwg.se.model.impl.User;
 import de.htwg.se.util.observer.Observable;
 
 
@@ -39,6 +41,7 @@ import de.htwg.se.util.observer.Observable;
 public class Controller extends Observable implements IController {
 
     private IField playingField;
+    private IUser user;
     private boolean gameOver = false;
     private boolean victory = false;
     private UndoManager undoManager;
@@ -58,12 +61,6 @@ public class Controller extends Observable implements IController {
     public Controller(IField playingfield)  {
         undoManager = new UndoManager();
         database = new db4oDatabase();
-        
-        if(database.contains())	{
-        	playingField = database.read();
-        } else {
-        	playingField = playingfield;
-        }
     }
 
     public boolean isVictory() {
@@ -179,11 +176,26 @@ public class Controller extends Observable implements IController {
 
 	@Override
 	public void finishGame() {
-		if(database.contains())	{
-			database.update(playingField);
-		} else	{
-			database.create(playingField);
+		database.update(user);
+	}
+
+	public boolean addNewAccount(String username, String password) {
+		IUser userForDb = new User(username, password);
+		if(database.contains(userForDb))	{
+			return false;
 		}
+		database.create(userForDb);
+		return true;
+	}
+
+	public boolean logIn(String username, String password) {
+		IUser userFromDb = database.read(username, password);
+		if(userFromDb == null)	{
+			return false;
+		}
+		user = userFromDb;
+		playingField = userFromDb.getPlayingField();
+		return true;
 	}
 
 }

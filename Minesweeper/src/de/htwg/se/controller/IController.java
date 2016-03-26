@@ -93,4 +93,9 @@ public interface IController extends IObservable {
      */
 	void finishGame();
 
+	boolean addNewAccount(String username, String password);
+
+	boolean logIn(String username, String password);
+
+
 }

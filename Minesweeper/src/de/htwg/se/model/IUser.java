@@ -8,4 +8,6 @@ public interface IUser {
     boolean authenticate(String name, String password);
     IStatistic getStatistic();
     void setStatistic(IStatistic statistic);
+    IField getPlayingField();
+    void setPlayingField(IField playingField);
 }
