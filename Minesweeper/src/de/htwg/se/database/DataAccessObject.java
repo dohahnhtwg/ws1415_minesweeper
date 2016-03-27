@@ -1,12 +1,12 @@
 package de.htwg.se.database;
 
-import de.htwg.se.model.IField;
+import de.htwg.se.model.IUser;
 
 public interface DataAccessObject {
 	
-	void create(IField field);
-	IField read();
-	void update(IField field);
+	void create(IUser user);
+	IUser read(String username, String password);
+	void update(IUser user);
 	void delete();
-	boolean contains();
+	boolean contains(IUser user);
 }

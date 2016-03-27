@@ -18,6 +18,8 @@ package de.htwg.se.minesweeper;
 
 import java.util.Scanner;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -26,13 +28,10 @@ import de.htwg.se.aview.tui.Tui;
 
 public final class Minesweeper {
 
-    private Tui tui;
     private static Minesweeper instance = null;
 
     private Minesweeper() {
-        
-        Injector injector = Guice.createInjector(new MinesweeperModule());
-        tui = injector.getInstance(Tui.class);
+    	PropertyConfigurator.configure("log4j.properties");
     }
 
     public static Minesweeper getInstance() {
@@ -42,21 +41,21 @@ public final class Minesweeper {
         return instance;
     }
 
-    public Tui getTui() {
-		return tui;
-	}
-
 	public static void main(String[] args) {
         Minesweeper.getInstance();
         
         Injector injector = Guice.createInjector(new MinesweeperModule());
         
         Tui tui = injector.getInstance(Tui.class);
-        new MinesweeperGUI(tui.getController());
+        injector.getInstance(MinesweeperGUI.class);
+
+        Scanner scanner = new Scanner(System.in);
+        
+        tui.startLoginSequence(scanner);
+        
         tui.paintTUI();
         
         boolean proceed = true;
-        Scanner scanner = new Scanner(System.in);
         while (proceed) {
             proceed = tui.processInputLine(scanner.next());
         }

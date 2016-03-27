@@ -18,7 +18,7 @@ public class TextGUITest {
     @Before
     public void setUp() throws Exception {
     	field = new Field();
-        controller = new Controller(field);
+        controller = new Controller(field, null);
         tui = new Tui(controller);
     }
     

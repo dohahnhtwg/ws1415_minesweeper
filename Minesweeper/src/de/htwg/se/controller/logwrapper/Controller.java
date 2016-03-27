@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import de.htwg.se.controller.IController;
+import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.IField;
 import de.htwg.se.util.observer.Event;
 import de.htwg.se.util.observer.IObserver;
@@ -23,8 +24,8 @@ public class Controller extends Observable implements IController {
     private long startTime;
     
     @Inject
-    public Controller(IField playingField) {
-        realController = new de.htwg.se.controller.impl.Controller(playingField);
+    public Controller(IField playingField, DataAccessObject database) {
+        realController = new de.htwg.se.controller.impl.Controller(playingField, database);
     }
     
     private void pre() {
@@ -143,6 +144,16 @@ public class Controller extends Observable implements IController {
 		pre();
 		realController.finishGame();
 		post();	
+	}
+
+	@Override
+	public boolean addNewAccount(String username, String password) {
+		return realController.addNewAccount(username, password);
+	}
+
+	@Override
+	public boolean logIn(String username, String password) {
+		return realController.logIn(username, password);
 	}
 
 }

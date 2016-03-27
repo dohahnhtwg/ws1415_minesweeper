@@ -29,9 +29,10 @@ import com.google.inject.Singleton;
 import de.htwg.se.controller.IController;
 import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.database.DataAccessObject;
-import de.htwg.se.database.impl.db4oDatabase;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
+import de.htwg.se.model.IUser;
+import de.htwg.se.model.impl.User;
 import de.htwg.se.util.observer.Observable;
 
 
@@ -39,6 +40,7 @@ import de.htwg.se.util.observer.Observable;
 public class Controller extends Observable implements IController {
 
     private IField playingField;
+    private IUser user;
     private boolean gameOver = false;
     private boolean victory = false;
     private UndoManager undoManager;
@@ -46,7 +48,7 @@ public class Controller extends Observable implements IController {
     private int loses = 0;
     private DataAccessObject database;
 
-    public int getVictories() {
+	public int getVictories() {
         return victories;
     }
 
@@ -55,15 +57,10 @@ public class Controller extends Observable implements IController {
     }
 
     @Inject
-    public Controller(IField playingfield)  {
+    public Controller(IField playingfield, DataAccessObject database)  {
         undoManager = new UndoManager();
-        database = new db4oDatabase();
-        
-        if(database.contains())	{
-        	playingField = database.read();
-        } else {
-        	playingField = playingfield;
-        }
+        this.database = database;
+        this.playingField = playingfield;
     }
 
     public boolean isVictory() {
@@ -179,11 +176,25 @@ public class Controller extends Observable implements IController {
 
 	@Override
 	public void finishGame() {
-		if(database.contains())	{
-			database.update(playingField);
-		} else	{
-			database.create(playingField);
-		}
+		database.update(user);
 	}
 
+	public boolean addNewAccount(String username, String password) {
+		IUser userForDb = new User(username, password);
+		if(database.contains(userForDb))	{
+			return false;
+		}
+		database.create(userForDb);
+		return true;
+	}
+
+	public boolean logIn(String username, String password) {
+		IUser userFromDb = database.read(username, password);
+		if(userFromDb == null)	{
+			return false;
+		}
+		user = userFromDb;
+		playingField = userFromDb.getPlayingField();
+		return true;
+	}
 }

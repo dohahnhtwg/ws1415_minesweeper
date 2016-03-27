@@ -1,82 +1,106 @@
 package de.htwg.se.database.impl;
 
 import java.util.List;
-
-import com.db4o.Db4o;
+import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.query.Predicate;
+import com.google.inject.Inject;
 
 import de.htwg.se.database.DataAccessObject;
-import de.htwg.se.model.IField;
-import de.htwg.se.model.impl.Field;
+import de.htwg.se.model.IUser;
+import de.htwg.se.model.impl.User;
 
 public class db4oDatabase implements DataAccessObject {
 	
 	private final String DB4OFILENAME = ".\\db4oDatabase";
+
+	@Inject
+	public db4oDatabase()	{
+		
+	}
 	
-	public void create(IField field) {
-		ObjectContainer db = Db4o.openFile(DB4OFILENAME);
+	@Override
+	public void create(IUser user) {
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded	
+				.newConfiguration(), DB4OFILENAME);
 		try {
-			db.store(field);
+			db.store(user);
 		}
 		finally {
 			db.close();
 		}
 	}
 
-	public IField read() {
-		ObjectContainer db = Db4o.openFile(DB4OFILENAME);
+	@Override
+	public IUser read(final String username, final String password) {
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded	
+				.newConfiguration(), DB4OFILENAME);
 		
 		try {
-			List<Field> fields = db.query(new Predicate<Field>() {
-				public boolean match(Field field) {
-					return field.getiD() == 0;
+			List<User> users = db.query(new Predicate<User>() {
+
+				private static final long serialVersionUID = 1L;
+
+				public boolean match(User user) {
+					return user.getName().equals(username);
 				}
 			});
-			return fields.get(fields.size() - 1);
+			if(users.isEmpty())	{
+				return null;
+			}
+			return users.get(0);
 		}
 		finally {
 			db.close();
 		}
 	}
 
-	public void update(IField field) {
-		ObjectContainer db = Db4o.openFile(DB4OFILENAME);
+	@Override
+	public void update(final IUser user) {
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded	
+				.newConfiguration(), DB4OFILENAME);
 		try {
-			//Fields for later update
-			List<Field> fields = db.query(new Predicate<Field>() {
-				public boolean match(Field field) {
-					return field.getiD() == 0;
+			List<User> users = db.query(new Predicate<User>() {
+
+				private static final long serialVersionUID = 1L;
+
+				public boolean match(User userDb) {
+					return user.getName().equals(userDb.getName());
 				}
 			});
-			db.store(field);
-			
+			IUser userDb = users.get(0);
+			userDb.setPlayingField(user.getPlayingField());
+			db.store(userDb);
 		}
 		finally {
-		 db.close();
-		}
+			db.close();
+		}	
 	}
 
+	@Override
 	public void delete() {
-
-
+		// TODO Auto-generated method stub
+		
 	}
-	
-	public boolean contains()	{
-		ObjectContainer db = Db4o.openFile(DB4OFILENAME);
+
+	@Override
+	public boolean contains(final IUser user) {
+		ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded	
+				.newConfiguration(), DB4OFILENAME);
 		
 		try {
-			List<Field> fields = db.query(new Predicate<Field>() {
-				public boolean match(Field field) {
-					return field.getiD() == 0;
+			List<User> users = db.query(new Predicate<User>() {
+
+				private static final long serialVersionUID = 1L;
+
+				public boolean match(User anotherUser) {
+					return anotherUser.getName().equals(user.getName());
 				}
 			});
-			return !(fields.size() == 0);
+			return !(users.size() == 0);
 		}
 		finally {
 			 db.close();
 		}
-		
 	}
-
 }

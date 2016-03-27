@@ -46,10 +46,11 @@ public final class MinesweeperWeb {
         Injector injector = Guice.createInjector(new MinesweeperModule());
         
         Tui tui = injector.getInstance(Tui.class);
+        Scanner scanner = new Scanner(System.in);
+        tui.startLoginSequence(scanner);
         tui.paintTUI();
         
         boolean proceed = true;
-        Scanner scanner = new Scanner(System.in);
         while (proceed) {
             proceed = tui.processInputLine(scanner.next());
         }

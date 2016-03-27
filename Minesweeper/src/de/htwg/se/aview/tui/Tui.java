@@ -16,6 +16,8 @@
 
 package de.htwg.se.aview.tui;
 
+import java.util.Scanner;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -39,18 +41,7 @@ public class Tui implements IObserver {
     public Tui(IController controller)   {
         this.controller = controller;
         controller.addObserver(this);
-        IHandler handlerSize;
-        IHandler handlerUnReDo;
-        IHandler handlerInput;
-        handlerNew = new ConcreteHandlerNew();
-        handlerSize = new ConcreteHandlerSize();
-        handlerUnReDo = new ConcreteHandlerUnReDo();
-        handlerInput = new ConcreteHandlerInput();
-        handlerNew.setSuccesor(handlerSize);
-        handlerSize.setSuccesor(handlerUnReDo);
-        handlerUnReDo.setSuccesor(handlerInput);
-        handlerInput.setSuccesor(null);
-        
+        createChainOfResponsibility();
     }
 
     public void paintTUI() {
@@ -70,7 +61,6 @@ public class Tui implements IObserver {
         return proceed;
     }
 
-    @Override
     public void update(Event e) {
         paintTUI();
         if(controller.isGameOver())  {
@@ -88,4 +78,59 @@ public class Tui implements IObserver {
     public IHandler getChainOfResponsibility()    {
         return handlerNew;
     }
+    
+    public void startLoginSequence(Scanner scanner) {
+    	boolean loggedIn = false;
+    	while(loggedIn == false)	{
+    		LOGGER.info("(1) Log in");
+    		LOGGER.info("(2) Create account");
+    		String input = scanner.next();
+    		if(input.equals("1"))	{
+    			loggedIn = tryToLogIn(scanner);
+    			if(loggedIn)	{
+    				LOGGER.info("Successfully logged in");
+    			} else {
+    				LOGGER.info("Invalid");
+    			}
+    		} else {
+    			if(input.equals("2"))	{
+    				startNewAccountSequence(scanner);
+    			} else {
+    				LOGGER.info("Please enter 1 or 2");
+    			}
+    		}
+    	}
+	}
+    
+    private void startNewAccountSequence(Scanner scanner) {
+		LOGGER.info("Enter new username:");
+		String username = scanner.next();
+		LOGGER.info("Enter new password:");
+		String password = scanner.next();
+		boolean success = controller.addNewAccount(username, password);
+		if(success)	{
+			LOGGER.info("Successfully created new account");
+		} else {
+			LOGGER.info("Account already exists");
+		}
+	}
+
+	private boolean tryToLogIn(Scanner scanner) {
+		LOGGER.info("Enter username:");
+		String username = scanner.next();
+		LOGGER.info("Enter password:");
+		String password = scanner.next();
+		return controller.logIn(username, password);
+	}
+
+	private void createChainOfResponsibility() {
+		IHandler handlerSize = new ConcreteHandlerSize();
+        IHandler handlerUnReDo = new ConcreteHandlerUnReDo();
+        IHandler handlerInput = new ConcreteHandlerInput();
+        handlerNew = new ConcreteHandlerNew();
+        handlerNew.setSuccesor(handlerSize);
+        handlerSize.setSuccesor(handlerUnReDo);
+        handlerUnReDo.setSuccesor(handlerInput);
+        handlerInput.setSuccesor(null);
+	}
 }

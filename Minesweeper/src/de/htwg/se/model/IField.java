@@ -59,13 +59,5 @@ public interface IField {
      * This Method returns the actual playing field as formated String.
      * @return String representing a Field.
      */
-    String toString();
-    
-    /**
-     * 
-     * @return
-     */
-    ICell getCell(int x, int y);
-    
-    
+    String toString();  
 }
