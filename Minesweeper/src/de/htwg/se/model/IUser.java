@@ -35,13 +35,13 @@ public interface IUser {
     
     /**
      * Returns statistic of this user
-     * @return
+     * @return bound IStatistic instance
      */
     IStatistic getStatistic();
     
     /**
      * Changes the statistic
-     * @param statistic
+     * @param statistic reference to IStatistic class
      */
     void setStatistic(IStatistic statistic);
     

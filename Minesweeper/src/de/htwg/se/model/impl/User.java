@@ -19,7 +19,6 @@ public class User implements IUser {
     private IStatistic statistic;
     private String algorithm = "PBKDF2WithHmacSHA1";
 
-	// TODO password will be probably changed to char[]
     public User(String name, String password) {
         this.name = name;
         try {
@@ -92,16 +91,16 @@ public class User implements IUser {
         return salt;
     }
 
-	public IField getPlayingField() {
-		return playingField;
-	}
+    public IField getPlayingField() {
+        return playingField;
+    }
 
-	public void setPlayingField(IField playingField) {
-		this.playingField = playingField;
-	}
-	
-	public void setAlgorithm(String algorithm) {
-		this.algorithm = algorithm;
-	}
-	
+    public void setPlayingField(IField playingField) {
+        this.playingField = playingField;
+    }
+
+    public void setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
+    }
+
 }

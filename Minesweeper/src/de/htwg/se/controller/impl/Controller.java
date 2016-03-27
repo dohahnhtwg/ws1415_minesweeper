@@ -48,7 +48,7 @@ public class Controller extends Observable implements IController {
     private int loses = 0;
     private DataAccessObject database;
 
-	public int getVictories() {
+    public int getVictories() {
         return victories;
     }
 
@@ -115,12 +115,9 @@ public class Controller extends Observable implements IController {
     }
     
     private boolean checkCellInField(Point cell)    {
-        if((cell.getX() > 0 && cell.getY() > 0) && (cell.getX() < playingField.getField().length-1 && cell.getY() < playingField.getField()[(int)cell.getX()].length-1))    {
-            return true;
-        }
-        return false;
+        return (cell.getX() > 0 && cell.getY() > 0) && (cell.getX() < playingField.getField().length - 1 && cell.getY() < playingField.getField()[(int) cell.getX()].length - 1);
     }
-    
+
     private boolean checkVictory()  {
         int requirement = playingField.getLines() * playingField.getColumns() - playingField.getnMines();
         int current = 0;
@@ -132,14 +129,14 @@ public class Controller extends Observable implements IController {
                 }
             }
         }
-        
+
         if(current == requirement)  {
             victories++;
             return true;
         }
         return false; 
     }
-    
+
     public void undo() {
         if (undoManager.canUndo()) {
             undoManager.undo();
@@ -153,7 +150,7 @@ public class Controller extends Observable implements IController {
         }
         notifyObservers();
     }
-    
+
     public String getField()    {
         return playingField.toString();
     }
@@ -166,7 +163,6 @@ public class Controller extends Observable implements IController {
         create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
     }
 
-    
     public void create(int lines, int columns, int nMines) {
         gameOver = false;
         victory = false;
@@ -174,27 +170,30 @@ public class Controller extends Observable implements IController {
         notifyObservers();
     }
 
-	@Override
-	public void finishGame() {
-		database.update(user);
-	}
+    @Override
+    public void finishGame() {
+        database.update(user);
+    }
 
-	public boolean addNewAccount(String username, String password) {
-		IUser userForDb = new User(username, password);
-		if(database.contains(userForDb))	{
-			return false;
-		}
-		database.create(userForDb);
-		return true;
-	}
+    public boolean addNewAccount(String username, String password) {
+        if (username.isEmpty() || password.isEmpty()) {
+            return false;
+        }
+        IUser userForDb = new User(username, password);
+        if(database.contains(userForDb)) {
+            return false;
+        }
+        database.create(userForDb);
+        return true;
+    }
 
-	public boolean logIn(String username, String password) {
-		IUser userFromDb = database.read(username, password);
-		if(userFromDb == null)	{
-			return false;
-		}
-		user = userFromDb;
-		playingField = userFromDb.getPlayingField();
-		return true;
-	}
+    public boolean logIn(String username, String password) {
+        IUser userFromDb = database.read(username, password);
+        if(userFromDb == null)    {
+            return false;
+        }
+        user = userFromDb;
+        playingField = userFromDb.getPlayingField();
+        return true;
+    }
 }
