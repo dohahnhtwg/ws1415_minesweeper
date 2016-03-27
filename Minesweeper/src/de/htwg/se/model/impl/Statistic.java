@@ -10,7 +10,8 @@ class Statistic implements IStatistic {
 
     Statistic() {
         this.gamesPlayed = this.gamesWon = 0;
-        this.timeSpent = this.minTime = 0;
+        this.timeSpent = 0;
+        this.minTime = Long.MAX_VALUE;
     }
     @Override
     public int getPlayedGames() {
@@ -37,8 +38,10 @@ class Statistic implements IStatistic {
         this.gamesPlayed += 1;
         if (victory) {
             this.gamesWon += 1;
+            if (timeSpent < this.minTime) {
+                this.minTime = timeSpent;
+            }
         }
         this.timeSpent += timeSpent;
-        this.minTime = timeSpent < this.minTime ? timeSpent : this.minTime;
     }
 }
