@@ -16,14 +16,16 @@
 
 package de.htwg.se.aview.gui;
 
+import javax.swing.ImageIcon;
+import static java.awt.Image.SCALE_SMOOTH;
+import java.awt.Image;
+
 /**
  * A class which provides all Constants needed by the GUI.
  * @author Dominik Hahn & Pavel Kravetskiy
  *
  */
 public final class Constants {
-
-    public static final String[] BUTTONTEXT = {"", "*", "?"};
     public static final int DEF_BUT_SIZEX = 100;
     public static final int DEF_BUT_SIZEY = 50;
     public static final int DEFBUTTONSIZE = 35;
@@ -42,9 +44,35 @@ public final class Constants {
     public static final int THREE = 3;
     public static final int ZERO = 0;
     public static final int BOUNDS = 300;
-
+    private static ImageIcon[] icons = null;
     private Constants() {
 
     }
+    public static ImageIcon getIcon(int index) {
+        String[] imgPaths = {
+                "/de/htwg/se/images/flag.png",
+                "/de/htwg/se/images/question_mark.png",
+                "/de/htwg/se/images/Empty_Icon.png"};
+        if (icons == null) {
+            icons = new ImageIcon[imgPaths.length];
+            for (int i= 0; i < imgPaths.length; i++) {
+                ImageIcon icon = new ImageIcon(Constants.class.getResource(imgPaths[i]));
+                Image img = icon.getImage();
+                Image newimg = img.getScaledInstance(Constants.DEFBUTTONSIZE - 10,
+                        Constants.DEFBUTTONSIZE - 10,
+                        SCALE_SMOOTH);
+                icons[i] = new ImageIcon(newimg);
+            }
+        }
+        return Constants.icons[index % imgPaths.length];
+    }
 
+    public static ImageIcon getMineIcon() {
+        ImageIcon icon = new ImageIcon(Constants.class.getResource("/de/htwg/se/images/minesweepericon.png"));
+        Image img = icon.getImage();
+        Image newimg = img.getScaledInstance(Constants.DEFBUTTONSIZE - 10,
+                Constants.DEFBUTTONSIZE - 10,
+                SCALE_SMOOTH);
+        return new ImageIcon(newimg);
+    }
 }

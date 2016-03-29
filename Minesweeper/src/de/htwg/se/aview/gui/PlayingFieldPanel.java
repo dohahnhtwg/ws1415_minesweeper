@@ -29,8 +29,7 @@ import java.util.TreeMap;
 import static de.htwg.se.aview.gui.Constants.ZERO;
 import static de.htwg.se.aview.gui.Constants.ONE;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import de.htwg.se.controller.IController;
 import de.htwg.se.model.ICell;
@@ -38,10 +37,10 @@ import de.htwg.se.model.ICell;
 public final class PlayingFieldPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JButton[][] buttons;
-    private static Map<Integer, Map<Integer, String>> marked = new TreeMap<>();
+    private static Map<Integer, Map<Integer, ImageIcon>> marked = new TreeMap<>();
 
     static {
-        marked = new HashMap<Integer, Map<Integer, String>>();
+        marked = new HashMap<Integer, Map<Integer, ImageIcon>>();
     }
     public PlayingFieldPanel(final int x, final int y, final IController controller) {
         buttons = new JButton[x][y];
@@ -68,12 +67,11 @@ public final class PlayingFieldPanel extends JPanel {
             public void mouseClicked(final MouseEvent event) {
 
                 if (event.getButton() == MouseEvent.BUTTON3 && buttons[i][j].isEnabled()) {
-                    index = ++index % Constants.BUTTONTEXT.length;
-                    buttons[i][j].setText(Constants.BUTTONTEXT[index]);
+                    buttons[i][j].setIcon(Constants.getIcon(index));
                     if (!marked.containsKey(i)) {
-                        marked.put(i, new TreeMap<Integer, String>());
+                        marked.put(i, new TreeMap<Integer, ImageIcon>());
                     } 
-                    marked.get(i).put(j, Constants.BUTTONTEXT[index]);
+                    marked.get(i).put(j, Constants.getIcon(index++));
                 }
             }
         });
@@ -83,12 +81,19 @@ public final class PlayingFieldPanel extends JPanel {
     private void reorgTextOnButton(final IController controller, final int i, final int j) {
         ICell cell = controller.getPlayingField().getField()[i + ONE][j + ONE];
         if (marked.containsKey(i) && marked.get(i).containsKey(j)) {
-            buttons[i][j].setText(marked.get(i).get(j));
+            buttons[i][j].setIcon(marked.get(i).get(j));
         }
         if (cell.isRevealed()) {
             buttons[i][j].setEnabled(false);
             if (cell.getValue() != 0) {
-                buttons[i][j].setText(controller.getPlayingField().getField()[i + ONE][j + ONE].toString());
+                String value = controller.getPlayingField().getField()[i + ONE][j + ONE].toString();
+                if (value.equals("  * ")) {
+                    buttons[i][j].setEnabled(true);
+                    buttons[i][j].setIcon(Constants.getMineIcon());
+                } else {
+                    buttons[i][j].setIcon(null);
+                    buttons[i][j].setText(value);
+                }
             }
         }
     }
@@ -97,12 +102,12 @@ public final class PlayingFieldPanel extends JPanel {
         return buttons;
     }
 
-    public Map<Integer, Map<Integer, String>> getMarked() {
+    public Map<Integer, Map<Integer, ImageIcon>> getMarked() {
         return marked;
     }
 
     public static void zeroMarked() {
         TimerThread.stopTimer();
-        marked = new HashMap<Integer, Map<Integer, String>>();
+        marked = new HashMap<Integer, Map<Integer, ImageIcon>>();
     }
 }
