@@ -50,9 +50,9 @@ public final class Constants {
     }
     public static ImageIcon getIcon(int index) {
         String[] imgPaths = {
-                "/de/htwg/se/images/flag.png",
-                "/de/htwg/se/images/question_mark.png",
-                "/de/htwg/se/images/Empty_Icon.png"};
+                "/images/flag.png",
+                "/images/question_mark.png",
+                "/images/Empty_Icon.png"};
         if (icons == null) {
             icons = new ImageIcon[imgPaths.length];
             for (int i= 0; i < imgPaths.length; i++) {
@@ -68,7 +68,7 @@ public final class Constants {
     }
 
     public static ImageIcon getMineIcon() {
-        ImageIcon icon = new ImageIcon(Constants.class.getResource("/de/htwg/se/images/minesweepericon.png"));
+        ImageIcon icon = new ImageIcon(Constants.class.getResource("/images/minesweepericon.png"));
         Image img = icon.getImage();
         Image newimg = img.getScaledInstance(Constants.DEFBUTTONSIZE - 10,
                 Constants.DEFBUTTONSIZE - 10,
