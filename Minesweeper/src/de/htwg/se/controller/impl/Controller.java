@@ -60,7 +60,13 @@ public class Controller extends Observable implements IController {
     public Controller(IField playingfield, DataAccessObject database)  {
         undoManager = new UndoManager();
         this.database = database;
-        this.playingField = playingfield;
+        if (database.contains(new User("Default", "Default"))) {
+            this.user = database.read("Default", "Default");
+        } else {
+            this.user = new User("Default", "Default");
+            database.create(this.user);
+        }
+        this.playingField = this.user.getPlayingField();
     }
 
     public boolean isVictory() {

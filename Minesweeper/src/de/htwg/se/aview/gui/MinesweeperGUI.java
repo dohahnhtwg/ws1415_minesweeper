@@ -17,6 +17,8 @@
 package de.htwg.se.aview.gui;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +56,11 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         constructMinesweeperGUI(controller);
         this.update(new Event() {
+        });
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                controller.finishGame();
+            }
         });
     }
 
