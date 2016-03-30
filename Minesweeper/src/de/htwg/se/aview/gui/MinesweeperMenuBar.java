@@ -180,14 +180,14 @@ class MinesweeperMenuBar extends JMenuBar {
         });
     }
 
-    private void placeComponents(JPanel panel, JFrame frame) {
+    private void placeComponents(JPanel panel, final JFrame frame) {
         panel.setLayout(null);
 
         JLabel userLabel = new JLabel("User");
         userLabel.setBounds(10, 10, 80, 25);
         panel.add(userLabel);
 
-        JTextField userText = new JTextField(20);
+        final JTextField userText = new JTextField(20);
         userText.setBounds(100, 10, 160, 25);
         panel.add(userText);
 
@@ -195,11 +195,11 @@ class MinesweeperMenuBar extends JMenuBar {
         passwordLabel.setBounds(10, 40, 80, 25);
         panel.add(passwordLabel);
 
-        JPasswordField passwordText = new JPasswordField(20);
+        final JPasswordField passwordText = new JPasswordField(20);
         passwordText.setBounds(100, 40, 160, 25);
         panel.add(passwordText);
 
-        JButton loginButton = new JButton("login");
+        final JButton loginButton = new JButton("login");
         loginButton.setBounds(10, 80, 80, 25);
         panel.add(loginButton);
 

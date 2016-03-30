@@ -31,7 +31,7 @@ public final class Minesweeper {
     private static Minesweeper instance = null;
 
     private Minesweeper() {
-    	PropertyConfigurator.configure("log4j.properties");
+
     }
 
     public static Minesweeper getInstance() {
