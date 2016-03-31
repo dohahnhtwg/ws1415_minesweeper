@@ -1,5 +1,6 @@
 package de.htwg.se.controller.logwrapper;
 
+import de.htwg.se.model.IStatistic;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -155,5 +156,10 @@ public class Controller extends Observable implements IController {
 	public boolean logIn(String username, String password) {
 		return realController.logIn(username, password);
 	}
+
+    @Override
+    public IStatistic getUserStatistic() {
+        return realController.getUserStatistic();
+    }
 
 }

@@ -28,6 +28,7 @@ public class User implements IUser {
             exc.printStackTrace();
         }
         playingField = new Field();
+        statistic = new Statistic();
     }
 
     @Override

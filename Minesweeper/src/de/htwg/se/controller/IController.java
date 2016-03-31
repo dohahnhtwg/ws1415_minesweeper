@@ -17,6 +17,7 @@
 package de.htwg.se.controller;
 
 import de.htwg.se.model.IField;
+import de.htwg.se.model.IStatistic;
 import de.htwg.se.util.observer.IObservable;
 
 /**
@@ -97,5 +98,5 @@ public interface IController extends IObservable {
 
 	boolean logIn(String username, String password);
 
-
+    IStatistic getUserStatistic();
 }

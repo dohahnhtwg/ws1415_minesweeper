@@ -31,6 +31,7 @@ import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
+import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import de.htwg.se.model.impl.User;
 import de.htwg.se.util.observer.Observable;
@@ -202,5 +203,9 @@ public class Controller extends Observable implements IController {
         playingField = userFromDb.getPlayingField();
         notifyObservers();
         return true;
+    }
+
+    public IStatistic getUserStatistic() {
+        return user.getStatistic();
     }
 }

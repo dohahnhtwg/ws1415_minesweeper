@@ -18,6 +18,7 @@ package de.htwg.se.aview.tui;
 
 import java.util.Scanner;
 
+import de.htwg.se.model.IStatistic;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -58,6 +59,8 @@ public class Tui implements IObserver {
             proceed = false;
         } else if("l".equals(next)) {
             startLoginSequence();
+        } else if ("s".equals(next)) {
+            printStatistic();
         } else if(!handlerNew.handleRequest(next, controller))  {
             LOGGER.info("illegal argument");
         }
@@ -80,6 +83,15 @@ public class Tui implements IObserver {
 
     public void setScanner(Scanner scanner) {
         this.scanner = scanner;
+    }
+
+    private void printStatistic() {
+        IStatistic s = controller.getUserStatistic();
+        LOGGER.info("Number of all played games: " + s.getPlayedGames());
+        LOGGER.info("Number of won games: " + s.getWonGames());
+        LOGGER.info("Amount of played time: " + s.getPlayedTime());
+        LOGGER.info("Minimal time spent for a game: " + s.getMinTimePlayed());
+        paintTUI();
     }
 
     private void startLoginSequence() {
