@@ -86,7 +86,7 @@ public class Controller extends Observable implements IController {
             gameOver = true;
             loses++;
         } else {
-            List<ICell> revelalFieldCommandList = new LinkedList<ICell>();
+            List<ICell> revelalFieldCommandList = new LinkedList<>();
             revealFieldHelp(x, y, revelalFieldCommandList);
             victory = checkVictory();
             undoManager.addEdit(new RevealFieldCommand(revelalFieldCommandList));
@@ -108,7 +108,7 @@ public class Controller extends Observable implements IController {
     }
     
     private List<Point> getFieldsAround(int x, int y) {
-        List<Point> fieldsAround = new ArrayList<Point>();
+        List<Point> fieldsAround = new ArrayList<>();
         fieldsAround.add(new Point(x - 1, y));
         fieldsAround.add(new Point(x + 1, y));
         fieldsAround.add(new Point(x - 1, y - 1));
@@ -200,6 +200,7 @@ public class Controller extends Observable implements IController {
         }
         user = userFromDb;
         playingField = userFromDb.getPlayingField();
+        notifyObservers();
         return true;
     }
 }

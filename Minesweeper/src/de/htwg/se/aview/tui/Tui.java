@@ -36,6 +36,7 @@ public class Tui implements IObserver {
     private IController controller;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
     private IHandler handlerNew;
+    private Scanner scanner;
 
     @Inject
     public Tui(IController controller)   {
@@ -46,7 +47,7 @@ public class Tui implements IObserver {
 
     public void paintTUI() {
         LOGGER.info(controller.getField());
-        LOGGER.info("Possible commands: q = quit, n = new Game, sS = small Field, sM = medium Field, sL = Large Field, yy-xx = reveal Field, u = undo, r = redo");
+        LOGGER.info("Possible commands: q = quit, n = new Game, sS = small Field, sM = medium Field, sL = Large Field, yy-xx = reveal Field, u = undo, r = redo, l = login, s = statistic");
     }
 
     public boolean processInputLine(String next) {
@@ -55,6 +56,8 @@ public class Tui implements IObserver {
         if("q".equals(next)) {
         	controller.finishGame();
             proceed = false;
+        } else if("l".equals(next)) {
+            startLoginSequence();
         } else if(!handlerNew.handleRequest(next, controller))  {
             LOGGER.info("illegal argument");
         }
@@ -75,34 +78,34 @@ public class Tui implements IObserver {
     	return this.controller;
     }
 
-    public IHandler getChainOfResponsibility()    {
-        return handlerNew;
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
     }
-    
-    public void startLoginSequence(Scanner scanner) {
-    	boolean loggedIn = false;
-    	while(loggedIn == false)	{
-    		LOGGER.info("(1) Log in");
-    		LOGGER.info("(2) Create account");
-    		String input = scanner.next();
-    		if(input.equals("1"))	{
-    			loggedIn = tryToLogIn(scanner);
-    			if(loggedIn)	{
-    				LOGGER.info("Successfully logged in");
-    			} else {
-    				LOGGER.info("Invalid");
-    			}
-    		} else {
-    			if(input.equals("2"))	{
-    				startNewAccountSequence(scanner);
-    			} else {
-    				LOGGER.info("Please enter 1 or 2");
-    			}
-    		}
-    	}
-	}
-    
-    private void startNewAccountSequence(Scanner scanner) {
+
+    private void startLoginSequence() {
+        boolean loggedIn = false;
+        while(!loggedIn)	{
+            LOGGER.info("(1) Log in");
+            LOGGER.info("(2) Create account");
+            String input = scanner.next();
+            if(input.equals("1"))	{
+                loggedIn = tryToLogIn();
+                if(loggedIn)	{
+                    LOGGER.info("Successfully logged in");
+                } else {
+                    LOGGER.info("Invalid");
+                }
+            } else {
+                if(input.equals("2"))	{
+                    startNewAccountSequence();
+                } else {
+                    LOGGER.info("Please enter 1 or 2");
+                }
+            }
+        }
+    }
+
+    private void startNewAccountSequence() {
 		LOGGER.info("Enter new username:");
 		String username = scanner.next();
 		LOGGER.info("Enter new password:");
@@ -115,7 +118,7 @@ public class Tui implements IObserver {
 		}
 	}
 
-	private boolean tryToLogIn(Scanner scanner) {
+	private boolean tryToLogIn() {
 		LOGGER.info("Enter username:");
 		String username = scanner.next();
 		LOGGER.info("Enter password:");

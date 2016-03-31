@@ -47,7 +47,6 @@ public final class MinesweeperWeb {
         
         Tui tui = injector.getInstance(Tui.class);
         Scanner scanner = new Scanner(System.in);
-        tui.startLoginSequence(scanner);
         tui.paintTUI();
         
         boolean proceed = true;

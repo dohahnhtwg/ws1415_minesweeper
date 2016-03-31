@@ -50,8 +50,7 @@ public final class Minesweeper {
         injector.getInstance(MinesweeperGUI.class);
 
         Scanner scanner = new Scanner(System.in);
-        
-        tui.startLoginSequence(scanner);
+        tui.setScanner(scanner);
         
         tui.paintTUI();
         
