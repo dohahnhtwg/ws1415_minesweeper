@@ -36,6 +36,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JOptionPane;
 
 import de.htwg.se.controller.IController;
+import de.htwg.se.model.IStatistic;
 
 class MinesweeperMenuBar extends JMenuBar {
     private static final long serialVersionUID = 1L;
@@ -139,17 +140,24 @@ class MinesweeperMenuBar extends JMenuBar {
         statistic.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ActionListener) {
-                final int loses = controller.getLoses();
-                final int wins = controller.getVictories();
+                final IStatistic stat = controller.getUserStatistic();
+                final int games = stat.getPlayedGames();
+                final int wins = stat.getWonGames();
+                final String playedTime = stat.getPlayedTime() == 0 ? "-" : String.valueOf(stat.getPlayedTime() / 1000);
+                final String minTimePlayed = stat.getMinTimePlayed() == Long.MAX_VALUE ? "-" :
+                        String.valueOf(stat.getMinTimePlayed() / 1000);
                 double percentage = 0;
-                if ((loses + wins) != 0) {
-                    percentage = wins * Constants.DEF_BUT_SIZEX/(loses + wins);
+                if ((games) != 0) {
+                    percentage = wins * Constants.DEF_BUT_SIZEX/(games);
                 }
                 JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
-                        "Last time spend: " + TimerThread.getTime()
-                        + "\nPlayed Games: " + (loses + wins)
-                        + "\nWins: " + wins
-                        + "\nPercentage: " + percentage + "%",
+                        "<html><body><table style='width:100%'>" +
+                                "<tr><td>Played Time:</td><td>" + playedTime + "s</td></tr>" +
+                                "<tr><td>Fastest win:</td><td>" + minTimePlayed + "s</td></tr>" +
+                                "<tr><td>Played Games:</td><td>" + games + "</td></tr>" +
+                                "<tr><td>Wins:</td><td>" + wins + "</td></tr>" +
+                                "<tr><td>Percentage:</td><td>" + percentage + "%</td></tr>" +
+                                "</table></body></html>",
                         "Statistic", JOptionPane.INFORMATION_MESSAGE);
             }
         });

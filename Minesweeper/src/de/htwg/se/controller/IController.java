@@ -79,24 +79,51 @@ public interface IController extends IObservable {
     IField getPlayingField();
 
     /**
-     * @return the number of victories.
-     */
-    int getVictories();
-
-    /**
-     * 
-     * @return the number of loses.
-     */
-    int getLoses();
-
-    /**
      * All action before game is finished
      */
-	void finishGame();
+    void finishGame();
 
-	boolean addNewAccount(String username, String password);
+    /**
+     * Create new account
+     * @param username name of the user to create
+     * @param password users password
+     * @return true if creation successfully finished
+     */
+    boolean addNewAccount(String username, String password);
 
-	boolean logIn(String username, String password);
+    /**
+     * Log in a user with given credentials
+     * @param username name of the user to log in
+     * @param password users password
+     * @return true if successfully logged in
+     */
+    boolean logIn(String username, String password);
 
+    /**
+     * Get current statistic instance
+     * @return statistic
+     */
     IStatistic getUserStatistic();
+
+    /**
+     * Start the timer
+     */
+    void startTimer();
+
+    /**
+     * Stop the timer
+     */
+    void stopTimer();
+
+    /**
+     * Get elapsed time since game start in seconds
+     * @return time in millis
+     */
+    Long getCurrentTime();
+
+    /**
+     * Return whenever the game is started
+     * @return true if started
+     */
+    boolean isStarted();
 }

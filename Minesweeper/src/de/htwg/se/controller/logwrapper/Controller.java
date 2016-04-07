@@ -130,16 +130,6 @@ public class Controller extends Observable implements IController {
         post();
     }
 
-    @Override
-    public int getVictories() {
-        return realController.getVictories();
-    }
-
-    @Override
-    public int getLoses() {
-        return realController.getLoses();
-    }
-
 	@Override
 	public void finishGame() {
 		pre();
@@ -160,6 +150,30 @@ public class Controller extends Observable implements IController {
     @Override
     public IStatistic getUserStatistic() {
         return realController.getUserStatistic();
+    }
+
+    @Override
+    public void startTimer() {
+        pre();
+        realController.startTimer();
+        post();
+    }
+
+    @Override
+    public void stopTimer() {
+        pre();
+        realController.stopTimer();
+        post();
+    }
+
+    @Override
+    public Long getCurrentTime() {
+        return realController.getCurrentTime();
+    }
+
+    @Override
+    public boolean isStarted() {
+        return realController.isStarted();
     }
 
 }

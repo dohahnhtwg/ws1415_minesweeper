@@ -23,13 +23,9 @@ import de.htwg.se.controller.IController;
 
 public final class ButtonHandler implements ActionListener {
 
-    private static TimerThread timerThread;
     private int x, y;
     private IController controller;
 
-    static {
-        timerThread = new TimerThread();
-    }
     public ButtonHandler(final int x, final int y, final IController controller) {
         this.x = x;
         this.y = y;
@@ -39,10 +35,6 @@ public final class ButtonHandler implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent arg0) {
-
-        if (!timerThread.isStarted() && !controller.isGameOver() && !controller.isVictory()) {
-            timerThread.startTimer();
-        }
         controller.revealField(x + Constants.ONE, y + Constants.ONE);
     }
 

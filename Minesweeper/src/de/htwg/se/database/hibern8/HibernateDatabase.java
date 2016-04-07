@@ -27,8 +27,8 @@ public class HibernateDatabase implements DataAccessObject{
             tx = session.beginTransaction();
 
             // TODO
-//            HibernateUser user =
-//            session.saveOrUpdate();
+//            HibernateUser user;
+//            session.saveOrUpdate(user);
 
 
             tx.commit();

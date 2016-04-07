@@ -138,16 +138,6 @@ public class ControllerTest {
     }
     
     @Test
-    public void getVictoriesShouldReturnVictories()	{
-    	assertEquals(0, controller.getVictories());
-    }
-    
-    @Test
-    public void getLosesShouldReturnLoses()	{
-    	assertEquals(0, controller.getLoses());
-    }
-    
-    @Test
     public void finishGameShouldUpdateDatabase()	{
     	//Execute
     	controller.finishGame();

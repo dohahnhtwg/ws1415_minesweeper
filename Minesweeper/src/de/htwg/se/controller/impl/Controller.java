@@ -42,20 +42,13 @@ public class Controller extends Observable implements IController {
 
     private IField playingField;
     private IUser user;
+    private IStatistic statistic;
     private boolean gameOver = false;
     private boolean victory = false;
+    private boolean isStarted = false;
     private UndoManager undoManager;
-    private int victories = 0;
-    private int loses = 0;
     private DataAccessObject database;
-
-    public int getVictories() {
-        return victories;
-    }
-
-    public int getLoses() {
-        return loses;
-    }
+    private Long elapsedTime = 0L;
 
     @Inject
     public Controller(IField playingfield, DataAccessObject database)  {
@@ -68,6 +61,7 @@ public class Controller extends Observable implements IController {
             database.create(this.user);
         }
         this.playingField = this.user.getPlayingField();
+        this.statistic = this.user.getStatistic();
     }
 
     public boolean isVictory() {
@@ -82,14 +76,22 @@ public class Controller extends Observable implements IController {
         if(gameOver || isVictory()) {
             return;
         }
+        if (!isStarted) {
+            startTimer();
+        }
         if(playingField.getField()[x][y].getValue() == -1) {
             playingField.getField()[x][y].setRevealed(true);
             gameOver = true;
-            loses++;
+            stopTimer();
+            statistic.updateStatistic(false, elapsedTime);
         } else {
             List<ICell> revelalFieldCommandList = new LinkedList<>();
             revealFieldHelp(x, y, revelalFieldCommandList);
             victory = checkVictory();
+            if (victory) {
+                stopTimer();
+                statistic.updateStatistic(true, elapsedTime);
+            }
             undoManager.addEdit(new RevealFieldCommand(revelalFieldCommandList));
         }
         notifyObservers();
@@ -137,11 +139,7 @@ public class Controller extends Observable implements IController {
             }
         }
 
-        if(current == requirement)  {
-            victories++;
-            return true;
-        }
-        return false; 
+        return current == requirement;
     }
 
     public void undo() {
@@ -201,11 +199,33 @@ public class Controller extends Observable implements IController {
         }
         user = userFromDb;
         playingField = userFromDb.getPlayingField();
+        statistic = userFromDb.getStatistic();
         notifyObservers();
         return true;
     }
 
     public IStatistic getUserStatistic() {
-        return user.getStatistic();
+        return statistic;
+    }
+
+    public void startTimer() {
+        isStarted = true;
+        elapsedTime = System.currentTimeMillis();
+    }
+
+    public void stopTimer() {
+        isStarted = false;
+        elapsedTime = System.currentTimeMillis() - elapsedTime;
+    }
+
+    public Long getCurrentTime() {
+        if (isStarted) {
+            return (System.currentTimeMillis() - elapsedTime) / 1000;
+        }
+        return elapsedTime / 1000;
+    }
+
+    public boolean isStarted() {
+        return isStarted;
     }
 }

@@ -107,7 +107,6 @@ public final class PlayingFieldPanel extends JPanel {
     }
 
     public static void zeroMarked() {
-        TimerThread.stopTimer();
         marked = new HashMap<Integer, Map<Integer, ImageIcon>>();
     }
 }

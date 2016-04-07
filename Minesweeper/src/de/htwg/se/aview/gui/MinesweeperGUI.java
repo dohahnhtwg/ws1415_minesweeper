@@ -62,6 +62,8 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
                 controller.finishGame();
             }
         });
+        UpdaterThread updaterThread = new UpdaterThread(controller);
+        updaterThread.run();
     }
 
     public void constructMinesweeperGUI(final IController controller) {
@@ -95,7 +97,7 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         setResizable(false);
         setVisible(true); 
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException
                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
             Logger.getLogger(MinesweeperGUI.class.getName()).log(Level.SEVERE, null, e);
@@ -120,8 +122,7 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
     }
 
     private void action(final String text) {
-        TimerThread.stopTimer();
-        JOptionPane.showMessageDialog(null, text + "\nTime: " + TimerThread.getTime() + " Seconds",
+        JOptionPane.showMessageDialog(null, text + "\nTime: " + controller.getCurrentTime() + " Seconds",
                 "Game ended", JOptionPane.INFORMATION_MESSAGE);
     }
 }

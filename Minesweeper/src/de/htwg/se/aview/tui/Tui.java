@@ -71,6 +71,7 @@ public class Tui implements IObserver {
         paintTUI();
         if(controller.isGameOver())  {
             LOGGER.info("GAME OVER!!!");
+            LOGGER.info("Spent time: " + controller.getCurrentTime() + "s");
         }
         if(controller.isVictory())   {
             LOGGER.info("Victory!!!");

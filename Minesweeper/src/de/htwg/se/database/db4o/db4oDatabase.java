@@ -71,6 +71,7 @@ public class db4oDatabase implements DataAccessObject {
             });
             IUser userDb = users.get(0);
             userDb.setPlayingField(user.getPlayingField());
+            userDb.setStatistic(user.getStatistic());
             db.store(userDb);
         }
         finally {
