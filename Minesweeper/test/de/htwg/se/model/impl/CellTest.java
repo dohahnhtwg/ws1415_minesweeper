@@ -26,21 +26,21 @@ public class CellTest {
     
     @Test
     public void testIsRevealed()    {
-        cell.setRevealed(true);
-        assertTrue(cell.isRevealed());
-        cell.setRevealed(false);
-        assertFalse(cell.isRevealed());
+        cell.setIsRevealed(true);
+        assertTrue(cell.getIsRevealed());
+        cell.setIsRevealed(false);
+        assertFalse(cell.getIsRevealed());
     }
     
     @Test
     public void testToString()  {
-        cell.setRevealed(true);
+        cell.setIsRevealed(true);
         cell.setValue(-1);
         assertTrue(cell.toString().equals("  * "));
-        cell.setRevealed(false);
+        cell.setIsRevealed(false);
         cell.setValue(2);
         assertTrue(cell.toString().equals("  - "));
-        cell.setRevealed(true);
+        cell.setIsRevealed(true);
         assertTrue(cell.toString().equals("  2 "));
     }
     
@@ -51,14 +51,14 @@ public class CellTest {
         assertFalse(cell.equals(null));
         assertFalse(cell.equals(new Integer(0)));
         assertFalse(cell.equals(testCell));
-        testCell.setRevealed(true);
+        testCell.setIsRevealed(true);
         testCell.setValue(0);
         assertFalse(cell.equals(testCell));
-        testCell.setRevealed(false);
+        testCell.setIsRevealed(false);
         assertTrue(cell.equals(testCell));
         assertTrue(cell.hashCode() == testCell.hashCode());
-        testCell.setRevealed(true);
-        cell.setRevealed(true);
+        testCell.setIsRevealed(true);
+        cell.setIsRevealed(true);
         assertTrue(cell.hashCode() == testCell.hashCode());
     }
 }

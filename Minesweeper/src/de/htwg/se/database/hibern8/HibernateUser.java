@@ -17,7 +17,7 @@ public class HibernateUser implements Serializable {
     @Column(name = "password")
     private byte[] encryptedPassword;
 
-    @Column
+    @Column(name = "salt")
     private byte[] salt;
 
     @Column

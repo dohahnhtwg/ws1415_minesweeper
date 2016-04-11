@@ -12,11 +12,13 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
 
 public class User implements IUser {
+    private int id;
     private String name;
     private byte[] encryptedPassword;
     private byte[] salt;
     private IField playingField;
     private IStatistic statistic;
+
     private String algorithm = "PBKDF2WithHmacSHA1";
 
     public User(String name, String password) {
@@ -29,6 +31,26 @@ public class User implements IUser {
         }
         playingField = new Field();
         statistic = new Statistic();
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    @Override
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
     }
 
     @Override
@@ -51,8 +73,13 @@ public class User implements IUser {
     }
 
     @Override
-    public String getEncryptedPassword() {
-        return new String(this.encryptedPassword);
+    public byte[] getEncryptedPassword() {
+        return this.encryptedPassword;
+    }
+
+    @Override
+    public void setEncryptedPassword(byte[] encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 
     @Override
@@ -104,4 +131,7 @@ public class User implements IUser {
         this.algorithm = algorithm;
     }
 
+    public String getAlgorithm() {
+        return algorithm;
+    }
 }

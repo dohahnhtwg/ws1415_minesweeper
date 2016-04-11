@@ -36,19 +36,37 @@ public interface IField {
      * @return number of lines.
      */
     int getLines();
-    
+
+    /**
+     * Set number of lines in the field
+     * @param lines int
+     */
+    void setLines(int lines);
+
     /**
      * This Method returns the number of columns in the actual playing field.
      * @return number of columns.
      */
     int getColumns();
+
+    /**
+     * Set number of columns in the field
+     * @param columns int
+     */
+    void setColumns(int columns);
     
     /**
      * This Method returns the number of mines in the actual playing field.
      * @return number of Mines.
      */
     int getnMines();
-    
+
+    /**
+     * Set number of mines in the field
+     * @param nMines int
+     */
+    void setnMines(int nMines);
+
     /**
      * This Method returns the actual playing field.
      * @return whole playing Field.
@@ -59,5 +77,30 @@ public interface IField {
      * This Method returns the actual playing field as formated String.
      * @return String representing a Field.
      */
-    String toString();  
+    String toString();
+
+    /**
+     * Get field id
+     * @return
+     */
+    int getFieldID();
+
+    /**
+     * Set field id
+     * @param fieldID
+     */
+    void setFieldID(int fieldID);
+
+    /**
+     * Get playing field
+     * @return playing field
+     */
+    ICell[][] getPlayingField();
+
+    /**
+     * Set playing field
+     * @param playingField
+     */
+    void setPlayingField(ICell[][] playingField);
+
 }

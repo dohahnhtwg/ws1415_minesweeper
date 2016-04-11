@@ -24,7 +24,8 @@ import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 
 public class Field implements IField{
-	
+
+    private int fieldID;
     private ICell[][] playingField;
     private static final int DEFDIMENS = 9;
     private static final int DEFNMINES = 10;
@@ -119,21 +120,59 @@ public class Field implements IField{
         sb.append(String.format("       %s", "Column\n"));
         return sb.toString();
     }
-    
+
+    @Override
     public int getLines()   {
         return lines;
     }
 
+    @Override
+    public void setLines(int lines) {
+        this.lines = lines;
+    }
 
+    @Override
     public int getColumns() {
         return columns;
     }
 
+    @Override
+    public void setColumns(int columns) {
+        this.columns = columns;
+    }
+
+    @Override
     public int getnMines() {
         return nMines;
     }
-    
+
+    @Override
+    public void setnMines(int nMines) {
+        this.nMines = nMines;
+    }
+
+    @Override
     public ICell[][] getField() {
         return playingField;
+    }
+
+    @Override
+    public int getFieldID() {
+        return fieldID;
+    }
+
+    @Override
+    public void setFieldID(int fieldID) {
+        this.fieldID = fieldID;
+    }
+
+    @Override
+    public void setPlayingField(ICell[][] playingField) {
+        this.playingField = playingField;
+    }
+
+    @Override
+    public ICell[][] getPlayingField() {
+        return this.playingField;
     }
 }

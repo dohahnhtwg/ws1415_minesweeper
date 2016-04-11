@@ -12,6 +12,10 @@
         <property name="current_session_context_class">thread</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="show_sql">false</property>
+        <!--<mapping resource="ICell.hbm.xml"/>-->
+        <!--<mapping resource="IField.hbm.xml"/>-->
+        <!--<mapping resource="IStatistic.hbm.xml"/>-->
+        <!--<mapping resource="IUser.hbm.xml"/>-->
         <mapping class="de.htwg.se.database.hibern8.HibernateCell" />
         <mapping class="de.htwg.se.database.hibern8.HibernateField" />
         <mapping class="de.htwg.se.database.hibern8.HibernateUser" />

@@ -83,7 +83,7 @@ public final class PlayingFieldPanel extends JPanel {
         if (marked.containsKey(i) && marked.get(i).containsKey(j)) {
             buttons[i][j].setIcon(marked.get(i).get(j));
         }
-        if (cell.isRevealed()) {
+        if (cell.getIsRevealed()) {
             buttons[i][j].setEnabled(false);
             if (cell.getValue() != 0) {
                 String value = controller.getPlayingField().getField()[i + ONE][j + ONE].toString();

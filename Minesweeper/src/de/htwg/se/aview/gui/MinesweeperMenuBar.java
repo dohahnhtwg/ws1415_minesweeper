@@ -141,18 +141,19 @@ class MinesweeperMenuBar extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent ActionListener) {
                 final IStatistic stat = controller.getUserStatistic();
-                final int games = stat.getPlayedGames();
-                final int wins = stat.getWonGames();
-                final String playedTime = stat.getPlayedTime() == 0 ? "-" : String.valueOf(stat.getPlayedTime() / 1000);
-                final String minTimePlayed = stat.getMinTimePlayed() == Long.MAX_VALUE ? "-" :
-                        String.valueOf(stat.getMinTimePlayed() / 1000);
+                final int games = stat.getGamesPlayed();
+                final int wins = stat.getGamesWon();
+                final String playedTime = stat.getTimeSpent() == 0 ? "-" :
+                        String.valueOf(stat.getTimeSpent() / 1000) + "s";
+                final String minTimePlayed = stat.getMinTime() == Long.MAX_VALUE ? "-" :
+                        String.valueOf(stat.getMinTime() / 1000);
                 double percentage = 0;
                 if ((games) != 0) {
                     percentage = wins * Constants.DEF_BUT_SIZEX/(games);
                 }
                 JOptionPane.showMessageDialog(MinesweeperMenuBar.this,
                         "<html><body><table style='width:100%'>" +
-                                "<tr><td>Played Time:</td><td>" + playedTime + "s</td></tr>" +
+                                "<tr><td>Played Time:</td><td>" + playedTime + "</td></tr>" +
                                 "<tr><td>Fastest win:</td><td>" + minTimePlayed + "s</td></tr>" +
                                 "<tr><td>Played Games:</td><td>" + games + "</td></tr>" +
                                 "<tr><td>Wins:</td><td>" + wins + "</td></tr>" +

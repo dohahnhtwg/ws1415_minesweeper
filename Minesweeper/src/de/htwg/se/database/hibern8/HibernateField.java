@@ -1,19 +1,20 @@
 package de.htwg.se.database.hibern8;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "field")
-public class HibernateField implements Serializable{
+public class HibernateField implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer fieldid;
 
-    @ManyToOne
-    @JoinColumn(name = "cellid")
-    private HibernateCell playingField; // FIXME
+    @Column
+    @OneToMany
+    private LinkedList<HibernateCell> playingField;
 
     @Column
     private Integer nMines;
@@ -36,11 +37,11 @@ public class HibernateField implements Serializable{
         this.fieldid = fieldid;
     }
 
-    public HibernateCell getPlayingField() {
+    public LinkedList<HibernateCell> getPlayingField() {
         return playingField;
     }
 
-    public void setPlayingField(HibernateCell playingField) {
+    public void setPlayingField(LinkedList<HibernateCell> playingField) {
         this.playingField = playingField;
     }
 

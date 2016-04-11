@@ -41,13 +41,13 @@ public interface ICell {
      * This Method says whether this cell is revealed or not.
      * @return true if the Cell is Revealed.
      */
-    boolean isRevealed();
+    boolean getIsRevealed();
     
     /**
      * This Method changed the actual is Revealed status of the Cell.
      * @param isRevealed
      */
-    void setRevealed(boolean isRevealed);
+    void setIsRevealed(boolean isRevealed);
     
     /**
      * Returns a formatted String for a given Cell.
@@ -67,4 +67,15 @@ public interface ICell {
      */
     int hashCode();
 
+    /**
+     * Get cell id
+     * @return int
+     */
+    int getId();
+
+    /**
+     * Set cell id
+     * @param id int
+     */
+    void setId(int id);
 }

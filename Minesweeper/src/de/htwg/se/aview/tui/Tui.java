@@ -88,10 +88,10 @@ public class Tui implements IObserver {
 
     private void printStatistic() {
         IStatistic s = controller.getUserStatistic();
-        LOGGER.info("Number of all played games: " + s.getPlayedGames());
-        LOGGER.info("Number of won games: " + s.getWonGames());
-        LOGGER.info("Amount of played time: " + s.getPlayedTime());
-        LOGGER.info("Minimal time spent for a game: " + s.getMinTimePlayed());
+        LOGGER.info("Number of all played games: " + s.getGamesPlayed());
+        LOGGER.info("Number of won games: " + s.getGamesWon());
+        LOGGER.info("Amount of played time: " + s.getTimeSpent());
+        LOGGER.info("Minimal time spent for a game: " + s.getMinTime());
         paintTUI();
     }
 

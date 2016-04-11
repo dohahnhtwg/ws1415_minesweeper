@@ -21,6 +21,7 @@ import de.htwg.se.model.ICell;
 
 public class Cell implements ICell {
 
+    private int id;
     private int value;
     private boolean isRevealed = false;
 
@@ -35,17 +36,9 @@ public class Cell implements ICell {
     public void setValue(int newValue) {
         this.value = newValue;
     }
-
-    public boolean isRevealed() {
-        return isRevealed;
-    }
-
-    public void setRevealed(boolean isRevealed) {
-        this.isRevealed = isRevealed;
-    }
     
     public String toString()    {
-        if(isRevealed())   {
+        if(getIsRevealed())   {
             if(value == -1)   {
                 return String.format(" %2c ", '*');
             } else {
@@ -80,5 +73,25 @@ public class Cell implements ICell {
     @Override
     public int hashCode() {
         return Boolean.hashCode(isRevealed) + Integer.hashCode(value);
+    }
+
+    @Override
+    public int getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean getIsRevealed() {
+        return this.isRevealed;
+    }
+
+    @Override
+    public void setIsRevealed(boolean isRevealed) {
+        this.isRevealed = isRevealed;
     }
 }

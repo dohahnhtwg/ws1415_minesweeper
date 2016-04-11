@@ -12,9 +12,6 @@ public class HibernateStatistic implements Serializable{
     private Integer statid;
 
     @Column
-    private Integer playedTime;
-
-    @Column
     private Integer gamesWon;
 
     @Column
@@ -23,16 +20,15 @@ public class HibernateStatistic implements Serializable{
     @Column
     private Long minTime;
 
-    public HibernateStatistic() {
+    @Column
+    private Integer gamesPlayed;
 
+    public Integer getGamesPlayed() {
+        return gamesPlayed;
     }
 
-    public Integer getPlayedTime() {
-        return playedTime;
-    }
-
-    public void setPlayedTime(Integer playedTime) {
-        this.playedTime = playedTime;
+    public void setGamesPlayed(Integer gamesPlayed) {
+        this.gamesPlayed = gamesPlayed;
     }
 
     public Long getMinTime() {

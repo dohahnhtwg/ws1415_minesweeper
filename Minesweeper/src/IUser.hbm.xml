@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="de.htwg.se.model.IUser" discriminator-value="usr">
+        <id name="id" type="integer">
+            <generator class="increment"/>
+        </id>
+        <property name="name" type="string"/>
+        <property name="encryptedPassword" type="binary"/>
+        <property name="salt" type="binary"/>
+        <property name="algorithm" type="string"/>
+        <property name="statistic" type="class"/>
+        <property name="playingField" type="class"/>
+        <many-to-one name="manyToOne" class="de.htwg.se.model.IField" property-ref="playingField"/>
+        <one-to-one name="oneToOne" class="de.htwg.se.model.IStatistic" property-ref="statistic"/>
+    </class>
+</hibernate-mapping>

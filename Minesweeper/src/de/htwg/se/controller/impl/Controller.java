@@ -80,7 +80,7 @@ public class Controller extends Observable implements IController {
             startTimer();
         }
         if(playingField.getField()[x][y].getValue() == -1) {
-            playingField.getField()[x][y].setRevealed(true);
+            playingField.getField()[x][y].setIsRevealed(true);
             gameOver = true;
             stopTimer();
             statistic.updateStatistic(false, elapsedTime);
@@ -98,12 +98,12 @@ public class Controller extends Observable implements IController {
     }
 
     private void revealFieldHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
-        playingField.getField()[x][y].setRevealed(true);
+        playingField.getField()[x][y].setIsRevealed(true);
         ((LinkedList<ICell>) revelalFieldCommandList).push(playingField.getField()[x][y]);
         if(playingField.getField()[x][y].getValue() <= 0)  {
             List<Point> fieldsaround = getFieldsAround(x, y);
             for(Point field : fieldsaround) {
-                if(checkCellInField(field) && !playingField.getField()[field.x][field.y].isRevealed()) {
+                if(checkCellInField(field) && !playingField.getField()[field.x][field.y].getIsRevealed()) {
                     revealFieldHelp(field.x, field.y, revelalFieldCommandList);
                 }
             }
@@ -133,7 +133,7 @@ public class Controller extends Observable implements IController {
         
         for (int i = 0; i < playingField.getField().length; i++)   {
             for (int j = 0; j < playingField.getField()[0].length; j ++)    {
-                if(playingField.getField()[i][j].isRevealed()) {
+                if(playingField.getField()[i][j].getIsRevealed()) {
                     current++;
                 }
             }

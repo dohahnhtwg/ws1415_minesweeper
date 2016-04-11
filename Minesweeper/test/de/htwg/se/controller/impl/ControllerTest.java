@@ -53,17 +53,17 @@ public class ControllerTest {
         controller.create(2, 2, 4);
         controller.revealField(1, 1);
         controller.revealField(1, 2);
-        assertFalse(field[1][2].isRevealed());
+        assertFalse(field[1][2].getIsRevealed());
         controller.create(2, 2, 1);
         field = controller.getPlayingField().getField();
         if(field[1][1].getValue() == -1)    {
             controller.revealField(2, 1);
             controller.revealField(1, 1);
-            assertTrue(field[1][1].isRevealed());
+            assertTrue(field[1][1].getIsRevealed());
         } else {
             controller.revealField(1, 1);
             controller.revealField(2, 1);
-            assertTrue(field[2][1].isRevealed());
+            assertTrue(field[2][1].getIsRevealed());
         }
     }
     
@@ -84,14 +84,14 @@ public class ControllerTest {
         ICell[][] field = controller.getPlayingField().getField();
         for (int i = 1; i < field.length - 1; i++)   {
             for (int j = 1; j < field[0].length - 1; j ++)    {
-                assertFalse(field[i][j].isRevealed()); 
+                assertFalse(field[i][j].getIsRevealed());
             }
         }
         controller.redo();
         field = controller.getPlayingField().getField();
         for (int i = 1; i < field.length - 1; i++)   {
             for (int j = 1; j < field[0].length - 1; j ++)    {
-                assertTrue(field[i][j].isRevealed()); 
+                assertTrue(field[i][j].getIsRevealed());
             }
         }
     }

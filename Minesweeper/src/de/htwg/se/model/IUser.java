@@ -23,8 +23,14 @@ public interface IUser {
      * Returns the encrypted password
      * @return encrypted password
      */
-    String getEncryptedPassword();
-    
+    byte[] getEncryptedPassword();
+
+    /**
+     *
+     * @param encryptedPassword
+     */
+    void setEncryptedPassword(byte[] encryptedPassword);
+
     /**
      * Authenticates the user
      * @param name
@@ -59,7 +65,37 @@ public interface IUser {
     
     /**
      * Changes the algorithms which is used to cipher the password
-     * @param invalidAlgo
+     * @param algorithm
      */
-	void setAlgorithm(String invalidAlgo);
+    void setAlgorithm(String algorithm);
+
+    /**
+     * Get current algorithm
+     * @return string
+     */
+    String getAlgorithm();
+
+    /**
+     * Get user id
+     * @return int
+     */
+    int getId();
+
+    /**
+     * Set user id
+     * @param id int
+     */
+    void setId(int id);
+
+    /**
+     * Get salt
+     * @return byte[]
+     */
+    byte[] getSalt();
+
+    /**
+     * Set salt
+     * @param salt byte[]
+     */
+    void setSalt(byte[] salt);
 }

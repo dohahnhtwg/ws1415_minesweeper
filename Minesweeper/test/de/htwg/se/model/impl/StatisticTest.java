@@ -16,7 +16,7 @@ public class StatisticTest {
     @Test
     public void testTimePlayed() {
         statistic.updateStatistic(true, 100);
-        assertEquals(100, statistic.getPlayedTime());
+        assertEquals(100, statistic.getTimeSpent());
     }
 
     @Test
@@ -24,20 +24,20 @@ public class StatisticTest {
         statistic.updateStatistic(true, 70);
         statistic.updateStatistic(false, 10);
         statistic.updateStatistic(true, 40);
-        assertEquals(40, statistic.getMinTimePlayed());
+        assertEquals(40, statistic.getMinTime());
     }
 
     @Test
     public void testGamesWon() {
         statistic.updateStatistic(true, 30);
         statistic.updateStatistic(true, 40);
-        assertEquals(2, statistic.getWonGames());
+        assertEquals(2, statistic.getGamesWon());
     }
 
     @Test
     public void testGamesPlayed() {
         statistic.updateStatistic(false, 50);
         statistic.updateStatistic(false, 50);
-        assertEquals(2, statistic.getPlayedGames());
+        assertEquals(2, statistic.getGamesPlayed());
     }
 }
