@@ -55,7 +55,7 @@ public class Controller extends Observable implements IController {
         undoManager = new UndoManager();
         this.database = database;
         if (database.contains(new User("Default", "Default"))) {
-            this.user = database.read("Default", "Default");
+            this.user = database.read("Default");
         } else {
             this.user = new User("Default", "Default");
             database.create(this.user);
@@ -193,7 +193,7 @@ public class Controller extends Observable implements IController {
     }
 
     public boolean logIn(String username, String password) {
-        IUser userFromDb = database.read(username, password);
+        IUser userFromDb = database.read(username);
         if(userFromDb == null)    {
             return false;
         }

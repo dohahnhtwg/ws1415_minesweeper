@@ -8,11 +8,12 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.UUID;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
 
 public class User implements IUser {
-    private int id;
+    private String id;
     private String name;
     private byte[] encryptedPassword;
     private byte[] salt;
@@ -21,7 +22,12 @@ public class User implements IUser {
 
     private String algorithm = "PBKDF2WithHmacSHA1";
 
+    public User()   {
+        this.id = UUID.randomUUID().toString();
+    }
+
     public User(String name, String password) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         try {
             this.salt = this.generateSalt();
@@ -34,12 +40,12 @@ public class User implements IUser {
     }
 
     @Override
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

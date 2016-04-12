@@ -79,13 +79,13 @@ public interface IUser {
      * Get user id
      * @return int
      */
-    int getId();
+    String getId();
 
     /**
      * Set user id
      * @param id int
      */
-    void setId(int id);
+    void setId(String id);
 
     /**
      * Get salt

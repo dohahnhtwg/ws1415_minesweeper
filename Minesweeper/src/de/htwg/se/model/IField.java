@@ -81,15 +81,15 @@ public interface IField {
 
     /**
      * Get field id
-     * @return
+     * @return id
      */
-    int getFieldID();
+    String getFieldID();
 
     /**
      * Set field id
-     * @param fieldID
+     * @param fieldID id
      */
-    void setFieldID(int fieldID);
+    void setFieldID(String fieldID);
 
     /**
      * Get playing field
@@ -99,7 +99,7 @@ public interface IField {
 
     /**
      * Set playing field
-     * @param playingField
+     * @param playingField field
      */
     void setPlayingField(ICell[][] playingField);
 

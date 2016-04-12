@@ -2,15 +2,18 @@ package de.htwg.se.model.impl;
 
 import de.htwg.se.model.IStatistic;
 
+import java.util.UUID;
+
 public class Statistic implements IStatistic {
 
-    private int id;
+    private String id;
     private int gamesPlayed;
     private int gamesWon;
     private long timeSpent;
     private long minTime;
 
     public Statistic() {
+        this.id = UUID.randomUUID().toString();
         this.gamesPlayed = this.gamesWon = 0;
         this.timeSpent = 0;
         this.minTime = Long.MAX_VALUE;
@@ -67,12 +70,12 @@ public class Statistic implements IStatistic {
         this.timeSpent += timeSpent;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

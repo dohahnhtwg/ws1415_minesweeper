@@ -1,11 +1,16 @@
 package de.htwg.se.database.couchDB;
 
+import org.ektorp.support.CouchDbDocument;
+import org.ektorp.support.TypeDiscriminator;
+
 /**
  * Created by GAAB on 11.04.2016.
  *
  */
-public class CouchField {
+public class CouchField extends CouchDbDocument {
 
+    @TypeDiscriminator
+    private String id;
     private CouchCell[][] playingField;
     private int nMines;
     private int lines;
@@ -41,5 +46,13 @@ public class CouchField {
 
     public void setLines(int lines) {
         this.lines = lines;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

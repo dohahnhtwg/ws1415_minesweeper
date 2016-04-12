@@ -17,6 +17,7 @@
 package de.htwg.se.model.impl;
 
 import java.util.Random;
+import java.util.UUID;
 
 import com.google.inject.Inject;
 
@@ -25,7 +26,7 @@ import de.htwg.se.model.IField;
 
 public class Field implements IField{
 
-    private int fieldID;
+    private String fieldID;
     private ICell[][] playingField;
     private static final int DEFDIMENS = 9;
     private static final int DEFNMINES = 10;
@@ -37,10 +38,12 @@ public class Field implements IField{
     
     @Inject
     public Field()  {
+        this.fieldID = UUID.randomUUID().toString();
         create(DEFDIMENS, DEFDIMENS, DEFNMINES);
     }
     
     public Field(int lines, int columns, int nMines)  {
+        this.fieldID = UUID.randomUUID().toString();
         create(lines, columns, nMines);
     }
     
@@ -157,12 +160,12 @@ public class Field implements IField{
     }
 
     @Override
-    public int getFieldID() {
+    public String getFieldID() {
         return fieldID;
     }
 
     @Override
-    public void setFieldID(int fieldID) {
+    public void setFieldID(String fieldID) {
         this.fieldID = fieldID;
     }
 

@@ -1,11 +1,16 @@
 package de.htwg.se.database.couchDB;
 
+import org.ektorp.support.CouchDbDocument;
+import org.ektorp.support.TypeDiscriminator;
+
 /**
  * Created by GAAB on 11.04.2016.
  *
  */
-public class CouchUser {
+public class CouchUser extends CouchDbDocument {
 
+    @TypeDiscriminator
+    private String id;
     private String name;
     private byte[] encryptedPassword;
     private byte[] salt;
@@ -50,5 +55,13 @@ public class CouchUser {
 
     public void setStatistic(CouchStatistic statistic) {
         this.statistic = statistic;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

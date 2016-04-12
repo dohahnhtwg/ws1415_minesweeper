@@ -5,7 +5,7 @@ import de.htwg.se.model.IUser;
 public interface DataAccessObject {
 	
 	void create(IUser user);
-	IUser read(String username, String password);
+	IUser read(String username);
 	void update(IUser user);
 	void delete();
 	boolean contains(IUser user);

@@ -18,14 +18,17 @@ package de.htwg.se.model.impl;
 
 import de.htwg.se.model.ICell;
 
+import java.util.UUID;
+
 
 public class Cell implements ICell {
 
-    private int id;
+    private String id;
     private int value;
     private boolean isRevealed = false;
 
     public Cell(int value) {
+        this.id = UUID.randomUUID().toString();
         this.value = value;
     }
 
@@ -51,23 +54,17 @@ public class Cell implements ICell {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)    {
+        if (this == obj) {
             return true;
-        } 
-        if (obj == null)    {
+        }
+        if (obj == null) {
             return false;
-        } 
-        if (getClass() != obj.getClass())   {
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        }  
+        }
         Cell other = (Cell) obj;
-        if (isRevealed != other.isRevealed) {
-            return false;
-        }      
-        if (value != other.value)   {
-            return false;
-        }       
-        return true;
+        return isRevealed == other.isRevealed && value == other.value;
     }
 
     @Override
@@ -76,12 +73,12 @@ public class Cell implements ICell {
     }
 
     @Override
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

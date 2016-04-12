@@ -33,7 +33,7 @@ public class db4oDatabase implements DataAccessObject {
     }
 
     @Override
-    public IUser read(final String username, final String password) {
+    public IUser read(final String username) {
         ObjectContainer db = Db4oEmbedded.openFile(Db4oEmbedded    
                 .newConfiguration(), DB4OFILENAME);
         

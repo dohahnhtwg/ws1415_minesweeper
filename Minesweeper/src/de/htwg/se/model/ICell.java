@@ -45,7 +45,7 @@ public interface ICell {
     
     /**
      * This Method changed the actual is Revealed status of the Cell.
-     * @param isRevealed
+     * @param isRevealed isRev
      */
     void setIsRevealed(boolean isRevealed);
     
@@ -71,11 +71,11 @@ public interface ICell {
      * Get cell id
      * @return int
      */
-    int getId();
+    String getId();
 
     /**
      * Set cell id
      * @param id int
      */
-    void setId(int id);
+    void setId(String id);
 }

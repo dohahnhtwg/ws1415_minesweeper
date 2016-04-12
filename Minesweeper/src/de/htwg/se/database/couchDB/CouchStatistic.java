@@ -1,11 +1,16 @@
 package de.htwg.se.database.couchDB;
 
+import org.ektorp.support.CouchDbDocument;
+import org.ektorp.support.TypeDiscriminator;
+
 /**
  * Created by GAAB on 11.04.2016.
  *
  */
-public class CouchStatistic {
+public class CouchStatistic extends CouchDbDocument {
 
+    @TypeDiscriminator
+    private String id;
     private int gamesPlayed;
     private int gamesWon;
     private long timeSpent;
@@ -41,5 +46,13 @@ public class CouchStatistic {
 
     public void setMinTime(long minTime) {
         this.minTime = minTime;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

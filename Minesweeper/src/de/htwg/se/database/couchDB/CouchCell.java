@@ -1,11 +1,16 @@
 package de.htwg.se.database.couchDB;
 
+import org.ektorp.support.CouchDbDocument;
+import org.ektorp.support.TypeDiscriminator;
+
 /**
  * Created by GAAB on 11.04.2016.
  *
  */
-public class CouchCell {
+public class CouchCell extends CouchDbDocument {
 
+    @TypeDiscriminator
+    private String id;
     private int value;
     private boolean isRevealed = false;
 
@@ -23,5 +28,13 @@ public class CouchCell {
 
     public void setRevealed(boolean revealed) {
         isRevealed = revealed;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

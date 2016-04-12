@@ -10,7 +10,7 @@ public class HibernateField implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer fieldid;
+    private String fieldid;
 
     @Column
     @OneToMany
@@ -29,11 +29,11 @@ public class HibernateField implements Serializable {
 
     }
 
-    public Integer getFieldid() {
+    public String getFieldid() {
         return fieldid;
     }
 
-    public void setFieldid(Integer fieldid) {
+    public void setFieldid(String fieldid) {
         this.fieldid = fieldid;
     }
 

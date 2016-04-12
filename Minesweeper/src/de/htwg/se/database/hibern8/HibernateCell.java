@@ -14,7 +14,7 @@ public class HibernateCell implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer cellid;
+    private String cellid;
 
     @Column
     private Integer value;
@@ -42,11 +42,11 @@ public class HibernateCell implements Serializable {
         this.value = value;
     }
 
-    public Integer getId() {
+    public String getId() {
         return this.cellid;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.cellid = id;
     }
 }

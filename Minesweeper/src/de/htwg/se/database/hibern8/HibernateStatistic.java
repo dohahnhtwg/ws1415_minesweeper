@@ -9,7 +9,7 @@ public class HibernateStatistic implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer statid;
+    private String statid;
 
     @Column
     private Integer gamesWon;
@@ -55,11 +55,11 @@ public class HibernateStatistic implements Serializable{
         this.timeSpent = timeSpent;
     }
 
-    public Integer getStatid() {
+    public String getStatid() {
         return statid;
     }
 
-    public void setStatid(Integer statid) {
+    public void setStatid(String statid) {
         this.statid = statid;
     }
 }

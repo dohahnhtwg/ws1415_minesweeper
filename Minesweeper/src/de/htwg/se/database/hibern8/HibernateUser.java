@@ -9,7 +9,7 @@ public class HibernateUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer userid;
+    private String userid;
 
     @Column(name = "name")
     private String name;
@@ -34,11 +34,11 @@ public class HibernateUser implements Serializable {
     public HibernateUser() {
     }
 
-    public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 

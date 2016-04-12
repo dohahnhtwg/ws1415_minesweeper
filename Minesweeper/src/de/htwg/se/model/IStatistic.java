@@ -59,11 +59,11 @@ public interface IStatistic {
      * Return statistic id
      * @return id
      */
-    int getId();
+    String getId();
 
     /**
      * Set statistic id
      * @param id integer
      */
-    void setId(int id);
+    void setId(String id);
 }

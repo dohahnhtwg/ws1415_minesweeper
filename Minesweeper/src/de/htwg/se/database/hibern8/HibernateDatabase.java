@@ -12,7 +12,6 @@ import de.htwg.se.model.impl.User;
 import de.htwg.se.model.impl.Statistic;
 import org.hibernate.*;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -122,7 +121,7 @@ public class HibernateDatabase implements DataAccessObject{
     }
 
     @Override
-    public IUser read(String username, String password) {
+    public IUser read(String username) {
         Transaction tx = null;
         Session session = HibernateUtil.getSession();
         try {
@@ -188,7 +187,7 @@ public class HibernateDatabase implements DataAccessObject{
 
     @Override
     public boolean contains(IUser user) {
-        IUser usr = this.read(user.getName(), Arrays.toString(user.getEncryptedPassword()));
+        IUser usr = this.read(user.getName());
         return usr != null;
     }
 }
