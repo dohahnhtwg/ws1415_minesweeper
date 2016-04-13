@@ -80,7 +80,7 @@ public class db4oDatabase implements DataAccessObject {
     }
 
     @Override
-    public void delete() {
+    public void delete(IUser user) {
         throw new NotImplementedException("Delete method is not implemented yet");
     }
 

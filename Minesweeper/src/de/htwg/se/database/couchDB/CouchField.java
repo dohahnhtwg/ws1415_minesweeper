@@ -9,6 +9,7 @@ import org.ektorp.support.TypeDiscriminator;
  */
 public class CouchField extends CouchDbDocument {
 
+    private static final long serialVersionUID = 3243503736951751825L;
     @TypeDiscriminator
     private String id;
     private CouchCell[][] playingField;

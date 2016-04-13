@@ -9,6 +9,7 @@ import org.ektorp.support.TypeDiscriminator;
  */
 public class CouchStatistic extends CouchDbDocument {
 
+    private static final long serialVersionUID = -6774088600239708899L;
     @TypeDiscriminator
     private String id;
     private int gamesPlayed;
