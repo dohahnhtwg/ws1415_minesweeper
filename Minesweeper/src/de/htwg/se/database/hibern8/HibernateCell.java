@@ -1,29 +1,32 @@
 package de.htwg.se.database.hibern8;
 
 import java.io.Serializable;
-import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "cell")
 public class HibernateCell implements Serializable {
 
     @Id
+    @Column(name = "cellid")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String cellid;
 
-    @Column
+    @Column(name = "value")
     private Integer value;
 
-    @Column
+    @Column(name = "isRevealed")
     private Boolean isRevealed;
+
+    @ManyToOne
+    @JoinColumn(name = "fieldid")
+    private HibernateField field;
 
     public HibernateCell(Integer value) {
         this.value = value;
+    }
+
+    public HibernateCell() {
     }
 
     public Boolean getIsRevealed() {

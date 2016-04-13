@@ -14,6 +14,7 @@ import org.hibernate.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class HibernateDatabase implements DataAccessObject{
 
@@ -85,7 +86,7 @@ public class HibernateDatabase implements DataAccessObject{
         ICell cell;
         HibernateCell hcell;
         HibernateField hibernateField = new HibernateField();
-        LinkedList<HibernateCell> hcells = new LinkedList<>();
+        List<HibernateCell> hcells = new LinkedList<>();
         for (int i = 0; i < lines; i++) {
             for (int j = 0; j < columns; j++) {
                 cell = field.getPlayingField()[i][j];
@@ -129,12 +130,9 @@ public class HibernateDatabase implements DataAccessObject{
             String queryStr = "FROM HibernateUser usr WHERE usr.name = :username";
             Query query = session.createQuery(queryStr);
             query.setParameter("username", username);
-            List result = query.list();
-            // TODO: fetch HibernateUser from results
-//            HibernateUser hibernateUser = result.get(0);
-//            for (Object aResult : result) {
-//                return (IUser) this.copyUserData(aResult);
-//            }
+            List<HibernateUser> result = query.list();
+            HibernateUser hibernateUser = result.get(0);
+            return this.copyUserData(hibernateUser);
         } catch (HibernateException e) {
             if (tx!=null)
                 tx.rollback();

@@ -1,7 +1,7 @@
 package de.htwg.se.database.hibern8;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -9,20 +9,21 @@ import javax.persistence.*;
 public class HibernateField implements Serializable {
 
     @Id
+    @Column(name = "fieldid")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String fieldid;
 
-    @Column
-    @OneToMany
-    private LinkedList<HibernateCell> playingField;
+    @OneToMany(mappedBy = "field")
+    @Column(name = "cells")
+    private List<HibernateCell> playingField;
 
-    @Column
+    @Column(name = "nMines")
     private Integer nMines;
 
-    @Column
+    @Column(name = "lines")
     private Integer lines;
 
-    @Column
+    @Column(name = "columns")
     private Integer columns;
 
     public HibernateField() {
@@ -37,11 +38,11 @@ public class HibernateField implements Serializable {
         this.fieldid = fieldid;
     }
 
-    public LinkedList<HibernateCell> getPlayingField() {
+    public List<HibernateCell> getPlayingField() {
         return playingField;
     }
 
-    public void setPlayingField(LinkedList<HibernateCell> playingField) {
+    public void setPlayingField(List<HibernateCell> playingField) {
         this.playingField = playingField;
     }
 
