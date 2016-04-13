@@ -130,7 +130,10 @@ public class CouchDatabase implements DataAccessObject {
     }
 
     private CouchUser copyUser(IUser user)  {
-        CouchUser couchUser = new CouchUser();
+        CouchUser couchUser = getUserById(user.getId());
+        if(couchUser == null) {
+            couchUser = new CouchUser();
+        }
         couchUser.setId(user.getId());
         couchUser.setEncryptedPassword(user.getEncryptedPassword());
         couchUser.setSalt(user.getSalt());

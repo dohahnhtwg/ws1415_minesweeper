@@ -163,11 +163,6 @@ public class HibernateDatabase implements DataAccessObject{
         }
     }
 
-    @Override
-    public void delete(IUser user) {
-        throw new NotImplementedException("The method is not implemented");
-    }
-
     public void delete(IUser user) {
         Transaction tx = null;
         Session session = HibernateUtil.getSession();
