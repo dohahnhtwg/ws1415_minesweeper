@@ -11,10 +11,7 @@ import de.htwg.se.model.impl.Field;
 import de.htwg.se.model.impl.Statistic;
 import de.htwg.se.model.impl.User;
 import org.apache.commons.lang.NotImplementedException;
-import org.ektorp.CouchDbConnector;
-import org.ektorp.CouchDbInstance;
-import org.ektorp.ViewQuery;
-import org.ektorp.ViewResult;
+import org.ektorp.*;
 import org.ektorp.http.HttpClient;
 import org.ektorp.http.StdHttpClient;
 import org.ektorp.impl.StdCouchDbInstance;
@@ -30,6 +27,7 @@ import java.util.List;
 public class CouchDatabase implements DataAccessObject {
 
     private CouchDbConnector db = null;
+    private static final int BORDER = 2;
 
     @Inject
     public CouchDatabase()  {
@@ -45,7 +43,9 @@ public class CouchDatabase implements DataAccessObject {
 
     @Override
     public void create(IUser user) {
-        db.create(copyUser(user));
+        CouchUser couchUser = copyUser(user);
+        db.create(user.getId(), couchUser);
+        System.out.println(couchUser.getRevision());
     }
 
     @Override
@@ -64,8 +64,8 @@ public class CouchDatabase implements DataAccessObject {
     }
 
     @Override
-    public void delete() {
-        throw new NotImplementedException();
+    public void delete(IUser user) {
+        db.delete(copyUser(getUserById(user.getId())));
     }
 
     @Override
@@ -102,12 +102,13 @@ public class CouchDatabase implements DataAccessObject {
         playingField.setLines(couchField.getColumns());
         playingField.setnMines(couchField.getnMines());
 
-        ICell[][] field = new ICell[couchField.getColumns()][couchField.getLines()];
-        for(int i=0; i < couchField.getColumns(); i++)   {
-            for(int j=0; j < couchField.getLines(); j++)  {
+        ICell[][] field = new ICell[couchField.getColumns() + BORDER][couchField.getLines() + BORDER];
+        for(int i=0; i < couchField.getColumns() + BORDER; i++)   {
+            for(int j=0; j < couchField.getLines() + BORDER; j++)  {
                 field[i][j] = copyCell(couchField.getPlayingField()[i][j]);
             }
         }
+        playingField.setPlayingField(field);
         return playingField;
     }
 
@@ -146,13 +147,13 @@ public class CouchDatabase implements DataAccessObject {
         couchField.setLines(playingField.getLines());
         couchField.setnMines(playingField.getnMines());
 
-        CouchCell[][] field = new CouchCell[playingField.getColumns()][playingField.getLines()];
-        for(int i=0; i < couchField.getColumns(); i++)   {
-            for(int j=0; j < couchField.getLines(); j++)  {
+        CouchCell[][] field = new CouchCell[playingField.getColumns() + BORDER][playingField.getLines() + BORDER];
+        for(int i=0; i < couchField.getColumns() + BORDER; i++)   {
+            for(int j=0; j < couchField.getLines() + BORDER; j++)  {
                 field[i][j] = copyCell(playingField.getField()[i][j]);
             }
         }
-
+        couchField.setPlayingField(field);
         return couchField;
     }
 

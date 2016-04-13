@@ -9,6 +9,7 @@ import org.ektorp.support.TypeDiscriminator;
  */
 public class CouchUser extends CouchDbDocument {
 
+    private static final long serialVersionUID = 5228488178609019609L;
     @TypeDiscriminator
     private String id;
     private String name;

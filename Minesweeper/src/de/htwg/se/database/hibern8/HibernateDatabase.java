@@ -164,7 +164,7 @@ public class HibernateDatabase implements DataAccessObject{
     }
 
     @Override
-    public void delete() {
+    public void delete(IUser user) {
         throw new NotImplementedException("The method is not implemented");
     }
 
