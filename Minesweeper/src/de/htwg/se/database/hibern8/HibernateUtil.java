@@ -18,7 +18,7 @@ public class HibernateUtil {
     static {
         try {
             Configuration configuration = new Configuration();
-            configuration.configure();
+            configuration.configure("src/hibernate.cfg.xml");
 
             serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
             ourSessionFactory = configuration.buildSessionFactory(serviceRegistry);

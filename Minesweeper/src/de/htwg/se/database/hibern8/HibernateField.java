@@ -5,13 +5,13 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "field")
+@Table(name = "hibernatefield")
 public class HibernateField implements Serializable {
 
     @Id
     @Column(name = "fieldid")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String fieldid;
+    private int fieldid;
 
     @OneToMany(mappedBy = "field")
     @Column(name = "cells")
@@ -31,11 +31,11 @@ public class HibernateField implements Serializable {
     }
 
     public String getFieldid() {
-        return fieldid;
+        return Integer.toString(fieldid);
     }
 
     public void setFieldid(String fieldid) {
-        this.fieldid = fieldid;
+        this.fieldid = Integer.parseInt(fieldid) + 1;
     }
 
     public List<HibernateCell> getPlayingField() {

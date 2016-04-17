@@ -4,17 +4,17 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "hibernateuser")
 public class HibernateUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String userid;
+    private int userid;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "password")
+    @Column(name = "encryptedPassword")
     private byte[] encryptedPassword;
 
     @Column(name = "salt")
@@ -35,11 +35,11 @@ public class HibernateUser implements Serializable {
     }
 
     public String getUserid() {
-        return userid;
+        return Integer.toString(userid);
     }
 
     public void setUserid(String userid) {
-        this.userid = userid;
+        this.userid = Integer.parseInt(userid) + 1;
     }
 
     public byte[] getEncryptedPassword() {

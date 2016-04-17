@@ -4,13 +4,13 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "cell")
+@Table(name = "hibernatecell")
 public class HibernateCell implements Serializable {
 
     @Id
     @Column(name = "cellid")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String cellid;
+    private int cellid;
 
     @Column(name = "value")
     private Integer value;
@@ -46,10 +46,10 @@ public class HibernateCell implements Serializable {
     }
 
     public String getId() {
-        return this.cellid;
+        return Integer.toString(this.cellid);
     }
 
     public void setId(String id) {
-        this.cellid = id;
+        this.cellid = Integer.parseInt(id) + 1;
     }
 }

@@ -1,6 +1,5 @@
 package de.htwg.se.database.hibern8;
 
-import com.db4o.foundation.NotImplementedException;
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
@@ -14,7 +13,6 @@ import org.hibernate.*;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class HibernateDatabase implements DataAccessObject{
 
@@ -39,8 +37,8 @@ public class HibernateDatabase implements DataAccessObject{
         user.setStatistic(statistic);
         // Playing fields data
         HibernateField hibern8Field = hibernateUser.getField();
-        int lines = hibern8Field.getLines();
-        int columns = hibern8Field.getColumns();
+        Integer lines = hibern8Field.getLines();
+        Integer columns = hibern8Field.getColumns();
         IField field = new Field(lines, columns, hibern8Field.getnMines());
         field.setFieldID(hibern8Field.getFieldid());
         ICell[][] cells = new ICell[lines][columns];
@@ -86,7 +84,7 @@ public class HibernateDatabase implements DataAccessObject{
         ICell cell;
         HibernateCell hcell;
         HibernateField hibernateField = new HibernateField();
-        List<HibernateCell> hcells = new LinkedList<>();
+        List<HibernateCell> hcells = new LinkedList<HibernateCell>();
         for (int i = 0; i < lines; i++) {
             for (int j = 0; j < columns; j++) {
                 cell = field.getPlayingField()[i][j];
@@ -101,7 +99,6 @@ public class HibernateDatabase implements DataAccessObject{
         return hibernateUser;
     }
 
-    @Override
     public void create(IUser user) {
         Transaction tx = null;
         Session session = HibernateUtil.getSession();
@@ -121,7 +118,6 @@ public class HibernateDatabase implements DataAccessObject{
         }
     }
 
-    @Override
     public IUser read(String username) {
         Transaction tx = null;
         Session session = HibernateUtil.getSession();
@@ -143,7 +139,6 @@ public class HibernateDatabase implements DataAccessObject{
         return null;
     }
 
-    @Override
     public void update(IUser user) {
         Transaction tx = null;
         Session session = HibernateUtil.getSession();
@@ -178,7 +173,6 @@ public class HibernateDatabase implements DataAccessObject{
         }
     }
 
-    @Override
     public boolean contains(IUser user) {
         IUser usr = this.read(user.getName());
         return usr != null;

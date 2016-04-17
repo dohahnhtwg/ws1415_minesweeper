@@ -11,7 +11,7 @@ public interface IStatistic {
      * Set number of played games
      * @param gamesPlayed int
      */
-    void setGamesPlayed(int gamesPlayed);
+    void setGamesPlayed(Integer gamesPlayed);
 
     /**
      * Return number of won games
@@ -23,7 +23,7 @@ public interface IStatistic {
      * Set number of won games
      * @param gamesWon int
      */
-    void setGamesWon(int gamesWon);
+    void setGamesWon(Integer gamesWon);
 
     /**
      * Return amount of played time
@@ -35,7 +35,7 @@ public interface IStatistic {
      * Set overall time spent
      * @param timeSpent seconds
      */
-    void setTimeSpent(long timeSpent);
+    void setTimeSpent(Long timeSpent);
     /**
      * Return minimal time spent for a game
      * @return seconds
@@ -46,7 +46,7 @@ public interface IStatistic {
      * Set minimal time spent for a game
      * @param minTime seconds
      */
-    void setMinTime(long minTime);
+    void setMinTime(Long minTime);
 
     /**
      * Update statistic according to given parameters

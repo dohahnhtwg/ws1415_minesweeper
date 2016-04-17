@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "statistic")
+@Table(name = "hibernatestatistic")
 public class HibernateStatistic implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String statid;
+    private int statid;
 
     @Column
     private Integer gamesWon;
@@ -56,10 +56,10 @@ public class HibernateStatistic implements Serializable{
     }
 
     public String getStatid() {
-        return statid;
+        return Integer.toString(statid);
     }
 
     public void setStatid(String statid) {
-        this.statid = statid;
+        this.statid = Integer.parseInt(statid) + 1;
     }
 }

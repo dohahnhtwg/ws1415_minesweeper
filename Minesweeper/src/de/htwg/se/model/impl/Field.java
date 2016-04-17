@@ -42,7 +42,7 @@ public class Field implements IField{
         create(DEFDIMENS, DEFDIMENS, DEFNMINES);
     }
     
-    public Field(int lines, int columns, int nMines)  {
+    public Field(Integer lines, Integer columns, Integer nMines)  {
         this.fieldID = UUID.randomUUID().toString();
         create(lines, columns, nMines);
     }

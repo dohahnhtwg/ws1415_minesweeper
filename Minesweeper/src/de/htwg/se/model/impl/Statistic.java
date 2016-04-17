@@ -24,7 +24,7 @@ public class Statistic implements IStatistic {
     }
 
     @Override
-    public void setGamesPlayed(int gamesPlayed) {
+    public void setGamesPlayed(Integer gamesPlayed) {
         this.gamesPlayed = gamesPlayed;
     }
 
@@ -34,7 +34,7 @@ public class Statistic implements IStatistic {
     }
 
     @Override
-    public void setGamesWon(int gamesWon) {
+    public void setGamesWon(Integer gamesWon) {
         this.gamesWon = gamesWon;
     }
 
@@ -44,7 +44,7 @@ public class Statistic implements IStatistic {
     }
 
     @Override
-    public void setTimeSpent(long timeSpent) {
+    public void setTimeSpent(Long timeSpent) {
         this.timeSpent = timeSpent;
     }
 
@@ -54,7 +54,7 @@ public class Statistic implements IStatistic {
     }
 
     @Override
-    public void setMinTime(long minTime) {
+    public void setMinTime(Long minTime) {
         this.minTime = minTime;
     }
 

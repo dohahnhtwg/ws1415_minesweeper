@@ -5,17 +5,14 @@
 <hibernate-configuration>
     <session-factory>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/minesweeper?createDatabaseIfNotExist=true</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">root</property>
+        <!--<property name="connection.url">jdbc:mysql://localhost:3306/minesweeper?createDatabaseIfNotExist=true</property>-->
+        <property name="connection.url">jdbc:mysql://lenny2.in.htwg-konstanz.de:3306/minesweeper?createDatabaseIfNotExist=true</property>
+        <property name="connection.username">htwg</property>
+        <property name="connection.password">htwg</property>
         <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
         <property name="current_session_context_class">thread</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="show_sql">false</property>
-        <!--<mapping resource="ICell.hbm.xml"/>-->
-        <!--<mapping resource="IField.hbm.xml"/>-->
-        <!--<mapping resource="IStatistic.hbm.xml"/>-->
-        <!--<mapping resource="IUser.hbm.xml"/>-->
         <mapping class="de.htwg.se.database.hibern8.HibernateCell" />
         <mapping class="de.htwg.se.database.hibern8.HibernateField" />
         <mapping class="de.htwg.se.database.hibern8.HibernateUser" />
