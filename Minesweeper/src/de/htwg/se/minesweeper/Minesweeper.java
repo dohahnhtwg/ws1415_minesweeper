@@ -18,13 +18,17 @@ package de.htwg.se.minesweeper;
 
 import java.util.Scanner;
 
-import org.apache.log4j.PropertyConfigurator;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
 
+import akka.actor.Props;
+import akka.actor.UntypedActor;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.Tui;
+import de.htwg.se.aview.tui.messages.InputMessage;
 
 public final class Minesweeper {
 
@@ -34,7 +38,7 @@ public final class Minesweeper {
 
     }
 
-    public static Minesweeper getInstance() {
+    static Minesweeper getInstance() {
         if (instance == null)	{
         	instance = new Minesweeper();
         }
@@ -42,22 +46,9 @@ public final class Minesweeper {
     }
 
 	public static void main(String[] args) {
-        Minesweeper.getInstance();
-        
-        Injector injector = Guice.createInjector(new MinesweeperModule());
-        
-        Tui tui = injector.getInstance(Tui.class);
-        injector.getInstance(MinesweeperGUI.class);
-
-        Scanner scanner = new Scanner(System.in);
-        tui.setScanner(scanner);
-        
-        tui.paintTUI();
-        
-        boolean proceed = true;
-        while (proceed) {
-            proceed = tui.processInputLine(scanner.next());
-        }
-        scanner.close();
+        final ActorSystem system = ActorSystem.create("Minesweeper");
+        system.actorOf(Props.create(MinesweeperActor.class), "minesweeper");
+        system.awaitTermination();
     }
 }
+

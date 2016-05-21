@@ -18,6 +18,10 @@ package de.htwg.se.aview.tui;
 
 import java.util.Scanner;
 
+import akka.actor.UntypedActor;
+import de.htwg.se.aview.tui.messages.InputMessage;
+import de.htwg.se.aview.tui.messages.PaintMessage;
+import de.htwg.se.minesweeper.messages.TerminateMessage;
 import de.htwg.se.model.IStatistic;
 import org.apache.log4j.Logger;
 
@@ -32,7 +36,7 @@ import de.htwg.se.controller.impl.ConcreteHandlerUnReDo;
 import de.htwg.se.util.observer.Event;
 import de.htwg.se.util.observer.IObserver;
 
-public class Tui implements IObserver {
+public class Tui extends UntypedActor implements IObserver {
 
     private IController controller;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
@@ -149,4 +153,19 @@ public class Tui implements IObserver {
         handlerUnReDo.setSuccesor(handlerInput);
         handlerInput.setSuccesor(null);
 	}
+
+    @Override
+    public void onReceive(Object message) throws Exception {
+        if(message instanceof InputMessage)    {
+            String input = ((InputMessage) message).getInput();
+            if(processInputLine(input)){return;}
+            getContext().parent().tell(new TerminateMessage(), self());
+            return;
+        }
+        if(message instanceof PaintMessage) {
+            paintTUI();
+            return;
+        }
+        unhandled(message);
+    }
 }
