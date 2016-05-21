@@ -18,27 +18,36 @@ package de.htwg.se.controller.impl;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.undo.UndoManager;
 
+import akka.actor.UntypedActor;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import de.htwg.se.aview.tui.messages.LoginResponse;
+import de.htwg.se.aview.tui.messages.NewAccountResponse;
+import de.htwg.se.aview.tui.messages.PrintStatisticMessage;
+import de.htwg.se.aview.tui.messages.UpdateMessage;
 import de.htwg.se.controller.IController;
 import de.htwg.se.controller.RevealFieldCommand;
+import de.htwg.se.controller.messages.*;
 import de.htwg.se.database.DataAccessObject;
+import de.htwg.se.database.db4o.db4oDatabase;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import de.htwg.se.model.impl.User;
-import de.htwg.se.util.observer.Observable;
+import de.htwg.se.util.observer.Event;
+import de.htwg.se.util.observer.IObserver;
 
 
 @Singleton
-public class Controller extends Observable implements IController {
+public class Controller extends UntypedActor implements IController {
 
     private IField playingField;
     private IUser user;
@@ -51,9 +60,9 @@ public class Controller extends Observable implements IController {
     private Long elapsedTime = 0L;
 
     @Inject
-    public Controller(IField playingfield, DataAccessObject database)  {
+    public Controller()  {
         undoManager = new UndoManager();
-        this.database = database;
+        this.database = new db4oDatabase();
         if (database.contains(new User("Default", "Default"))) {
             this.user = database.read("Default");
         } else {
@@ -64,29 +73,124 @@ public class Controller extends Observable implements IController {
         this.statistic = this.user.getStatistic();
     }
 
-    public boolean isVictory() {
-        return victory;
+    @Override
+    public void onReceive(Object message) throws Exception {
+        if(message instanceof FinishGameMessage)    {
+            finishGame();
+            return;
+        }
+        if(message instanceof LoginRequest) {
+            logIn((LoginRequest)message);
+            return;
+        }
+        if(message instanceof NewAccountRequest)    {
+            addNewAccount((NewAccountRequest)message);
+            return;
+        }
+        if(message instanceof NewGameMessage)   {
+            create();
+            return;
+        }
+        if(message instanceof NewSizeMessage)   {
+            NewSizeMessage msg = (NewSizeMessage)message;
+            create(msg.getLines(), msg.getColumns(), msg.getMines());
+            return;
+        }
+        if(message instanceof RedoMessage)  {
+            redo();
+            return;
+        }
+        if(message instanceof UndoMessage)  {
+            undo();
+            return;
+        }
+        if(message instanceof RevealFieldMessage)    {
+            revealField((RevealFieldMessage)message);
+            return;
+        }
+        if(message instanceof StatisticRequest) {
+            getContext().parent().tell(new PrintStatisticMessage(statistic), self());
+            return;
+        }
+        unhandled(message);
     }
 
-    public boolean isGameOver() {
-        return gameOver;
+    public void finishGame() {
+        database.update(user);
     }
 
-    public void revealField(int x, int y) {
-        if(gameOver || isVictory()) {
+    public void logIn(LoginRequest msg) {
+        IUser userFromDb = database.read(msg.getUsername());
+        if(userFromDb == null)    {
+            getContext().parent().tell(new LoginResponse(false), self());
+        } else {
+            user = userFromDb;
+            playingField = userFromDb.getPlayingField();
+            statistic = userFromDb.getStatistic();
+            getContext().parent().tell(new LoginResponse(true), self());
+            getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+            //notifyObservers();
+            //return true;
+        }
+    }
+
+    public void addNewAccount(NewAccountRequest msg) {
+        if (msg.getUsername().isEmpty() || msg.getPassword().isEmpty()) {
+            getContext().parent().tell(new NewAccountResponse(false), self());
+        } else {
+            IUser userForDb = new User(msg.getUsername(), msg.getPassword());
+            if(database.contains(userForDb)) {
+                getContext().parent().tell(new NewAccountResponse(false), self());
+            } else {
+                database.create(userForDb);
+                getContext().parent().tell(new NewAccountResponse(true), self());
+            }
+        }
+    }
+
+    public void create() {
+        create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
+    }
+
+    public void create(int lines, int columns, int nMines) {
+        gameOver = false;
+        victory = false;
+        playingField.create(lines, columns, nMines);
+        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+        //notifyObservers();
+    }
+
+    public void undo() {
+        if (undoManager.canUndo()) {
+            undoManager.undo();
+        }
+        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+        //notifyObservers();
+    }
+
+    public void redo() {
+        if (undoManager.canRedo()) {
+            undoManager.redo();
+        }
+        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+        //notifyObservers();
+    }
+
+    private void revealField(RevealFieldMessage msg) {
+        if(gameOver || victory) {
             return;
         }
         if (!isStarted) {
             startTimer();
         }
-        if(playingField.getField()[x][y].getValue() == -1) {
-            playingField.getField()[x][y].setIsRevealed(true);
+        if(playingField.getField()[msg.getX()][msg.getY()].getValue() == -1) {
+            playingField.getField()[msg.getX()][msg.getY()].setIsRevealed(true);
             gameOver = true;
             stopTimer();
             statistic.updateStatistic(false, elapsedTime);
         } else {
             List<ICell> revelalFieldCommandList = new LinkedList<>();
-            revealFieldHelp(x, y, revelalFieldCommandList);
+            revealFieldHelp(msg.getX(), msg.getY(), revelalFieldCommandList);
             victory = checkVictory();
             if (victory) {
                 stopTimer();
@@ -94,7 +198,8 @@ public class Controller extends Observable implements IController {
             }
             undoManager.addEdit(new RevealFieldCommand(revelalFieldCommandList));
         }
-        notifyObservers();
+        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+        //notifyObservers();
     }
 
     private void revealFieldHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
@@ -109,7 +214,7 @@ public class Controller extends Observable implements IController {
             }
         }
     }
-    
+
     private List<Point> getFieldsAround(int x, int y) {
         List<Point> fieldsAround = new ArrayList<>();
         fieldsAround.add(new Point(x - 1, y));
@@ -122,7 +227,7 @@ public class Controller extends Observable implements IController {
         fieldsAround.add(new Point(x , y + 1));
         return fieldsAround;
     }
-    
+
     private boolean checkCellInField(Point cell)    {
         return (cell.getX() > 0 && cell.getY() > 0) && (cell.getX() < playingField.getField().length - 1 && cell.getY() < playingField.getField()[(int) cell.getX()].length - 1);
     }
@@ -130,7 +235,7 @@ public class Controller extends Observable implements IController {
     private boolean checkVictory()  {
         int requirement = playingField.getLines() * playingField.getColumns() - playingField.getnMines();
         int current = 0;
-        
+
         for (int i = 0; i < playingField.getField().length; i++)   {
             for (int j = 0; j < playingField.getField()[0].length; j ++)    {
                 if(playingField.getField()[i][j].getIsRevealed()) {
@@ -142,66 +247,39 @@ public class Controller extends Observable implements IController {
         return current == requirement;
     }
 
-    public void undo() {
-        if (undoManager.canUndo()) {
-            undoManager.undo();
-        }
-        notifyObservers();
-    }
-
-    public void redo() {
-        if (undoManager.canRedo()) {
-            undoManager.redo();
-        }
-        notifyObservers();
-    }
-
     public String getField()    {
         return playingField.toString();
     }
 
-    public IField getPlayingField()  {
-        return playingField;
-    }
-    
-    public void create() {
-        create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
-    }
+    /* called in gui? */
 
-    public void create(int lines, int columns, int nMines) {
-        gameOver = false;
-        victory = false;
-        playingField.create(lines, columns, nMines);
-        notifyObservers();
+    @Override
+    public boolean isVictory() {
+        return victory;
     }
 
     @Override
-    public void finishGame() {
-        database.update(user);
+    public boolean isGameOver() {
+        return gameOver;
     }
 
-    public boolean addNewAccount(String username, String password) {
-        if (username.isEmpty() || password.isEmpty()) {
-            return false;
-        }
-        IUser userForDb = new User(username, password);
-        if(database.contains(userForDb)) {
-            return false;
-        }
-        database.create(userForDb);
-        return true;
+    @Deprecated
+    public boolean addNewAccount(String name, String pass) {
+        return false;
     }
 
-    public boolean logIn(String username, String password) {
-        IUser userFromDb = database.read(username);
-        if(userFromDb == null)    {
-            return false;
-        }
-        user = userFromDb;
-        playingField = userFromDb.getPlayingField();
-        statistic = userFromDb.getStatistic();
-        notifyObservers();
-        return true;
+    @Deprecated
+    public boolean logIn(String name, String pass) {
+        return false;
+    }
+
+    @Deprecated
+    public void revealField(int x, int y)  {
+
+    }
+
+    public IField getPlayingField()  {
+        return playingField;
     }
 
     public IStatistic getUserStatistic() {
@@ -227,5 +305,33 @@ public class Controller extends Observable implements IController {
 
     public boolean isStarted() {
         return isStarted;
+    }
+
+    private static final int INITIAL_CAPACITY = 2;
+
+    private List<IObserver> subscribers = new ArrayList<IObserver>(INITIAL_CAPACITY);
+
+    public void addObserver(IObserver s) {
+        subscribers.add(s);
+    }
+
+    public void removeObserver(IObserver s) {
+        subscribers.remove(s);
+    }
+
+    public void removeAllObservers() {
+        subscribers.clear();
+
+    }
+
+    public void notifyObservers() {
+        notifyObservers(null);
+    }
+
+    public void notifyObservers(Event e) {
+        for (Iterator<IObserver> iter = subscribers.iterator(); iter.hasNext();) {
+            IObserver observer = iter.next();
+            observer.update(e);
+        }
     }
 }

@@ -28,46 +28,6 @@ import de.htwg.se.util.observer.IObservable;
 public interface IController extends IObservable {
 
     /**
-     * Creates a playing Field with the same parameters as old ones.
-     */
-    void create();
-    
-    /**
-     * Creates a new playing Field.
-     * @param lines number of lines.
-     * @param columns number of columns.
-     * @param nMines number of Mines.
-     */
-    void create(int lines, int columns, int nMines);
-    
-    /**
-     * @return true if the Player is victorious.
-     */
-    boolean isVictory();
-    
-    /**
-     * @return true if the Player lost the game.
-     */
-    boolean isGameOver();
-    
-    /**
-     * reveal the Field with the given Coordinates.
-     * @param x is the x-Coordinate.
-     * @param y is the y-Coordinate.
-     */
-    void revealField(int x, int y);
-    
-    /**
-     * undo the last revealeFieldCommand.
-     */
-    void undo();
-    
-    /**
-     * redo the last undo.
-     */
-    void redo();
-    
-    /**
      * @return the painting of a Field.
      */
     String getField();
@@ -77,27 +37,6 @@ public interface IController extends IObservable {
      * @return the actual playing Field.
      */
     IField getPlayingField();
-
-    /**
-     * All action before game is finished
-     */
-    void finishGame();
-
-    /**
-     * Create new account
-     * @param username name of the user to create
-     * @param password users password
-     * @return true if creation successfully finished
-     */
-    boolean addNewAccount(String username, String password);
-
-    /**
-     * Log in a user with given credentials
-     * @param username name of the user to log in
-     * @param password users password
-     * @return true if successfully logged in
-     */
-    boolean logIn(String username, String password);
 
     /**
      * Get current statistic instance
@@ -126,4 +65,29 @@ public interface IController extends IObservable {
      * @return true if started
      */
     boolean isStarted();
+
+    /* Depracted section */
+
+    void finishGame();
+
+    boolean isVictory();
+
+    boolean isGameOver();
+
+    void create();
+
+    void create(int x, int y, int z);
+
+    void undo();
+
+    void redo();
+
+    @Deprecated
+    boolean logIn(String name, String pass);
+
+    @Deprecated
+    boolean addNewAccount(String name, String pass);
+
+    @Deprecated
+    void revealField(int x, int y);
 }

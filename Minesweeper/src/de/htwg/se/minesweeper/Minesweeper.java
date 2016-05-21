@@ -16,19 +16,8 @@
 
 package de.htwg.se.minesweeper;
 
-import java.util.Scanner;
-
-import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-
 import akka.actor.Props;
-import akka.actor.UntypedActor;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
-import de.htwg.se.aview.gui.MinesweeperGUI;
-import de.htwg.se.aview.tui.Tui;
-import de.htwg.se.aview.tui.messages.InputMessage;
 
 public final class Minesweeper {
 

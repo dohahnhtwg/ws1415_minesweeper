@@ -12,7 +12,6 @@ import de.htwg.se.minesweeper.MinesweeperModule;
  */
 public class TuiBuilder implements IndirectActorProducer {
 
-
     @Override
     public Actor produce() {
         Injector injector = Guice.createInjector(new MinesweeperModule());

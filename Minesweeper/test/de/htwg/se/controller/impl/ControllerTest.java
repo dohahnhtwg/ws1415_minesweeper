@@ -2,10 +2,13 @@ package de.htwg.se.controller.impl;
 
 import static org.junit.Assert.*;
 
+import de.htwg.se.aview.tui.handler.ConcreteHandlerNew;
+import de.htwg.se.aview.tui.handler.ConcreteHandlerSize;
+import de.htwg.se.aview.tui.handler.ConcreteHandlerUnReDo;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
-import de.htwg.se.controller.IHandler;
+import de.htwg.se.aview.tui.IHandler;
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.impl.Field;
@@ -109,7 +112,7 @@ public class ControllerTest {
         IHandler handlerNew = new ConcreteHandlerNew();
         IHandler handlerSize = new ConcreteHandlerSize();
         IHandler handlerUnReDo = new ConcreteHandlerUnReDo();
-        IHandler handlerInput = new ConcreteHandlerInput();
+        IHandler handlerInput = new de.htwg.se.aview.tui.handler.ConcreteHandlerInput();
         
         handlerNew.setSuccesor(handlerSize);
         handlerSize.setSuccesor(handlerUnReDo);
@@ -121,20 +124,20 @@ public class ControllerTest {
         assertEquals(handlerInput, handlerUnReDo.getSuccesor());
         assertEquals(null, handlerInput.getSuccesor());
         
-        assertTrue(handlerNew.handleRequest("n", controller));
-        assertFalse(handlerNew.handleRequest("test", controller));
+        assertTrue(handlerNew.handleRequest("n", controller, self()));
+        assertFalse(handlerNew.handleRequest("test", controller, self()));
         
-        assertTrue(handlerSize.handleRequest("sS", controller));
-        assertTrue(handlerSize.handleRequest("sM", controller));
-        assertTrue(handlerSize.handleRequest("sL", controller));
-        assertFalse(handlerSize.handleRequest("test", controller));
+        assertTrue(handlerSize.handleRequest("sS", controller, self()));
+        assertTrue(handlerSize.handleRequest("sM", controller, self()));
+        assertTrue(handlerSize.handleRequest("sL", controller, self()));
+        assertFalse(handlerSize.handleRequest("test", controller, self()));
         
-        assertTrue(handlerUnReDo.handleRequest("u", controller));
-        assertTrue(handlerUnReDo.handleRequest("r", controller));
-        assertFalse(handlerUnReDo.handleRequest("test", controller));
+        assertTrue(handlerUnReDo.handleRequest("u", controller, self()));
+        assertTrue(handlerUnReDo.handleRequest("r", controller, self()));
+        assertFalse(handlerUnReDo.handleRequest("test", controller, self()));
 
-        assertTrue(handlerInput.handleRequest("01-01", controller));
-        assertFalse(handlerInput.handleRequest("test", controller));
+        assertTrue(handlerInput.handleRequest("01-01", controller, self()));
+        assertFalse(handlerInput.handleRequest("test", controller, self()));
     }
     
     @Test
