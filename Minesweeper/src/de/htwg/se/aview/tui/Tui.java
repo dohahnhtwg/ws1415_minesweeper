@@ -24,10 +24,7 @@ import akka.actor.UntypedActor;
 import com.google.inject.Inject;
 import de.htwg.se.aview.tui.messages.*;
 import de.htwg.se.controller.impl.*;
-import de.htwg.se.controller.messages.FinishGameMessage;
-import de.htwg.se.controller.messages.LoginRequest;
-import de.htwg.se.controller.messages.NewAccountRequest;
-import de.htwg.se.controller.messages.StatisticRequest;
+import de.htwg.se.controller.messages.*;
 import de.htwg.se.minesweeper.messages.TerminateMessage;
 import de.htwg.se.model.IStatistic;
 import org.apache.log4j.Logger;
@@ -43,6 +40,7 @@ public class Tui extends UntypedActor {
     public Tui()   {
         this.controller = getContext().actorOf(Props.create(MainController.class), "controller");
         createChainOfResponsibility();
+        controller.tell(new UpdateRequest(), self());
     }
 
     @Override

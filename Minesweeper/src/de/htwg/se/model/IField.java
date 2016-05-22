@@ -22,14 +22,6 @@ package de.htwg.se.model;
  *
  */
 public interface IField {
-
-    /**
-     * Creates a new playing Field
-     * @param x is the number of lines.
-     * @param y is the number of columns.
-     * @param nMines is the number of Mines in the playing Field.
-     */
-    void create(int x, int y, int nMines);
     
     /**
      * This Method returns the number of lines in the actual playing field.
@@ -102,5 +94,13 @@ public interface IField {
      * @param playingField field
      */
     void setPlayingField(ICell[][] playingField);
+
+    boolean isVictory();
+
+    void setIsVictory(boolean isVictory);
+
+    boolean isGameOver();
+
+    void setIsGameOver(boolean isGameOver);
 
 }

@@ -46,20 +46,16 @@ import de.htwg.se.model.impl.User;
 @Singleton
 public class MainController extends UntypedActor implements IMainController {
 
-    private IField playingField;
-
+    private FieldController fieldController;
     private IUser user;
     private IStatistic statistic;
-    private boolean gameOver = false;
-    private boolean victory = false;
     private boolean isStarted = false;
-    private UndoManager undoManager;
     private DataAccessObject database;
     private Long elapsedTime = 0L;
 
     @Inject
     public MainController()  {
-        undoManager = new UndoManager();
+        //undoManager = new UndoManager();
         this.database = new db4oDatabase();
         if (database.contains(new User("Default", "Default"))) {
             this.user = database.read("Default");
@@ -67,7 +63,9 @@ public class MainController extends UntypedActor implements IMainController {
             this.user = new User("Default", "Default");
             database.create(this.user);
         }
-        this.playingField = this.user.getPlayingField();
+        //this.playingField = this.user.getPlayingField();
+        this.fieldController = new FieldController();
+        this.fieldController.setField(this.user.getPlayingField());
         this.statistic = this.user.getStatistic();
     }
 
@@ -110,6 +108,11 @@ public class MainController extends UntypedActor implements IMainController {
             getContext().parent().tell(new PrintStatisticMessage(statistic), self());
             return;
         }
+        if(message instanceof UpdateRequest)    {
+            getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(),
+                    fieldController.getField().isVictory(), getCurrentTime()), self());
+            return;
+        }
         unhandled(message);
     }
 
@@ -123,10 +126,10 @@ public class MainController extends UntypedActor implements IMainController {
             getContext().parent().tell(new LoginResponse(false), self());
         } else {
             user = userFromDb;
-            playingField = userFromDb.getPlayingField();
+            fieldController.setField(userFromDb.getPlayingField());
             statistic = userFromDb.getStatistic();
             getContext().parent().tell(new LoginResponse(true), self());
-            getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+            getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
         }
     }
 
@@ -145,114 +148,59 @@ public class MainController extends UntypedActor implements IMainController {
     }
 
     public void create() {
-        create(playingField.getLines(), playingField.getColumns(), playingField.getnMines());
+        fieldController.restart();
+        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
     }
 
     public void create(int lines, int columns, int nMines) {
-        gameOver = false;
-        victory = false;
-        playingField.create(lines, columns, nMines);
-        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+        fieldController.create(lines, columns, nMines);
+        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
     }
 
     public void undo() {
-        if (undoManager.canUndo()) {
-            undoManager.undo();
-        }
-        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+        fieldController.undo();
+        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
     }
 
     public void redo() {
-        if (undoManager.canRedo()) {
-            undoManager.redo();
-        }
-        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
+        fieldController.redo();
+        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
     }
 
     private void revealField(RevealFieldMessage msg) {
-        if(gameOver || victory) {
+        if(fieldController.getField().isGameOver() || fieldController.getField().isVictory()) {
             return;
         }
         if (!isStarted) {
             startTimer();
         }
-        if(playingField.getField()[msg.getX()][msg.getY()].getValue() == -1) {
-            playingField.getField()[msg.getX()][msg.getY()].setIsRevealed(true);
-            gameOver = true;
+        fieldController.revealField(msg);
+        if(fieldController.getField().isGameOver()) {
             stopTimer();
             statistic.updateStatistic(false, elapsedTime);
         } else {
-            List<ICell> revelalFieldCommandList = new LinkedList<>();
-            revealFieldHelp(msg.getX(), msg.getY(), revelalFieldCommandList);
-            victory = checkVictory();
-            if (victory) {
+            if(fieldController.getField().isVictory())  {
                 stopTimer();
                 statistic.updateStatistic(true, elapsedTime);
             }
-            undoManager.addEdit(new RevealFieldCommand(revelalFieldCommandList));
         }
-        getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
-    }
-
-    private void revealFieldHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
-        playingField.getField()[x][y].setIsRevealed(true);
-        ((LinkedList<ICell>) revelalFieldCommandList).push(playingField.getField()[x][y]);
-        if(playingField.getField()[x][y].getValue() <= 0)  {
-            List<Point> fieldsaround = getFieldsAround(x, y);
-            for(Point field : fieldsaround) {
-                if(checkCellInField(field) && !playingField.getField()[field.x][field.y].getIsRevealed()) {
-                    revealFieldHelp(field.x, field.y, revelalFieldCommandList);
-                }
-            }
-        }
-    }
-
-    private List<Point> getFieldsAround(int x, int y) {
-        List<Point> fieldsAround = new ArrayList<>();
-        fieldsAround.add(new Point(x - 1, y));
-        fieldsAround.add(new Point(x + 1, y));
-        fieldsAround.add(new Point(x - 1, y - 1));
-        fieldsAround.add(new Point(x - 1, y + 1));
-        fieldsAround.add(new Point(x + 1, y + 1));
-        fieldsAround.add(new Point(x + 1, y - 1));
-        fieldsAround.add(new Point(x , y - 1));
-        fieldsAround.add(new Point(x , y + 1));
-        return fieldsAround;
-    }
-
-    private boolean checkCellInField(Point cell)    {
-        return (cell.getX() > 0 && cell.getY() > 0) && (cell.getX() < playingField.getField().length - 1 && cell.getY() < playingField.getField()[(int) cell.getX()].length - 1);
-    }
-
-    private boolean checkVictory()  {
-        int requirement = playingField.getLines() * playingField.getColumns() - playingField.getnMines();
-        int current = 0;
-
-        for (int i = 0; i < playingField.getField().length; i++)   {
-            for (int j = 0; j < playingField.getField()[0].length; j ++)    {
-                if(playingField.getField()[i][j].getIsRevealed()) {
-                    current++;
-                }
-            }
-        }
-
-        return current == requirement;
+        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
     }
 
     public String getField()    {
-        return playingField.toString();
+        return fieldController.getField().toString();
     }
 
     /* No longer needed, use actor */
 
     @Override
     public boolean isVictory() {
-        return victory;
+        return fieldController.getField().isVictory();
     }
 
     @Override
     public boolean isGameOver() {
-        return gameOver;
+        return fieldController.getField().isGameOver();
     }
 
     @Deprecated
@@ -273,7 +221,7 @@ public class MainController extends UntypedActor implements IMainController {
     /* only called in gui and web? */
 
     public IField getPlayingField()  {
-        return playingField;
+        return fieldController.getField();
     }
 
     public IStatistic getUserStatistic() {

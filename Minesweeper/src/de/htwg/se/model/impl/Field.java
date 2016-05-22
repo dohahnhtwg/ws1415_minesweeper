@@ -28,84 +28,24 @@ public class Field implements IField{
 
     private String fieldID;
     private ICell[][] playingField;
-    private static final int DEFDIMENS = 9;
-    private static final int DEFNMINES = 10;
-    private static final int BORDER = 2;
-    private static final int THREE_CELL_LEN = 3;
     private int nMines;
     private int lines;
     private int columns;
+    private boolean isGameOver = false;
+    private boolean isVictory = false;
     
     @Inject
     public Field()  {
         this.fieldID = UUID.randomUUID().toString();
-        create(DEFDIMENS, DEFDIMENS, DEFNMINES);
     }
-    
-    public Field(Integer lines, Integer columns, Integer nMines)  {
-        this.fieldID = UUID.randomUUID().toString();
-        create(lines, columns, nMines);
-    }
-    
-    
-    public final void create(int lines, int columns, int nMines)    {
+
+    public Field(int lines, int columns, int nMines)    {
         this.lines = lines;
         this.columns = columns;
         this.nMines = nMines;
-        if (lines < 1 || columns < 1 || nMines < 0)   {
-            throw new IllegalArgumentException("lines, columns or nMines too small.");
-        }
-        playingField = new ICell[lines + BORDER][columns + BORDER];
-        for (int i = 0; i < playingField.length; i++)   {
-            for (int j = 0; j < playingField[0].length; j ++)    {
-                playingField[i][j] = new Cell(0);
-            }
-        }
-        fill(lines, columns);
     }
-    
-    private void fill(int lines, int columns) {
-        Long timeforhash = System.nanoTime();
-        int hash = timeforhash.hashCode();
-        Random rnd = new Random(hash);
-        for (int i = 0; i < nMines; i++)    {
-            generateMines(lines, columns, rnd);
-        }
-        generateMinesAround();
-    }
-    
-    private void generateMines(int lines, int columns, Random rnd)    {
-        int x = rnd.nextInt(lines /*- 1*/) + 1;
-        int y = rnd.nextInt(columns /*- 1*/) + 1;
-        if (playingField[x][y].getValue() != -1)    {
-            playingField[x][y].setValue(-1);
-        } else  {
-            generateMines(lines, columns, rnd);
-        }
-    }
-    
-    private void generateMinesAround() {
-        for (int i = 1; i < playingField.length - 1; i++)   {
-            for (int j = 1; j < playingField[0].length - 1; j ++)   {
-                if (playingField[i][j].getValue() != -1)    {
-                    playingField[i][j].setValue(nMinesAroundAPoint(i, j));
-                }
-            }
-        }
-    }
-    
-    private int nMinesAroundAPoint(int x, int y)    {
-        int mines = 0;
-        for (int i = 0; i < THREE_CELL_LEN; i++) {
-            for (int j = 0; j < THREE_CELL_LEN; j++) {
-                if (playingField[x - 1 + i][y - 1 + j].getValue() == -1)    {
-                    mines++;
-                }
-            }
-        }
-        return mines;
-    }
-    
+
+    @Override
     public String toString()    {
         StringBuilder sb = new StringBuilder("\n");
         sb.append(String.format("%5s\n", "Line\n"));
@@ -175,7 +115,20 @@ public class Field implements IField{
     }
 
     @Override
+    public boolean isVictory() { return isVictory; }
+
+    @Override
+    public void setIsVictory(boolean isVictory) { this.isVictory = isVictory; }
+
+    @Override
+    public boolean isGameOver() { return isGameOver; }
+
+    @Override
+    public void setIsGameOver(boolean isGameOver) { this.isGameOver = isGameOver; }
+
+    @Override
     public ICell[][] getPlayingField() {
         return this.playingField;
     }
+
 }
