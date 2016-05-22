@@ -41,7 +41,7 @@ public class Tui extends UntypedActor {
 
     @Inject
     public Tui()   {
-        this.controller = getContext().actorOf(Props.create(Controller.class), "controller");
+        this.controller = getContext().actorOf(Props.create(MainController.class), "controller");
         createChainOfResponsibility();
     }
 
@@ -180,12 +180,5 @@ public class Tui extends UntypedActor {
         } else {
             LOGGER.info("Account already exists");
         }
-    }
-
-    /* Depracted section will be removed soon*/
-
-    @Deprecated
-    public void paintTUI()  {
-
     }
 }

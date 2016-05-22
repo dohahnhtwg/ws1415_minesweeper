@@ -31,14 +31,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
 
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 import de.htwg.se.util.observer.Event;
 import de.htwg.se.util.observer.IObserver;
 
 public final class MinesweeperGUI extends JFrame implements IObserver {
     private static final long serialVersionUID = 1L;
 
-    private IController controller;
+    private IMainController controller;
     private JPanel mainPanel;
     private JPanel sidePanel1, sidePanel2;
     private JMenuBar menu;
@@ -46,9 +46,8 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
     private PlayingFieldPanel field;
 
     @Inject
-    public MinesweeperGUI(final IController controller) {
+    public MinesweeperGUI(final IMainController controller) {
         this.controller = controller;
-        controller.addObserver(this);
         new JFrame("Minesweeper");
         mainPanel = new JPanel(new BorderLayout());
         setLocationByPlatform(true);
@@ -66,7 +65,7 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         updaterThread.run();
     }
 
-    public void constructMinesweeperGUI(final IController controller) {
+    public void constructMinesweeperGUI(final IMainController controller) {
         int x = controller.getPlayingField().getLines();
         int y = controller.getPlayingField().getColumns();
         if (menu != null) {

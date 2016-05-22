@@ -18,7 +18,6 @@ package de.htwg.se.controller.impl;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ import de.htwg.se.aview.tui.messages.LoginResponse;
 import de.htwg.se.aview.tui.messages.NewAccountResponse;
 import de.htwg.se.aview.tui.messages.PrintStatisticMessage;
 import de.htwg.se.aview.tui.messages.UpdateMessage;
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.controller.messages.*;
 import de.htwg.se.database.DataAccessObject;
@@ -42,14 +41,13 @@ import de.htwg.se.model.IField;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import de.htwg.se.model.impl.User;
-import de.htwg.se.util.observer.Event;
-import de.htwg.se.util.observer.IObserver;
 
 
 @Singleton
-public class Controller extends UntypedActor implements IController {
+public class MainController extends UntypedActor implements IMainController {
 
     private IField playingField;
+
     private IUser user;
     private IStatistic statistic;
     private boolean gameOver = false;
@@ -60,7 +58,7 @@ public class Controller extends UntypedActor implements IController {
     private Long elapsedTime = 0L;
 
     @Inject
-    public Controller()  {
+    public MainController()  {
         undoManager = new UndoManager();
         this.database = new db4oDatabase();
         if (database.contains(new User("Default", "Default"))) {
@@ -129,8 +127,6 @@ public class Controller extends UntypedActor implements IController {
             statistic = userFromDb.getStatistic();
             getContext().parent().tell(new LoginResponse(true), self());
             getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
-            //notifyObservers();
-            //return true;
         }
     }
 
@@ -157,7 +153,6 @@ public class Controller extends UntypedActor implements IController {
         victory = false;
         playingField.create(lines, columns, nMines);
         getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
-        //notifyObservers();
     }
 
     public void undo() {
@@ -165,7 +160,6 @@ public class Controller extends UntypedActor implements IController {
             undoManager.undo();
         }
         getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
-        //notifyObservers();
     }
 
     public void redo() {
@@ -173,7 +167,6 @@ public class Controller extends UntypedActor implements IController {
             undoManager.redo();
         }
         getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
-        //notifyObservers();
     }
 
     private void revealField(RevealFieldMessage msg) {
@@ -199,7 +192,6 @@ public class Controller extends UntypedActor implements IController {
             undoManager.addEdit(new RevealFieldCommand(revelalFieldCommandList));
         }
         getContext().parent().tell(new UpdateMessage(getField(), gameOver, victory, getCurrentTime()), self());
-        //notifyObservers();
     }
 
     private void revealFieldHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
@@ -251,7 +243,7 @@ public class Controller extends UntypedActor implements IController {
         return playingField.toString();
     }
 
-    /* called in gui? */
+    /* No longer needed, use actor */
 
     @Override
     public boolean isVictory() {
@@ -277,6 +269,8 @@ public class Controller extends UntypedActor implements IController {
     public void revealField(int x, int y)  {
 
     }
+
+    /* only called in gui and web? */
 
     public IField getPlayingField()  {
         return playingField;
@@ -305,33 +299,5 @@ public class Controller extends UntypedActor implements IController {
 
     public boolean isStarted() {
         return isStarted;
-    }
-
-    private static final int INITIAL_CAPACITY = 2;
-
-    private List<IObserver> subscribers = new ArrayList<IObserver>(INITIAL_CAPACITY);
-
-    public void addObserver(IObserver s) {
-        subscribers.add(s);
-    }
-
-    public void removeObserver(IObserver s) {
-        subscribers.remove(s);
-    }
-
-    public void removeAllObservers() {
-        subscribers.clear();
-
-    }
-
-    public void notifyObservers() {
-        notifyObservers(null);
-    }
-
-    public void notifyObservers(Event e) {
-        for (Iterator<IObserver> iter = subscribers.iterator(); iter.hasNext();) {
-            IObserver observer = iter.next();
-            observer.update(e);
-        }
     }
 }

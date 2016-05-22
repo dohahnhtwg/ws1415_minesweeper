@@ -31,7 +31,7 @@ import static de.htwg.se.aview.gui.Constants.ONE;
 
 import javax.swing.*;
 
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 import de.htwg.se.model.ICell;
 
 public final class PlayingFieldPanel extends JPanel {
@@ -42,7 +42,7 @@ public final class PlayingFieldPanel extends JPanel {
     static {
         marked = new HashMap<Integer, Map<Integer, ImageIcon>>();
     }
-    public PlayingFieldPanel(final int x, final int y, final IController controller) {
+    public PlayingFieldPanel(final int x, final int y, final IMainController controller) {
         buttons = new JButton[x][y];
         setLayout(new GridLayout(x, y));
 
@@ -60,7 +60,7 @@ public final class PlayingFieldPanel extends JPanel {
         }
     }
 
-    private void addListeners(final IController controller, final int i, final int j) {
+    private void addListeners(final IMainController controller, final int i, final int j) {
         buttons[i][j].addMouseListener(new MouseAdapter() {
             private int index = ZERO;
             @Override
@@ -78,7 +78,7 @@ public final class PlayingFieldPanel extends JPanel {
         buttons[i][j].addActionListener(new ButtonHandler(i , j, controller));
     }
 
-    private void reorgTextOnButton(final IController controller, final int i, final int j) {
+    private void reorgTextOnButton(final IMainController controller, final int i, final int j) {
         ICell cell = controller.getPlayingField().getField()[i + ONE][j + ONE];
         if (marked.containsKey(i) && marked.get(i).containsKey(j)) {
             buttons[i][j].setIcon(marked.get(i).get(j));

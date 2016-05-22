@@ -15,7 +15,7 @@ import de.htwg.se.model.impl.Field;
 
 public class ControllerTest {
 
-    Controller controller;
+    MainController controller;
     Field field;
     DataAccessObject databaseMock;
     
@@ -23,7 +23,7 @@ public class ControllerTest {
     public void setUp() {
     	field = new Field();
     	databaseMock = mock(DataAccessObject.class);
-        controller = new Controller(field, databaseMock);
+        controller = new MainController(field, databaseMock);
     }
     
     @Test

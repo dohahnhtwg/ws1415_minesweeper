@@ -1,14 +1,14 @@
 package de.htwg.se.aview.gui;
 
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UpdaterThread implements Runnable {
-    private IController controller;
+    private IMainController controller;
 
-    protected UpdaterThread(IController controller) {
+    protected UpdaterThread(IMainController controller) {
         this.controller = controller;
     }
 
