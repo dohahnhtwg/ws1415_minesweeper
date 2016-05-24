@@ -1,5 +1,7 @@
 package de.htwg.se.aview.tui.messages;
 
+import de.htwg.se.model.IField;
+
 import java.io.Serializable;
 
 /**
@@ -7,29 +9,15 @@ import java.io.Serializable;
  */
 public class UpdateMessage implements Serializable {
 
-    private String field;
-    private boolean isGameOver;
-    private boolean isVictory;
+    private IField field;
     private Long currentTime;
 
-    public UpdateMessage(String field, boolean isGameOver, boolean isVictory, Long currentTime)   {
-        this.isGameOver = isGameOver;
-        this.isVictory = isVictory;
+    public UpdateMessage(IField field, Long currentTime)   {
         this.currentTime = currentTime;
         this.field = field;
     }
 
-    public String getField()    {
-        return  field;
-    }
-
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    public boolean isVictory()  {
-        return isVictory;
-    }
+    public IField getField()    { return  field; }
 
     public Long getCurrentTime()    {
         return currentTime;

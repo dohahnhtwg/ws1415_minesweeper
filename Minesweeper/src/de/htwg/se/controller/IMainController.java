@@ -78,8 +78,10 @@ public interface IMainController {
 
     void create(int x, int y, int z);
 
+    @Deprecated
     void undo();
 
+    @Deprecated
     void redo();
 
     @Deprecated

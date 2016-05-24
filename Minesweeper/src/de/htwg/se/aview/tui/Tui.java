@@ -81,12 +81,12 @@ public class Tui extends UntypedActor {
     }
 
     private void update(UpdateMessage msg) {
-        paintTUI(msg.getField());
-        if(msg.isGameOver())  {
+        paintTUI(msg.getField().toString());
+        if(msg.getField().isGameOver())  {
             LOGGER.info("GAME OVER!!!");
             LOGGER.info("Spent time: " + msg.getCurrentTime() + "s");
         }
-        if(msg.isVictory())   {
+        if(msg.getField().isVictory())   {
             LOGGER.info("Victory!!!");
         }
     }

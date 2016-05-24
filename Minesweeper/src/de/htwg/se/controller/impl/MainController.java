@@ -15,14 +15,8 @@
  */
 
 package de.htwg.se.controller.impl;
-
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.swing.undo.UndoManager;
-
+import akka.actor.ActorRef;
+import akka.actor.Props;
 import akka.actor.UntypedActor;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -32,11 +26,9 @@ import de.htwg.se.aview.tui.messages.NewAccountResponse;
 import de.htwg.se.aview.tui.messages.PrintStatisticMessage;
 import de.htwg.se.aview.tui.messages.UpdateMessage;
 import de.htwg.se.controller.IMainController;
-import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.controller.messages.*;
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.database.db4o.db4oDatabase;
-import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
@@ -46,7 +38,7 @@ import de.htwg.se.model.impl.User;
 @Singleton
 public class MainController extends UntypedActor implements IMainController {
 
-    private FieldController fieldController;
+    private ActorRef fieldController;
     private IUser user;
     private IStatistic statistic;
     private boolean isStarted = false;
@@ -55,7 +47,6 @@ public class MainController extends UntypedActor implements IMainController {
 
     @Inject
     public MainController()  {
-        //undoManager = new UndoManager();
         this.database = new db4oDatabase();
         if (database.contains(new User("Default", "Default"))) {
             this.user = database.read("Default");
@@ -63,9 +54,8 @@ public class MainController extends UntypedActor implements IMainController {
             this.user = new User("Default", "Default");
             database.create(this.user);
         }
-        //this.playingField = this.user.getPlayingField();
-        this.fieldController = new FieldController();
-        this.fieldController.setField(this.user.getPlayingField());
+        this.fieldController = getContext().actorOf(Props.create(FieldController.class), "fieldController");
+        fieldController.tell(new NewFieldMessage(this.user.getPlayingField()), self());
         this.statistic = this.user.getStatistic();
     }
 
@@ -93,11 +83,11 @@ public class MainController extends UntypedActor implements IMainController {
             return;
         }
         if(message instanceof RedoMessage)  {
-            redo();
+            redo((RedoMessage)message);
             return;
         }
         if(message instanceof UndoMessage)  {
-            undo();
+            undo((UndoMessage)message);
             return;
         }
         if(message instanceof RevealFieldMessage)    {
@@ -109,8 +99,16 @@ public class MainController extends UntypedActor implements IMainController {
             return;
         }
         if(message instanceof UpdateRequest)    {
-            getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(),
-                    fieldController.getField().isVictory(), getCurrentTime()), self());
+            fieldController.tell(new FieldRequest(), self());
+            return;
+        }
+        if(message instanceof FieldResponse)    {
+            FieldResponse response = (FieldResponse)message;
+            getContext().parent().tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
+            return;
+        }
+        if(message instanceof RevealFieldResponse)  {
+            handleRevealFieldResponse((RevealFieldResponse)message);
             return;
         }
         unhandled(message);
@@ -120,20 +118,20 @@ public class MainController extends UntypedActor implements IMainController {
         database.update(user);
     }
 
-    public void logIn(LoginRequest msg) {
+    private void logIn(LoginRequest msg) {
         IUser userFromDb = database.read(msg.getUsername());
         if(userFromDb == null)    {
             getContext().parent().tell(new LoginResponse(false), self());
         } else {
             user = userFromDb;
-            fieldController.setField(userFromDb.getPlayingField());
+            fieldController.tell(new NewFieldMessage(userFromDb.getPlayingField()), self());
             statistic = userFromDb.getStatistic();
             getContext().parent().tell(new LoginResponse(true), self());
-            getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
+            fieldController.tell(new FieldRequest(), self());
         }
     }
 
-    public void addNewAccount(NewAccountRequest msg) {
+    private void addNewAccount(NewAccountRequest msg) {
         if (msg.getUsername().isEmpty() || msg.getPassword().isEmpty()) {
             getContext().parent().tell(new NewAccountResponse(false), self());
         } else {
@@ -148,80 +146,51 @@ public class MainController extends UntypedActor implements IMainController {
     }
 
     public void create() {
-        fieldController.restart();
-        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
+        fieldController.tell(new RestartRequest(), self());
     }
 
     public void create(int lines, int columns, int nMines) {
-        fieldController.create(lines, columns, nMines);
-        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
+        fieldController.tell(new CreateRequest(lines, columns, nMines), self());
     }
 
-    public void undo() {
-        fieldController.undo();
-        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
+    private void undo(UndoMessage msg) {
+        fieldController.tell(msg, self());
     }
 
-    public void redo() {
-        fieldController.redo();
-        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
+    private void redo(RedoMessage msg) {
+        fieldController.tell(msg, self());
     }
 
     private void revealField(RevealFieldMessage msg) {
-        if(fieldController.getField().isGameOver() || fieldController.getField().isVictory()) {
-            return;
-        }
         if (!isStarted) {
             startTimer();
         }
-        fieldController.revealField(msg);
-        if(fieldController.getField().isGameOver()) {
+        fieldController.tell(msg, self());
+    }
+
+    private void handleRevealFieldResponse(RevealFieldResponse response) {
+        if(response.getField().isGameOver()) {
             stopTimer();
             statistic.updateStatistic(false, elapsedTime);
         } else {
-            if(fieldController.getField().isVictory())  {
+            if(response.getField().isVictory())  {
                 stopTimer();
                 statistic.updateStatistic(true, elapsedTime);
             }
         }
-        getContext().parent().tell(new UpdateMessage(getField(), fieldController.getField().isGameOver(), fieldController.getField().isVictory(), getCurrentTime()), self());
+        getContext().parent().tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
     }
 
-    public String getField()    {
-        return fieldController.getField().toString();
-    }
 
-    /* No longer needed, use actor */
+    /* only called in gui and web? Refactor with use of actors */
 
     @Override
-    public boolean isVictory() {
-        return fieldController.getField().isVictory();
+    public String getField() {
+        return null;
     }
-
-    @Override
-    public boolean isGameOver() {
-        return fieldController.getField().isGameOver();
-    }
-
-    @Deprecated
-    public boolean addNewAccount(String name, String pass) {
-        return false;
-    }
-
-    @Deprecated
-    public boolean logIn(String name, String pass) {
-        return false;
-    }
-
-    @Deprecated
-    public void revealField(int x, int y)  {
-
-    }
-
-    /* only called in gui and web? */
 
     public IField getPlayingField()  {
-        return fieldController.getField();
+        return null;
     }
 
     public IStatistic getUserStatistic() {
@@ -248,4 +217,35 @@ public class MainController extends UntypedActor implements IMainController {
     public boolean isStarted() {
         return isStarted;
     }
+
+    /* No longer needed, use actor */
+
+    @Override
+    public boolean isVictory() {
+        return false;
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+
+    @Deprecated
+    public boolean addNewAccount(String name, String pass) {
+        return false;
+    }
+
+    @Deprecated
+    public boolean logIn(String name, String pass) {
+        return false;
+    }
+
+    @Deprecated
+    public void revealField(int x, int y)  { }
+
+    @Deprecated
+    public void undo() { }
+
+    @Deprecated
+    public void redo() { }
 }

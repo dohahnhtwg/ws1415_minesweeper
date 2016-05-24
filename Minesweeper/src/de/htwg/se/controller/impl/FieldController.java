@@ -1,9 +1,8 @@
 package de.htwg.se.controller.impl;
 
 import akka.actor.UntypedActor;
-import de.htwg.se.aview.tui.messages.UpdateMessage;
 import de.htwg.se.controller.RevealFieldCommand;
-import de.htwg.se.controller.messages.RevealFieldMessage;
+import de.htwg.se.controller.messages.*;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.model.impl.Cell;
@@ -16,10 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by GAAB on 22.05.2016.
- */
-public class FieldController {
+class FieldController extends UntypedActor {
 
     private IField field;
     private UndoManager undoManager;
@@ -34,6 +30,37 @@ public class FieldController {
         undoManager = new UndoManager();
     }
 
+    @Override
+    public void onReceive(Object message) throws Exception {
+        if(message instanceof FieldRequest) {
+            getContext().parent().tell(new FieldResponse(field), self());
+            return;
+        }
+        if(message instanceof RestartRequest)   {
+            restart();
+            getContext().parent().tell(new FieldResponse(field), self());
+            return;
+        }
+        if(message instanceof CreateRequest)    {
+            CreateRequest request = (CreateRequest)message;
+            create(request.getLines(), request.getColumns(), request.getnMines());
+            getContext().parent().tell(new FieldResponse(field), self());
+        }
+        if(message instanceof RedoMessage)  {
+            redo();
+            getContext().parent().tell(new FieldResponse(field), self());
+        }
+        if(message instanceof UndoMessage)  {
+            undo();
+            getContext().parent().tell(new FieldResponse(field), self());
+        }
+        if(message instanceof RevealFieldMessage)   {
+            revealField((RevealFieldMessage)message);
+            getContext().parent().tell(new RevealFieldResponse(field), self());
+        }
+        unhandled(message);
+    }
+
     public IField getField()    {
         return field;
     }
@@ -42,7 +69,7 @@ public class FieldController {
         this.field = field;
     }
 
-    public void restart()   {
+    private void restart()   {
         create(field.getLines(), field.getColumns(), field.getnMines());
     }
 
@@ -65,7 +92,10 @@ public class FieldController {
         this.field.setPlayingField(field);
     }
 
-    public void revealField(RevealFieldMessage msg) {
+    private void revealField(RevealFieldMessage msg) {
+        if(field.isGameOver() || field.isVictory()) {
+            return;
+        }
         if(field.getField()[msg.getX()][msg.getY()].getValue() == -1) {
             field.getField()[msg.getX()][msg.getY()].setIsRevealed(true);
             field.setIsGameOver(true);
@@ -77,13 +107,13 @@ public class FieldController {
         }
     }
 
-    public void undo() {
+    private void undo() {
         if (undoManager.canUndo()) {
             undoManager.undo();
         }
     }
 
-    public void redo() {
+    private void redo() {
         if (undoManager.canRedo()) {
             undoManager.redo();
         }
