@@ -4,9 +4,8 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import de.htwg.se.aview.tui.Tui;
-import de.htwg.se.aview.tui.TuiBuilder;
 import de.htwg.se.aview.tui.messages.InputMessage;
-import de.htwg.se.minesweeper.messages.TerminateMessage;
+import de.htwg.se.minesweeper.messages.TerminateRequest;
 import java.util.Scanner;
 
 class MinesweeperActor extends UntypedActor {
@@ -35,7 +34,7 @@ class MinesweeperActor extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if(message instanceof TerminateMessage) {
+        if(message instanceof TerminateRequest) {
             proceed = false;
             thread.join();
             scanner.close();

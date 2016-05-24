@@ -1,14 +1,19 @@
-package de.htwg.se.controller.messages;
+package de.htwg.se.controller.messages.FieldController;
 
 import de.htwg.se.model.IField;
 
 import java.io.Serializable;
 
 /**
- * Created by GAAB on 24.05.2016.
+ * Created by dohahn on 24.05.2016.
+ * Message with a new field
+ * On receive the FieldController change the actual field with given field
  */
 public class NewFieldMessage implements Serializable {
 
+    /**
+     * New field
+     */
     private IField field;
 
     public NewFieldMessage(IField field)    {
@@ -17,9 +22,5 @@ public class NewFieldMessage implements Serializable {
 
     public IField getField()    {
         return field;
-    }
-
-    public void set(IField field)   {
-        this.field = field;
     }
 }

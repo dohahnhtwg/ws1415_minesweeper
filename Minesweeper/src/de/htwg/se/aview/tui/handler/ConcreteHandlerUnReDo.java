@@ -18,8 +18,8 @@ package de.htwg.se.aview.tui.handler;
 
 import akka.actor.ActorRef;
 import de.htwg.se.aview.tui.IHandler;
-import de.htwg.se.controller.messages.RedoMessage;
-import de.htwg.se.controller.messages.UndoMessage;
+import de.htwg.se.controller.messages.RedoRequest;
+import de.htwg.se.controller.messages.UndoRequest;
 
 public class ConcreteHandlerUnReDo implements IHandler {
 
@@ -33,11 +33,11 @@ public class ConcreteHandlerUnReDo implements IHandler {
     @Override
     public boolean handleRequest(String request, ActorRef recipient, ActorRef sender) {
         if("u".equals(request))  {
-            recipient.tell(new UndoMessage(), sender);
+            recipient.tell(new UndoRequest(), sender);
             return true;
         }
         if("r".equals(request))  {
-            recipient.tell(new RedoMessage(), sender);
+            recipient.tell(new RedoRequest(), sender);
             return true;
         }
         return successor.handleRequest(request, recipient, sender);

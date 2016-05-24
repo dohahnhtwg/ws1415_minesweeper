@@ -3,6 +3,10 @@ package de.htwg.se.controller.impl;
 import akka.actor.UntypedActor;
 import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.controller.messages.*;
+import de.htwg.se.controller.messages.FieldController.CreateRequest;
+import de.htwg.se.controller.messages.FieldController.FieldRequest;
+import de.htwg.se.controller.messages.FieldController.RestartRequest;
+import de.htwg.se.controller.messages.MainController.FieldResponse;
 import de.htwg.se.model.ICell;
 import de.htwg.se.model.IField;
 import de.htwg.se.model.impl.Cell;
@@ -46,34 +50,26 @@ class FieldController extends UntypedActor {
             create(request.getLines(), request.getColumns(), request.getnMines());
             getContext().parent().tell(new FieldResponse(field), self());
         }
-        if(message instanceof RedoMessage)  {
+        if(message instanceof RedoRequest)  {
             redo();
             getContext().parent().tell(new FieldResponse(field), self());
         }
-        if(message instanceof UndoMessage)  {
+        if(message instanceof UndoRequest)  {
             undo();
             getContext().parent().tell(new FieldResponse(field), self());
         }
-        if(message instanceof RevealFieldMessage)   {
-            revealField((RevealFieldMessage)message);
-            getContext().parent().tell(new RevealFieldResponse(field), self());
+        if(message instanceof RevealCellRequest)   {
+            revealCell((RevealCellRequest)message);
+            getContext().parent().tell(new RevealCellResponse(field), self());
         }
         unhandled(message);
-    }
-
-    public IField getField()    {
-        return field;
-    }
-
-    public void setField(IField field)   {
-        this.field = field;
     }
 
     private void restart()   {
         create(field.getLines(), field.getColumns(), field.getnMines());
     }
 
-    public void create(int lines, int columns, int nMines)    {
+    private void create(int lines, int columns, int nMines)    {
         field.setIsGameOver(false);
         field.setIsVictory(false);
         field.setLines(lines);
@@ -92,7 +88,7 @@ class FieldController extends UntypedActor {
         this.field.setPlayingField(field);
     }
 
-    private void revealField(RevealFieldMessage msg) {
+    private void revealCell(RevealCellRequest msg) {
         if(field.isGameOver() || field.isVictory()) {
             return;
         }
@@ -101,7 +97,7 @@ class FieldController extends UntypedActor {
             field.setIsGameOver(true);
         } else {
             List<ICell> revealFieldCommandList = new LinkedList<>();
-            revealFieldHelp(msg.getX(), msg.getY(), revealFieldCommandList);
+            revealCellHelp(msg.getX(), msg.getY(), revealFieldCommandList);
             field.setIsVictory(checkVictory());
             undoManager.addEdit(new RevealFieldCommand(revealFieldCommandList));
         }
@@ -161,20 +157,20 @@ class FieldController extends UntypedActor {
         return mines;
     }
 
-    private void revealFieldHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
+    private void revealCellHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
         field.getField()[x][y].setIsRevealed(true);
         ((LinkedList<ICell>) revelalFieldCommandList).push(field.getField()[x][y]);
         if(field.getField()[x][y].getValue() <= 0)  {
-            List<Point> fieldsAround = getFieldsAround(x, y);
+            List<Point> fieldsAround = getCellsAround(x, y);
             for(Point field : fieldsAround) {
                 if(checkCellInField(field) && !this.field.getField()[field.x][field.y].getIsRevealed()) {
-                    revealFieldHelp(field.x, field.y, revelalFieldCommandList);
+                    revealCellHelp(field.x, field.y, revelalFieldCommandList);
                 }
             }
         }
     }
 
-    private List<Point> getFieldsAround(int x, int y) {
+    private List<Point> getCellsAround(int x, int y) {
         List<Point> fieldsAround = new ArrayList<>();
         fieldsAround.add(new Point(x - 1, y));
         fieldsAround.add(new Point(x + 1, y));

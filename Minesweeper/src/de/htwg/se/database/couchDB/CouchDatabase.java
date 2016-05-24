@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by GAAB on 11.04.2016.
+ * Created by dohahn on 11.04.2016.
  *
  */
 public class CouchDatabase implements DataAccessObject {

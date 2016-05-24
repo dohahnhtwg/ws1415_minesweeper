@@ -18,7 +18,7 @@ package de.htwg.se.aview.tui.handler;
 
 import akka.actor.ActorRef;
 import de.htwg.se.aview.tui.IHandler;
-import de.htwg.se.controller.messages.NewSizeMessage;
+import de.htwg.se.controller.messages.MainController.NewSizeRequest;
 
 public class ConcreteHandlerSize implements IHandler {
 
@@ -38,15 +38,15 @@ public class ConcreteHandlerSize implements IHandler {
     @Override
     public boolean handleRequest(String request, ActorRef recipient, ActorRef sender) {
         if("sS".equals(request))   {
-            recipient.tell(new NewSizeMessage(SMALLDIMENS, SMALLDIMENS, SMALLMINES), sender);
+            recipient.tell(new NewSizeRequest(SMALLDIMENS, SMALLDIMENS, SMALLMINES), sender);
             return true;
         }
         if("sM".equals(request))  {
-            recipient.tell(new NewSizeMessage(MEDIUMDIMENS, MEDIUMDIMENS, MEDIUMMINES), sender);
+            recipient.tell(new NewSizeRequest(MEDIUMDIMENS, MEDIUMDIMENS, MEDIUMMINES), sender);
             return true;
         }
         if("sL".equals(request))  {
-            recipient.tell(new NewSizeMessage(MEDIUMDIMENS, LARGEDIMENS, LARGEMINES), sender);
+            recipient.tell(new NewSizeRequest(MEDIUMDIMENS, LARGEDIMENS, LARGEMINES), sender);
             return true;
         }
         return successor.handleRequest(request, recipient, sender);

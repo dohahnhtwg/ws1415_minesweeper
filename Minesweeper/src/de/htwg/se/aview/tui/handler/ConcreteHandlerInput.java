@@ -18,7 +18,7 @@ package de.htwg.se.aview.tui.handler;
 
 import akka.actor.ActorRef;
 import de.htwg.se.aview.tui.IHandler;
-import de.htwg.se.controller.messages.RevealFieldMessage;
+import de.htwg.se.controller.messages.RevealCellRequest;
 
 public class ConcreteHandlerInput implements IHandler {
 
@@ -33,7 +33,7 @@ public class ConcreteHandlerInput implements IHandler {
     public boolean handleRequest(String request, ActorRef recipient, ActorRef sender) {
         if (request.matches("[0-9][0-9]-[0-9][0-9]")) {
             String[] parts = request.split("-");
-            RevealFieldMessage msg = new RevealFieldMessage(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+            RevealCellRequest msg = new RevealCellRequest(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
             recipient.tell(msg, sender);
             return true;
         }

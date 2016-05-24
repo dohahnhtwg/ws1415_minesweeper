@@ -1,14 +1,18 @@
-package de.htwg.se.controller.messages;
+package de.htwg.se.controller.messages.MainController;
 
 import de.htwg.se.model.IField;
 
 import java.io.Serializable;
 
 /**
- * Created by GAAB on 24.05.2016.
+ * Created by dohahn on 24.05.2016.
+ * Response of a RestartRequest with the new field
  */
 public class RestartResponse implements Serializable {
 
+    /**
+     * The field after restart
+     */
     private IField field;
 
     public RestartResponse(IField field)    {

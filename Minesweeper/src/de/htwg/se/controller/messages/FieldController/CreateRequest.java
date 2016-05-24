@@ -1,13 +1,27 @@
-package de.htwg.se.controller.messages;
+package de.htwg.se.controller.messages.FieldController;
 
 import java.io.Serializable;
 
 /**
- * Created by GAAB on 24.05.2016.
+ * Created by dohahn on 24.05.2016.
+ * Requests to create a new field
+ * On receive the FieldController will create a new field and answer with a FieldResponse
  */
 public class CreateRequest implements Serializable {
+
+    /**
+     * Number of lines for the new field
+     */
     private final int lines;
+
+    /**
+     * Number of columns for the new field
+     */
     private final int columns;
+
+    /**
+     * Number of mines for the new field
+     */
     private final int nMines;
 
     public CreateRequest(int lines, int columns, int nMines) {

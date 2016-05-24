@@ -23,9 +23,10 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import com.google.inject.Inject;
 import de.htwg.se.aview.tui.messages.*;
+import de.htwg.se.aview.tui.messages.StatisticResponse;
 import de.htwg.se.controller.impl.*;
-import de.htwg.se.controller.messages.*;
-import de.htwg.se.minesweeper.messages.TerminateMessage;
+import de.htwg.se.controller.messages.MainController.*;
+import de.htwg.se.minesweeper.messages.TerminateRequest;
 import de.htwg.se.model.IStatistic;
 import org.apache.log4j.Logger;
 
@@ -48,15 +49,15 @@ public class Tui extends UntypedActor {
         if(message instanceof InputMessage)    {
             String input = ((InputMessage) message).getInput();
             if(processInputLine(input)){return;}
-            getContext().parent().tell(new TerminateMessage(), self());
+            getContext().parent().tell(new TerminateRequest(), self());
             return;
         }
         if(message instanceof UpdateMessage)    {
             update((UpdateMessage)message);
             return;
         }
-        if(message instanceof PrintStatisticMessage)    {
-            IStatistic statistic = ((PrintStatisticMessage)message).getStatistic();
+        if(message instanceof StatisticResponse)    {
+            IStatistic statistic = ((StatisticResponse)message).getStatistic();
             printStatistic(statistic);
             return;
         }

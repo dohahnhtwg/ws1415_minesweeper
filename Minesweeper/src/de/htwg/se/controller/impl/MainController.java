@@ -23,10 +23,15 @@ import com.google.inject.Singleton;
 
 import de.htwg.se.aview.tui.messages.LoginResponse;
 import de.htwg.se.aview.tui.messages.NewAccountResponse;
-import de.htwg.se.aview.tui.messages.PrintStatisticMessage;
+import de.htwg.se.aview.tui.messages.StatisticResponse;
 import de.htwg.se.aview.tui.messages.UpdateMessage;
 import de.htwg.se.controller.IMainController;
 import de.htwg.se.controller.messages.*;
+import de.htwg.se.controller.messages.FieldController.CreateRequest;
+import de.htwg.se.controller.messages.FieldController.FieldRequest;
+import de.htwg.se.controller.messages.FieldController.NewFieldMessage;
+import de.htwg.se.controller.messages.FieldController.RestartRequest;
+import de.htwg.se.controller.messages.MainController.*;
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.database.db4o.db4oDatabase;
 import de.htwg.se.model.IField;
@@ -73,29 +78,29 @@ public class MainController extends UntypedActor implements IMainController {
             addNewAccount((NewAccountRequest)message);
             return;
         }
-        if(message instanceof NewGameMessage)   {
+        if(message instanceof NewGameRequest)   {
             create();
             return;
         }
-        if(message instanceof NewSizeMessage)   {
-            NewSizeMessage msg = (NewSizeMessage)message;
+        if(message instanceof NewSizeRequest)   {
+            NewSizeRequest msg = (NewSizeRequest)message;
             create(msg.getLines(), msg.getColumns(), msg.getMines());
             return;
         }
-        if(message instanceof RedoMessage)  {
-            redo((RedoMessage)message);
+        if(message instanceof RedoRequest)  {
+            redo((RedoRequest)message);
             return;
         }
-        if(message instanceof UndoMessage)  {
-            undo((UndoMessage)message);
+        if(message instanceof UndoRequest)  {
+            undo((UndoRequest)message);
             return;
         }
-        if(message instanceof RevealFieldMessage)    {
-            revealField((RevealFieldMessage)message);
+        if(message instanceof RevealCellRequest)    {
+            revealCell((RevealCellRequest)message);
             return;
         }
         if(message instanceof StatisticRequest) {
-            getContext().parent().tell(new PrintStatisticMessage(statistic), self());
+            getContext().parent().tell(new StatisticResponse(statistic), self());
             return;
         }
         if(message instanceof UpdateRequest)    {
@@ -107,8 +112,8 @@ public class MainController extends UntypedActor implements IMainController {
             getContext().parent().tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
             return;
         }
-        if(message instanceof RevealFieldResponse)  {
-            handleRevealFieldResponse((RevealFieldResponse)message);
+        if(message instanceof RevealCellResponse)  {
+            handleRevealCellResponse((RevealCellResponse)message);
             return;
         }
         unhandled(message);
@@ -153,22 +158,22 @@ public class MainController extends UntypedActor implements IMainController {
         fieldController.tell(new CreateRequest(lines, columns, nMines), self());
     }
 
-    private void undo(UndoMessage msg) {
+    private void undo(UndoRequest msg) {
         fieldController.tell(msg, self());
     }
 
-    private void redo(RedoMessage msg) {
+    private void redo(RedoRequest msg) {
         fieldController.tell(msg, self());
     }
 
-    private void revealField(RevealFieldMessage msg) {
+    private void revealCell(RevealCellRequest msg) {
         if (!isStarted) {
             startTimer();
         }
         fieldController.tell(msg, self());
     }
 
-    private void handleRevealFieldResponse(RevealFieldResponse response) {
+    private void handleRevealCellResponse(RevealCellResponse response) {
         if(response.getField().isGameOver()) {
             stopTimer();
             statistic.updateStatistic(false, elapsedTime);

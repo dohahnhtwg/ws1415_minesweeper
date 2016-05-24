@@ -4,7 +4,7 @@ import org.ektorp.support.CouchDbDocument;
 import org.ektorp.support.TypeDiscriminator;
 
 /**
- * Created by GAAB on 11.04.2016.
+ * Created by dohahn on 11.04.2016.
  *
  */
 public class CouchStatistic extends CouchDbDocument {

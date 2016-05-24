@@ -18,7 +18,7 @@ package de.htwg.se.aview.tui.handler;
 
 import akka.actor.ActorRef;
 import de.htwg.se.aview.tui.IHandler;
-import de.htwg.se.controller.messages.NewGameMessage;
+import de.htwg.se.controller.messages.MainController.NewGameRequest;
 
 public class ConcreteHandlerNew implements IHandler {
 
@@ -32,7 +32,7 @@ public class ConcreteHandlerNew implements IHandler {
     @Override
     public boolean handleRequest(String request, ActorRef recipient, ActorRef sender) {
         if ("n".equals(request))  {
-            recipient.tell(new NewGameMessage(), sender);
+            recipient.tell(new NewGameRequest(), sender);
             return true;
         }
         return successor.handleRequest(request, recipient, sender);
