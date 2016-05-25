@@ -21,10 +21,7 @@ import akka.actor.UntypedActor;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import de.htwg.se.aview.tui.messages.LoginResponse;
-import de.htwg.se.aview.tui.messages.NewAccountResponse;
-import de.htwg.se.aview.tui.messages.StatisticResponse;
-import de.htwg.se.aview.tui.messages.UpdateMessage;
+import de.htwg.se.aview.messages.*;
 import de.htwg.se.controller.IMainController;
 import de.htwg.se.controller.messages.*;
 import de.htwg.se.controller.messages.FieldController.CreateRequest;
@@ -116,9 +113,14 @@ public class MainController extends UntypedActor implements IMainController {
             handleRevealCellResponse((RevealCellResponse)message);
             return;
         }
+        if(message instanceof TimeResponse) {
+            getContext().parent().tell(new TimeResponse(getCurrentTime()), self());
+            return;
+        }
         unhandled(message);
     }
 
+    //TODO make private
     public void finishGame() {
         database.update(user);
     }
@@ -150,10 +152,12 @@ public class MainController extends UntypedActor implements IMainController {
         }
     }
 
+    //TODO make private after gui-actor rework
     public void create() {
         fieldController.tell(new RestartRequest(), self());
     }
 
+    //TODO make private after gui-actor rework
     public void create(int lines, int columns, int nMines) {
         fieldController.tell(new CreateRequest(lines, columns, nMines), self());
     }
@@ -186,32 +190,17 @@ public class MainController extends UntypedActor implements IMainController {
         getContext().parent().tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
     }
 
-
-    /* only called in gui and web? Refactor with use of actors */
-
-    @Override
-    public String getField() {
-        return null;
-    }
-
-    public IField getPlayingField()  {
-        return null;
-    }
-
-    public IStatistic getUserStatistic() {
-        return statistic;
-    }
-
-    public void startTimer() {
+    private void startTimer() {
         isStarted = true;
         elapsedTime = System.currentTimeMillis();
     }
 
-    public void stopTimer() {
+    private void stopTimer() {
         isStarted = false;
         elapsedTime = System.currentTimeMillis() - elapsedTime;
     }
 
+    //TODO make private after gui-actor rework
     public Long getCurrentTime() {
         if (isStarted) {
             return (System.currentTimeMillis() - elapsedTime) / 1000;
@@ -219,18 +208,19 @@ public class MainController extends UntypedActor implements IMainController {
         return elapsedTime / 1000;
     }
 
-    public boolean isStarted() {
-        return isStarted;
-    }
-
     /* No longer needed, use actor */
 
-    @Override
+    @Deprecated
+    public IField getPlayingField()  {
+        return null;
+    }
+
+    @Deprecated
     public boolean isVictory() {
         return false;
     }
 
-    @Override
+    @Deprecated
     public boolean isGameOver() {
         return false;
     }
@@ -253,4 +243,10 @@ public class MainController extends UntypedActor implements IMainController {
 
     @Deprecated
     public void redo() { }
+
+    @Deprecated
+    public IStatistic getUserStatistic() {
+        return statistic;
+    }
+
 }

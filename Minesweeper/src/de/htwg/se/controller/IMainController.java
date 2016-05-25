@@ -27,55 +27,24 @@ import de.htwg.se.util.observer.IObservable;
  */
 public interface IMainController {
 
-    /**
-     * @return the painting of a Field.
-     */
-    String getField();
-    
-    /**
-     * Returns the actual playing field of the controller.
-     * @return the actual playing Field.
-     */
+    /* Depracted section use actors */
+
+    @Deprecated
     IField getPlayingField();
 
-    /**
-     * Get current statistic instance
-     * @return statistic
-     */
-    IStatistic getUserStatistic();
-
-    /**
-     * Start the timer
-     */
-    void startTimer();
-
-    /**
-     * Stop the timer
-     */
-    void stopTimer();
-
-    /**
-     * Get elapsed time since game start in seconds
-     * @return time in millis
-     */
-    Long getCurrentTime();
-
-    /**
-     * Return whenever the game is started
-     * @return true if started
-     */
-    boolean isStarted();
-
-    /* Depracted section */
-
+    @Deprecated
     void finishGame();
 
+    @Deprecated
     boolean isVictory();
 
+    @Deprecated
     boolean isGameOver();
 
+    @Deprecated
     void create();
 
+    @Deprecated
     void create(int x, int y, int z);
 
     @Deprecated
@@ -92,4 +61,10 @@ public interface IMainController {
 
     @Deprecated
     void revealField(int x, int y);
+
+    @Deprecated
+    Long getCurrentTime();
+
+    @Deprecated
+    IStatistic getUserStatistic();
 }

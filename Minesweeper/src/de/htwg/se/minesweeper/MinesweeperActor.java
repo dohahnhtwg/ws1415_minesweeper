@@ -4,7 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import de.htwg.se.aview.tui.Tui;
-import de.htwg.se.aview.tui.messages.InputMessage;
+import de.htwg.se.aview.messages.InputMessage;
 import de.htwg.se.minesweeper.messages.TerminateRequest;
 import java.util.Scanner;
 

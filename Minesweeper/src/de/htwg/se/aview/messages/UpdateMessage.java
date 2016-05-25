@@ -1,4 +1,4 @@
-package de.htwg.se.aview.tui.messages;
+package de.htwg.se.aview.messages;
 
 import de.htwg.se.model.IField;
 

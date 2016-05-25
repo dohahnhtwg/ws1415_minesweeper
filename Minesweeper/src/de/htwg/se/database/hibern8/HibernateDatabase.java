@@ -127,7 +127,10 @@ public class HibernateDatabase implements DataAccessObject{
             Query query = session.createQuery(queryStr);
             query.setParameter("username", username);
             List<HibernateUser> result = query.list();
-            HibernateUser hibernateUser = result.get(0);
+            HibernateUser hibernateUser = null;
+            if (result.size() != 0) {
+                hibernateUser = result.get(0);
+            }
             return this.copyUserData(hibernateUser);
         } catch (HibernateException e) {
             if (tx!=null)
