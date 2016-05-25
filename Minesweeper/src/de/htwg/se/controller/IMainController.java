@@ -23,7 +23,7 @@ import de.htwg.se.util.observer.IObservable;
 /**
  * This interface represent a MainController for the Minesweeper Game.
  * @author Dominik Hahn & Pavel Kravetskiy
- *
+ * TODO Removed Interfaces, communication only over actors
  */
 public interface IMainController {
 
