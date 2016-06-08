@@ -37,30 +37,30 @@ class FieldController extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         if(message instanceof FieldRequest) {
-            getContext().parent().tell(new FieldResponse(field), self());
+            getSender().tell(new FieldResponse(field), self());
             return;
         }
         if(message instanceof RestartRequest)   {
             restart();
-            getContext().parent().tell(new FieldResponse(field), self());
+            getSender().tell(new FieldResponse(field), self());
             return;
         }
         if(message instanceof CreateRequest)    {
             CreateRequest request = (CreateRequest)message;
             create(request.getLines(), request.getColumns(), request.getnMines());
-            getContext().parent().tell(new FieldResponse(field), self());
+            getSender().tell(new FieldResponse(field), self());
         }
         if(message instanceof RedoRequest)  {
             redo();
-            getContext().parent().tell(new FieldResponse(field), self());
+            getSender().tell(new FieldResponse(field), self());
         }
         if(message instanceof UndoRequest)  {
             undo();
-            getContext().parent().tell(new FieldResponse(field), self());
+            getSender().tell(new FieldResponse(field), self());
         }
         if(message instanceof RevealCellRequest)   {
             revealCell((RevealCellRequest)message);
-            getContext().parent().tell(new RevealCellResponse(field), self());
+            getSender().tell(new RevealCellResponse(field), self());
         }
         unhandled(message);
     }
