@@ -79,14 +79,14 @@ public final class PlayingFieldPanel extends JPanel {
     }
 
     private void reorgTextOnButton(final IMainController controller, final int i, final int j) {
-        ICell cell = controller.getPlayingField().getField()[i + ONE][j + ONE];
+        ICell cell = controller.getPlayingField().getPlayingField()[i + ONE][j + ONE];
         if (marked.containsKey(i) && marked.get(i).containsKey(j)) {
             buttons[i][j].setIcon(marked.get(i).get(j));
         }
         if (cell.getIsRevealed()) {
             buttons[i][j].setEnabled(false);
             if (cell.getValue() != 0) {
-                String value = controller.getPlayingField().getField()[i + ONE][j + ONE].toString();
+                String value = controller.getPlayingField().getPlayingField()[i + ONE][j + ONE].toString();
                 if (value.equals("  * ")) {
                     buttons[i][j].setEnabled(true);
                     buttons[i][j].setIcon(Constants.getMineIcon());

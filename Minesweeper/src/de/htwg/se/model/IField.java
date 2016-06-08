@@ -58,12 +58,6 @@ public interface IField {
      * @param nMines int
      */
     void setnMines(int nMines);
-
-    /**
-     * This Method returns the actual playing field.
-     * @return whole playing Field.
-     */
-    ICell[][] getField();
     
     /**
      * This Method returns the actual playing field as formated String.

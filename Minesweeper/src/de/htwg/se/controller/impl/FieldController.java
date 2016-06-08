@@ -92,8 +92,8 @@ class FieldController extends UntypedActor {
         if(field.isGameOver() || field.isVictory()) {
             return;
         }
-        if(field.getField()[msg.getX()][msg.getY()].getValue() == -1) {
-            field.getField()[msg.getX()][msg.getY()].setIsRevealed(true);
+        if(field.getPlayingField()[msg.getX()][msg.getY()].getValue() == -1) {
+            field.getPlayingField()[msg.getX()][msg.getY()].setIsRevealed(true);
             field.setIsGameOver(true);
         } else {
             List<ICell> revealFieldCommandList = new LinkedList<>();
@@ -158,12 +158,12 @@ class FieldController extends UntypedActor {
     }
 
     private void revealCellHelp(int x, int y, List<ICell> revelalFieldCommandList)  {
-        field.getField()[x][y].setIsRevealed(true);
-        ((LinkedList<ICell>) revelalFieldCommandList).push(field.getField()[x][y]);
-        if(field.getField()[x][y].getValue() <= 0)  {
+        field.getPlayingField()[x][y].setIsRevealed(true);
+        ((LinkedList<ICell>) revelalFieldCommandList).push(field.getPlayingField()[x][y]);
+        if(field.getPlayingField()[x][y].getValue() <= 0)  {
             List<Point> fieldsAround = getCellsAround(x, y);
             for(Point field : fieldsAround) {
-                if(checkCellInField(field) && !this.field.getField()[field.x][field.y].getIsRevealed()) {
+                if(checkCellInField(field) && !this.field.getPlayingField()[field.x][field.y].getIsRevealed()) {
                     revealCellHelp(field.x, field.y, revelalFieldCommandList);
                 }
             }
@@ -185,17 +185,17 @@ class FieldController extends UntypedActor {
 
     private boolean checkCellInField(Point cell)    {
         return (cell.getX() > 0 && cell.getY() > 0)
-                && (cell.getX() < field.getField().length - 1
-                && cell.getY() < field.getField()[(int) cell.getX()].length - 1);
+                && (cell.getX() < field.getPlayingField().length - 1
+                && cell.getY() < field.getPlayingField()[(int) cell.getX()].length - 1);
     }
 
     private boolean checkVictory()  {
         int requirement = field.getLines() * field.getColumns() - field.getnMines();
         int current = 0;
 
-        for (int i = 0; i < field.getField().length; i++)   {
-            for (int j = 0; j < field.getField()[0].length; j ++)    {
-                if(field.getField()[i][j].getIsRevealed()) {
+        for (int i = 0; i < field.getPlayingField().length; i++)   {
+            for (int j = 0; j < field.getPlayingField()[0].length; j ++)    {
+                if(field.getPlayingField()[i][j].getIsRevealed()) {
                     current++;
                 }
             }

@@ -69,7 +69,10 @@ public class Cell implements ICell {
 
     @Override
     public int hashCode() {
-        return Boolean.hashCode(isRevealed) + Integer.hashCode(value);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + value;
+        result = 31 * result + (isRevealed ? 1 : 0);
+        return result;
     }
 
     @Override

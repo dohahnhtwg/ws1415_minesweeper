@@ -153,7 +153,7 @@ public class CouchDatabase implements DataAccessObject {
         CouchCell[][] field = new CouchCell[playingField.getColumns() + BORDER][playingField.getLines() + BORDER];
         for(int i=0; i < couchField.getColumns() + BORDER; i++)   {
             for(int j=0; j < couchField.getLines() + BORDER; j++)  {
-                field[i][j] = copyCell(playingField.getField()[i][j]);
+                field[i][j] = copyCell(playingField.getPlayingField()[i][j]);
             }
         }
         couchField.setPlayingField(field);
