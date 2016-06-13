@@ -26,10 +26,31 @@ public class Cell implements ICell {
     private String id;
     private int value;
     private boolean isRevealed = false;
+    private String playingField;
+
+
+    public boolean isRevealed() {
+        return isRevealed;
+    }
+
+    public void setRevealed(boolean revealed) {
+        isRevealed = revealed;
+    }
 
     public Cell(int value) {
         this.id = UUID.randomUUID().toString();
         this.value = value;
+    }
+
+    public Cell(String playingField) {
+        this.playingField = playingField;
+    }
+
+    public Cell(String id, Integer value, Boolean isRevealed, String playingField) {
+        this.id = id;
+        this.value = value;
+        this.isRevealed = isRevealed;
+        this.playingField = playingField;
     }
 
     public int getValue() {
@@ -90,5 +111,13 @@ public class Cell implements ICell {
     @Override
     public void setIsRevealed(boolean isRevealed) {
         this.isRevealed = isRevealed;
+    }
+
+    public String getPlayingField() {
+        return playingField;
+    }
+
+    public void setPlayingField(String playingField) {
+        this.playingField = playingField;
     }
 }

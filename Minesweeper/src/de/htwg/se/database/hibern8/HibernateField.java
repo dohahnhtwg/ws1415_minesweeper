@@ -1,51 +1,43 @@
 package de.htwg.se.database.hibern8;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 
+
 @Entity
-@Table(name = "hibernatefield")
+@Table(name = "fieldtest")
 public class HibernateField implements Serializable {
 
-    @Id
-    @Column(name = "fieldid")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int fieldid;
-
-    @OneToMany(mappedBy = "field")
-    @Column(name = "cells")
-    private List<HibernateCell> playingField;
-
-    @Column(name = "nMines")
+    private String fieldid;
     private Integer nMines;
-
-    @Column(name = "lines")
     private Integer lines;
-
-    @Column(name = "columns")
     private Integer columns;
+    private HibernateUser user;
+    private Set<HibernateCell> cells =  new HashSet<>(0);
 
-    public HibernateField() {
+    public HibernateField() {}
 
+    public HibernateField(String fieldid, Integer nMines, Integer lines, Integer columns, HibernateUser user) {
+        this.fieldid = fieldid;
+        this.nMines = nMines;
+        this.lines = lines;
+        this.columns = columns;
+        this.user = user;
     }
 
+    @Id
+    @Column(name = "fieldid", unique = true, nullable = false)
     public String getFieldid() {
-        return Integer.toString(fieldid);
+        return fieldid;
     }
 
     public void setFieldid(String fieldid) {
-        this.fieldid = Integer.parseInt(fieldid) + 1;
+        this.fieldid = fieldid;
     }
 
-    public List<HibernateCell> getPlayingField() {
-        return playingField;
-    }
-
-    public void setPlayingField(List<HibernateCell> playingField) {
-        this.playingField = playingField;
-    }
-
+    @Column(name = "nMines")
     public Integer getnMines() {
         return nMines;
     }
@@ -54,6 +46,7 @@ public class HibernateField implements Serializable {
         this.nMines = nMines;
     }
 
+    @Column(name = "ncolumns")
     public Integer getColumns() {
         return columns;
     }
@@ -62,11 +55,26 @@ public class HibernateField implements Serializable {
         this.columns = columns;
     }
 
+    @Column(name = "nlines")
     public Integer getLines() {
         return lines;
     }
 
     public void setLines(Integer lines) {
         this.lines = lines;
+    }
+
+    @OneToOne(mappedBy = "field", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public HibernateUser getUser() { return user; }
+
+    public void setUser(HibernateUser user) { this.user = user; }
+
+    @OneToMany(mappedBy = "field", fetch = FetchType.LAZY)
+    public Set<HibernateCell> getCells() {
+        return cells;
+    }
+
+    public void setCells(Set<HibernateCell> cells) {
+        this.cells = cells;
     }
 }

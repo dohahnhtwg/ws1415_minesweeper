@@ -4,39 +4,38 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "hibernatecell")
+@Table(name = "celltest")
 public class HibernateCell implements Serializable {
 
-    @Id
-    @Column(name = "cellid")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int cellid;
-
-    @Column(name = "value")
+    private String cellid;
     private Integer value;
-
-    @Column(name = "isRevealed")
-    private Boolean isRevealed;
-
-    @ManyToOne
-    @JoinColumn(name = "fieldid")
+    private Integer isRevealed;
+    private String  fieldid;
+    private Integer index;
     private HibernateField field;
 
-    public HibernateCell(Integer value) {
+    public HibernateCell() {}
+
+    public HibernateCell(String cellid, Integer value, Integer isRevealed, Integer index, String fieldid, HibernateField field) {
+        this.cellid = cellid;
         this.value = value;
+        this.isRevealed = isRevealed;
+        this.index = index;
+        this.fieldid = fieldid;
+        this.field = field;
     }
 
-    public HibernateCell() {
+    @Id
+    @Column(name = "cellid", unique = true, nullable = false)
+    public String  getCellid() {
+        return cellid;
     }
 
-    public Boolean getIsRevealed() {
-        return this.isRevealed;
+    public void setCellid(String  cellid) {
+        this.cellid = cellid;
     }
 
-    public void seIstRevealed(Boolean revealed) {
-        this.isRevealed = revealed;
-    }
-
+    @Column(name = "value")
     public Integer getValue() {
         return this.value;
     }
@@ -45,11 +44,36 @@ public class HibernateCell implements Serializable {
         this.value = value;
     }
 
-    public String getId() {
-        return Integer.toString(this.cellid);
+    @Column(name = "isRevealed")
+    public Integer getIsRevealed() {
+        return this.isRevealed;
     }
 
-    public void setId(String id) {
-        this.cellid = Integer.parseInt(id) + 1;
+    public void setIsRevealed(Integer revealed) {
+        this.isRevealed = revealed;
     }
+
+    @Column(name = "idx")
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    @Column(name = "fieldid" )
+    public String getFieldid() {
+        return fieldid;
+    }
+
+    public void setFieldid(String fieldid) {
+        this.fieldid = fieldid;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fieldid", nullable = false, insertable = false, updatable = false)
+    public HibernateField getField() { return field; }
+
+    public void setField(HibernateField field) { this.field = field; }
 }

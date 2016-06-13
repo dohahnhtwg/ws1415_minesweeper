@@ -18,6 +18,15 @@ public class Statistic implements IStatistic {
         this.timeSpent = 0;
         this.minTime = Long.MAX_VALUE;
     }
+
+    public Statistic(String id, Integer gamesPlayed, Integer gamesWon, Long timeSpent, Long minTime) {
+        this.id = id;
+        this.minTime = minTime;
+        this.timeSpent = timeSpent;
+        this.gamesWon = gamesWon;
+        this.gamesPlayed = gamesPlayed;
+    }
+
     @Override
     public int getGamesPlayed() {
         return this.gamesPlayed;

@@ -10,55 +10,97 @@ import de.htwg.se.model.impl.Field;
 import de.htwg.se.model.impl.User;
 import de.htwg.se.model.impl.Statistic;
 import org.hibernate.*;
-
-import java.util.LinkedList;
 import java.util.List;
 
 public class HibernateDatabase implements DataAccessObject{
+    private static final int BORDER = 2;
 
-    private IUser copyUserData(HibernateUser hibernateUser) {
-        if (hibernateUser == null) {
-            return null;
-        }
+    private IUser getUserData(HibernateUser hibernateUser, Session session) {
+        String queryStr;
+        Query query;
+        List<HibernateStatistic> statResult;
+        List<HibernateField> fieldResult;
+        List<HibernateCell> cellResult;
+        HibernateStatistic hibernateStatistic;
+        HibernateField hibernateField;
+        IStatistic statistic;
+        IField field;
+
         // Users data
-        IUser user = new User(hibernateUser.getName(), "dummy");
+        IUser user = new User();
         user.setId(hibernateUser.getUserid());
         user.setSalt(hibernateUser.getSalt());
         user.setEncryptedPassword(hibernateUser.getEncryptedPassword());
         user.setAlgorithm(hibernateUser.getAlgorithm());
+        user.setName(hibernateUser.getName());
+
         // Statistics data
-        IStatistic statistic = new Statistic();
-        HibernateStatistic hibernateStatistic = hibernateUser.getStatistic();
-        statistic.setId(hibernateStatistic.getStatid());
-        statistic.setGamesPlayed(hibernateStatistic.getGamesPlayed());
-        statistic.setGamesWon(hibernateStatistic.getGamesWon());
-        statistic.setTimeSpent(hibernateStatistic.getTimeSpent());
-        statistic.setMinTime(hibernateStatistic.getMinTime());
-        user.setStatistic(statistic);
-        // Playing fields data
-        HibernateField hibern8Field = hibernateUser.getField();
-        Integer lines = hibern8Field.getLines();
-        Integer columns = hibern8Field.getColumns();
-        IField field = new Field(lines, columns, hibern8Field.getnMines());
-        field.setFieldID(hibern8Field.getFieldid());
-        ICell[][] cells = new ICell[lines][columns];
-        HibernateCell hcell;
-        int ind = 0;
-        for (int i = 0; i < lines; i++) {
-            for (int j = 0; j < columns; j++) {
-                hcell = hibern8Field.getPlayingField().get(ind);
-                cells[i][j] = new Cell(hcell.getValue());
-                cells[i][j].setId(hcell.getId());
-                cells[i][j].setIsRevealed(hcell.getIsRevealed());
-                ind++;
-            }
+        queryStr = "FROM HibernateStatistic stat WHERE stat.statid = :statid";
+        query = session.createQuery(queryStr);
+        query.setParameter("statid", hibernateUser.getStatid());
+        statResult = query.list();
+        if (statResult.isEmpty()) {
+            statistic = new Statistic();
+        } else {
+            hibernateStatistic = statResult.get(0);
+            statistic = new Statistic(
+                    hibernateUser.getStatid(),
+                    hibernateStatistic.getGamesPlayed(),
+                    hibernateStatistic.getGamesWon(),
+                    hibernateStatistic.getTimeSpent(),
+                    hibernateStatistic.getMinTime()
+            );
         }
-        field.setPlayingField(cells);
+        user.setStatistic(statistic);
+
+        // Playing fields data
+        queryStr = "FROM HibernateField field WHERE field.fieldid = :fieldid";
+        query = session.createQuery(queryStr);
+        query.setParameter("fieldid", hibernateUser.getFieldid());
+        fieldResult = query.list();
+        int lines, columns;
+        if (fieldResult.isEmpty()) {
+            field = new Field();
+            lines = field.getLines() + BORDER;
+            columns = field.getColumns() + BORDER;
+        } else {
+            hibernateField = fieldResult.get(0);
+            lines = hibernateField.getLines() + BORDER;
+            columns = hibernateField.getColumns() + BORDER;
+            field = new Field(
+                    hibernateUser.getFieldid(),
+                    lines - BORDER,
+                    columns - BORDER,
+                    hibernateField.getnMines()
+            );
+        }
+
+        // cell data
+        ICell[][] cells = new ICell[lines][columns];
+        queryStr = "FROM HibernateCell cell WHERE cell.fieldid = :fieldid";
+        System.out.println("SELEKTIRUEM");
+        query = session.createQuery(queryStr);
+        query.setParameter("fieldid", hibernateUser.getFieldid());
+        cellResult = query.list();
+        if (!cellResult.isEmpty()) {
+            int index; // to get the right place of the cell in matrix
+            for (HibernateCell hibernateCell: cellResult) {
+                index = hibernateCell.getIndex();
+                cells[(index / 100)][(index % 100)] = new Cell(
+                        hibernateCell.getCellid(),
+                        hibernateCell.getValue(),
+                        hibernateCell.getIsRevealed() == 1 ? Boolean.TRUE : Boolean.FALSE,
+                        hibernateUser.getFieldid()
+                );
+            }
+            field.setPlayingField(cells);
+        }
+
         user.setPlayingField(field);
         return user;
     }
 
-    private HibernateUser copyUserData(IUser user) {
+    private HibernateUser saveUserData(IUser user, Session session) {
         if (user == null) {
             return null;
         }
@@ -71,51 +113,100 @@ public class HibernateDatabase implements DataAccessObject{
         hibernateUser.setSalt(user.getSalt());
         // Statistics data
         IStatistic statistic = user.getStatistic();
-        HibernateStatistic hibernateStatistic = new HibernateStatistic();
-        hibernateStatistic.setStatid(statistic.getId());
-        hibernateStatistic.setGamesWon(statistic.getGamesWon());
-        hibernateStatistic.setMinTime(statistic.getMinTime());
-        hibernateStatistic.setTimeSpent(statistic.getTimeSpent());
+        HibernateStatistic hibernateStatistic = new HibernateStatistic(
+                statistic.getId(),
+                statistic.getGamesWon(),
+                statistic.getTimeSpent(),
+                statistic.getMinTime(),
+                statistic.getGamesPlayed(),
+                hibernateUser
+        );
+        session.saveOrUpdate(hibernateStatistic);
         hibernateUser.setStatistic(hibernateStatistic);
+        hibernateUser.setStatid(statistic.getId());
         // Playing fields data
         IField field = user.getPlayingField();
         int lines = field.getLines();
         int columns = field.getColumns();
+        HibernateField hibernateField = new HibernateField(
+                field.getFieldID(),
+                field.getnMines(),
+                lines,
+                columns,
+                hibernateUser
+        );
+        session.saveOrUpdate(hibernateField);
+        hibernateUser.setField(hibernateField);
+        hibernateUser.setFieldid(field.getFieldID());
+        session.saveOrUpdate(hibernateUser);
+
         ICell cell;
-        HibernateCell hcell;
-        HibernateField hibernateField = new HibernateField();
-        List<HibernateCell> hcells = new LinkedList<HibernateCell>();
-        for (int i = 0; i < lines; i++) {
-            for (int j = 0; j < columns; j++) {
+        HibernateCell hCell;
+        // Cell data
+        for (int i = 0; i < lines + BORDER; i++) {
+            for (int j = 0; j < columns + BORDER; j++) {
                 cell = field.getPlayingField()[i][j];
-                hcell = new HibernateCell(cell.getValue());
-                hcell.setId(cell.getId());
-                hcell.seIstRevealed(cell.getIsRevealed());
-                hcells.add(hcell);
+                hCell = new HibernateCell(
+                        cell.getId(),
+                        cell.getValue(),
+                        cell.getIsRevealed() ? 1 : 0,
+                        i * 100 + j,
+                        hibernateField.getFieldid(),
+                        hibernateField
+                );
+                hibernateField.getCells().add(hCell);
+                session.saveOrUpdate(hCell);
             }
         }
-        hibernateField.setPlayingField(hcells);
-        hibernateUser.setField(hibernateField);
+        session.saveOrUpdate(hibernateField);
         return hibernateUser;
     }
 
-    public void create(IUser user) {
-        Transaction tx = null;
-        Session session = HibernateUtil.getSession();
-        try {
-            tx = session.beginTransaction();
-            HibernateUser hibernateUser = this.copyUserData(user);
-            if (hibernateUser != null) {
-                session.save(hibernateUser);
-            }
-            tx.commit();
-        } catch (HibernateException ex) {
-            if (tx != null)
-                tx.rollback();
-            throw new RuntimeException(ex.getMessage());
-        } finally {
-            session.close();
+    private void deleteUserData(IUser user, Session session) {
+        if (user == null) {
+            return;
         }
+        // get user entry
+        String queryStr = "FROM HibernateUser usr WHERE usr.name = :username";
+        Query query = session.createQuery(queryStr);
+        query.setParameter("username", user.getName());
+        List<HibernateUser> userResult = query.list();
+        HibernateUser hibernateUser = userResult.get(0);
+        if (userResult.isEmpty()) {
+            return;
+        }
+        // get & delete statistic entry
+        queryStr = "FROM HibernateStatistic stat WHERE stat.statid = :statid";
+        query = session.createQuery(queryStr);
+        query.setParameter("statid", user.getStatistic().getId());
+        List<HibernateStatistic> statResult = query.list();
+        if (!statResult.isEmpty()) {
+            session.delete(statResult.get(0));
+        }
+        // get & delete cell entries
+        queryStr = "FROM HibernateCell cell WHERE cell.fieldid = :fieldid";
+        query = session.createQuery(queryStr);
+        query.setParameter("fieldid", hibernateUser.getFieldid());
+        List<HibernateCell> cellResult = query.list();
+        if (!cellResult.isEmpty()) {
+            for(HibernateCell cell: cellResult) {
+                session.delete(cell);
+            }
+        }
+        // get & delete field entry
+        queryStr = "FROM HibernateField field WHERE field.fieldid = :fieldid";
+        query = session.createQuery(queryStr);
+        query.setParameter("fieldid", hibernateUser.getFieldid());
+        List<HibernateField> fieldResult = query.list();
+        if (!fieldResult.isEmpty()) {
+            session.delete(fieldResult.get(0));
+        }
+        // after all delete the user
+        session.delete(hibernateUser);
+    }
+
+    public void create(IUser user) {
+        this.update(user);
     }
 
     public IUser read(String username) {
@@ -127,8 +218,10 @@ public class HibernateDatabase implements DataAccessObject{
             Query query = session.createQuery(queryStr);
             query.setParameter("username", username);
             List<HibernateUser> result = query.list();
-            HibernateUser hibernateUser = result.get(0);
-            return this.copyUserData(hibernateUser);
+            if (result.isEmpty()) {
+                return null;
+            }
+            return this.getUserData(result.get(0), session);
         } catch (HibernateException e) {
             if (tx!=null)
                 tx.rollback();
@@ -144,8 +237,7 @@ public class HibernateDatabase implements DataAccessObject{
         Session session = HibernateUtil.getSession();
         try {
             tx = session.beginTransaction();
-            HibernateUser hibernateUser = this.copyUserData(user);
-            session.saveOrUpdate(hibernateUser);
+            this.saveUserData(user, session);
             tx.commit();
         } catch (HibernateException ex) {
             if (tx != null)
@@ -161,8 +253,7 @@ public class HibernateDatabase implements DataAccessObject{
         Session session = HibernateUtil.getSession();
         try {
             tx = session.beginTransaction();
-            HibernateUser hibernateUser = this.copyUserData(user);
-            session.delete(hibernateUser);
+            this.deleteUserData(user, session);
             tx.commit();
         } catch (HibernateException ex) {
             if (tx != null)
@@ -174,7 +265,25 @@ public class HibernateDatabase implements DataAccessObject{
     }
 
     public boolean contains(IUser user) {
-        IUser usr = this.read(user.getName());
-        return usr != null;
+        if (user == null) {
+            return false;
+        }
+        Transaction tx = null;
+        Session session = HibernateUtil.getSession();
+        try {
+            tx = session.beginTransaction();
+            String queryStr = "FROM HibernateUser usr WHERE usr.name = :username";
+            Query query = session.createQuery(queryStr);
+            query.setParameter("username", user.getName());
+            List<HibernateUser> result = query.list();
+            return !result.isEmpty();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return false;
     }
 }

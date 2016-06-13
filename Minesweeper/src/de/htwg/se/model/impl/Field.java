@@ -46,12 +46,17 @@ public class Field implements IField{
         this.fieldID = UUID.randomUUID().toString();
         create(lines, columns, nMines);
     }
-    
-    
+
+    public Field(String fieldID, Integer lines, Integer columns, Integer nMines)  {
+        this.fieldID = fieldID;
+        create(lines, columns, nMines);
+    }
+
     public final void create(int lines, int columns, int nMines)    {
         this.lines = lines;
         this.columns = columns;
         this.nMines = nMines;
+        this.fieldID = UUID.randomUUID().toString();
         if (lines < 1 || columns < 1 || nMines < 0)   {
             throw new IllegalArgumentException("lines, columns or nMines too small.");
         }

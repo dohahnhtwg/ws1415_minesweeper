@@ -4,25 +4,36 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "hibernatestatistic")
+@Table(name = "statistictest")
 public class HibernateStatistic implements Serializable{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int statid;
 
-    @Column
+    private String statid;
     private Integer gamesWon;
-
-    @Column
     private Long timeSpent;
-
-    @Column
     private Long minTime;
-
-    @Column
     private Integer gamesPlayed;
+    private HibernateUser user;
 
+    public HibernateStatistic() {}
+
+    public HibernateStatistic(String statid, Integer gamesWon, Long timeSpent, Long minTime, Integer gamesPlayed, HibernateUser user) {
+        this.statid = statid;
+        this.gamesWon = gamesWon;
+        this.timeSpent = timeSpent;
+        this.minTime = minTime;
+        this.gamesPlayed = gamesPlayed;
+        this.user = user;
+    }
+
+    @Id
+    public String getStatid() { return statid; }
+
+    public void setStatid(String statid) {
+        this.statid = statid;
+    }
+
+    @Column(name = "gamesPlayed")
     public Integer getGamesPlayed() {
         return gamesPlayed;
     }
@@ -31,6 +42,7 @@ public class HibernateStatistic implements Serializable{
         this.gamesPlayed = gamesPlayed;
     }
 
+    @Column(name = "minTime")
     public Long getMinTime() {
         return minTime;
     }
@@ -39,6 +51,7 @@ public class HibernateStatistic implements Serializable{
         this.minTime = minTime;
     }
 
+    @Column(name = "gamesWon")
     public Integer getGamesWon() {
         return gamesWon;
     }
@@ -47,6 +60,7 @@ public class HibernateStatistic implements Serializable{
         this.gamesWon = gamesWon;
     }
 
+    @Column(name = "timeSpent")
     public Long getTimeSpent() {
         return timeSpent;
     }
@@ -55,11 +69,8 @@ public class HibernateStatistic implements Serializable{
         this.timeSpent = timeSpent;
     }
 
-    public String getStatid() {
-        return Integer.toString(statid);
-    }
+    @OneToOne(mappedBy = "statistic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public HibernateUser getUser() { return user; }
 
-    public void setStatid(String statid) {
-        this.statid = Integer.parseInt(statid) + 1;
-    }
+    public void setUser(HibernateUser user) { this.user = user; }
 }

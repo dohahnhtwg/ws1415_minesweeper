@@ -142,6 +142,17 @@ public class Controller extends Observable implements IController {
         return current == requirement;
     }
 
+    private boolean checkGameOver() {
+        for (int i = 0; i < playingField.getField().length; i++)   {
+            for (int j = 0; j < playingField.getField()[0].length; j++)    {
+                if(playingField.getField()[i][j].getIsRevealed() &&
+                        playingField.getField()[i][j].getValue() == -1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public void undo() {
         if (undoManager.canUndo()) {
             undoManager.undo();
@@ -177,6 +188,9 @@ public class Controller extends Observable implements IController {
 
     @Override
     public void finishGame() {
+        if (checkGameOver() || checkVictory()) {
+            return;
+        }
         database.update(user);
     }
 
@@ -184,11 +198,21 @@ public class Controller extends Observable implements IController {
         if (username.isEmpty() || password.isEmpty()) {
             return false;
         }
-        IUser userForDb = new User(username, password);
+        final IUser userForDb = new User(username, password);
         if(database.contains(userForDb)) {
             return false;
         }
-        database.create(userForDb);
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                database.create(userForDb);
+            }
+        })).start();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
