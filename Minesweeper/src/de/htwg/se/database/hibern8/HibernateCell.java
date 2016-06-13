@@ -15,7 +15,7 @@ public class HibernateCell implements Serializable {
     @Column(name = "value")
     private Integer value;
 
-    @Column(name = "isRevealed")
+    @Column(name = "setIsRevealed")
     private Boolean isRevealed;
 
     @ManyToOne

@@ -90,7 +90,7 @@ public class HibernateDatabase implements DataAccessObject{
                 cell = field.getPlayingField()[i][j];
                 hcell = new HibernateCell(cell.getValue());
                 hcell.setId(cell.getId());
-                hcell.seIstRevealed(cell.getIsRevealed());
+                hcell.seIstRevealed(cell.isRevealed());
                 hcells.add(hcell);
             }
         }

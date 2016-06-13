@@ -41,7 +41,7 @@ public class Cell implements ICell {
     }
     
     public String toString()    {
-        if(getIsRevealed())   {
+        if(isRevealed())   {
             if(value == -1)   {
                 return String.format(" %2c ", '*');
             } else {
@@ -86,7 +86,7 @@ public class Cell implements ICell {
     }
 
     @Override
-    public boolean getIsRevealed() {
+    public boolean isRevealed() {
         return this.isRevealed;
     }
 

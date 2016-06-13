@@ -75,9 +75,6 @@ class FieldController extends UntypedActor {
         field.setLines(lines);
         field.setColumns(columns);
         field.setnMines(nMines);
-        if (lines < 1 || columns < 1 || nMines < 0)   {
-            throw new IllegalArgumentException("lines, columns or nMines too small.");
-        }
         ICell[][] field = new ICell[lines + BORDER][columns + BORDER];
         for (int i = 0; i < field.length; i++)   {
             for (int j = 0; j < field[0].length; j ++)    {
@@ -163,7 +160,7 @@ class FieldController extends UntypedActor {
         if(field.getPlayingField()[x][y].getValue() <= 0)  {
             List<Point> fieldsAround = getCellsAround(x, y);
             for(Point field : fieldsAround) {
-                if(checkCellInField(field) && !this.field.getPlayingField()[field.x][field.y].getIsRevealed()) {
+                if(checkCellInField(field) && !this.field.getPlayingField()[field.x][field.y].isRevealed()) {
                     revealCellHelp(field.x, field.y, revelalFieldCommandList);
                 }
             }
@@ -195,7 +192,7 @@ class FieldController extends UntypedActor {
 
         for (int i = 0; i < field.getPlayingField().length; i++)   {
             for (int j = 0; j < field.getPlayingField()[0].length; j ++)    {
-                if(field.getPlayingField()[i][j].getIsRevealed()) {
+                if(field.getPlayingField()[i][j].isRevealed()) {
                     current++;
                 }
             }

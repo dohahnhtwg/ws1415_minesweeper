@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.htwg.se.model.impl.Cell;
-
 public class CellTest {
     
     private Cell cell;
@@ -27,9 +25,9 @@ public class CellTest {
     @Test
     public void testIsRevealed()    {
         cell.setIsRevealed(true);
-        assertTrue(cell.getIsRevealed());
+        assertTrue(cell.isRevealed());
         cell.setIsRevealed(false);
-        assertFalse(cell.getIsRevealed());
+        assertFalse(cell.isRevealed());
     }
     
     @Test

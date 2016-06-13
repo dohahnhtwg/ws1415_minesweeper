@@ -41,7 +41,7 @@ public interface ICell {
      * This Method says whether this cell is revealed or not.
      * @return true if the Cell is Revealed.
      */
-    boolean getIsRevealed();
+    boolean isRevealed();
     
     /**
      * This Method changed the actual is Revealed status of the Cell.

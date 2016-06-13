@@ -10,7 +10,6 @@ import de.htwg.se.model.impl.Cell;
 import de.htwg.se.model.impl.Field;
 import de.htwg.se.model.impl.Statistic;
 import de.htwg.se.model.impl.User;
-import org.apache.commons.lang.NotImplementedException;
 import org.ektorp.*;
 import org.ektorp.http.HttpClient;
 import org.ektorp.http.StdHttpClient;
@@ -164,7 +163,7 @@ public class CouchDatabase implements DataAccessObject {
         CouchCell couchCell = new CouchCell();
         couchCell.setId(cell.getId());
         couchCell.setValue(cell.getValue());
-        couchCell.setRevealed(cell.getIsRevealed());
+        couchCell.setRevealed(cell.isRevealed());
         return couchCell;
     }
 
