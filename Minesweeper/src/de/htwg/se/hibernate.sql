@@ -1,45 +1,42 @@
-CREATE TABLE IF NOT EXISTS hibernateCell (
-  cellid INT(6) AUTO_INCREMENT PRIMARY KEY,
-  value SMALLINT DEFAULT 0,
-  isRevealed BOOL DEFAULT FALSE,
-  fieldid INT(6),
-  FOREIGN KEY (`fieldid`) REFERENCES hibernateField(`fieldid`)
+CREATE TABLE celltest (
+  cellid VARCHAR(255) PRIMARY KEY NOT NULL,
+  value SMALLINT(6) DEFAULT '0',
+  isRevealed TINYINT(1) DEFAULT '0',
+  idx INT(6) NOT NULL,
+  fieldid VARCHAR(50) NOT NULL,
+  CONSTRAINT celltest_ibfk_1 FOREIGN KEY (fieldid) REFERENCES fieldtest (fieldid)
 );
 
-CREATE TABLE IF NOT EXISTS hibernateField (
-  `fieldid` INT(6) AUTO_INCREMENT PRIMARY KEY,
-  `nMines` TINYINT NOT NULL,
-  `lines` TINYINT NOT NULL,
-  `columns` TINYINT NOT NULL
+CREATE TABLE fieldtest (
+  fieldid VARCHAR(50) PRIMARY KEY NOT NULL,
+  nmines INT(6),
+  nlines INT(6),
+  ncolumns INT(6)
 );
 
-CREATE TABLE IF NOT EXISTS hibernateStatistic (
-  `statid` INT(6) AUTO_INCREMENT PRIMARY KEY,
-  `gamesWon` INT(6),
-  `timeSpent` INT,
-  `minTime` INT,
-  `gamesPlayed` INT(6)
+CREATE TABLE statistictest (
+  statid VARCHAR(255) PRIMARY KEY NOT NULL,
+  gamesWon INT(6) DEFAULT '0',
+  timeSpent BIGINT(20) DEFAULT '0',
+  minTime BIGINT(20) DEFAULT '999999999999999',
+  gamesPlayed INT(6) DEFAULT '0'
 );
 
-CREATE TABLE IF NOT EXISTS hibernateUser (
-  `userid` INT(6) AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(255) NOT NULL,
-  `encryptedPassword` BINARY NOT NULL,
-  `salt` BINARY NOT NULL,
-  `algorithm` VARCHAR(20) NOT NULL,
-  `fieldid` INT(6) NOT NULL,
-  `statid` INT(6) NOT NULL,
-  FOREIGN KEY (`fieldid`) REFERENCES hibernateField(`fieldid`),
-  FOREIGN KEY (`statid`) REFERENCES hibernateStatistic(`statid`)
-);
-
-CREATE TABLE minesweeper.field_cells
-(
-  fieldid INT(6) NOT NULL,
-  cellid INT(6) NOT NULL,
-  CONSTRAINT field_cells_fieldid_cellid_pk PRIMARY KEY (fieldid, cellid),
-  CONSTRAINT field_cells_hibernatecell_cellid_fk FOREIGN KEY (cellid) REFERENCES hibernatecell (cellid),
-  CONSTRAINT field_cells_hibernatefield_fieldid_fk FOREIGN KEY (fieldid) REFERENCES hibernatefield (fieldid)
+CREATE TABLE usertest (
+  userid VARCHAR(50) PRIMARY KEY NOT NULL,
+  username VARCHAR(255) NOT NULL,
+  encryptedPassword BLOB NOT NULL,
+  salt BLOB NOT NULL,
+  pwdalgorithm VARCHAR(50) NOT NULL,
+  statid VARCHAR(50),
+  fieldid VARCHAR(50),
+  CONSTRAINT usertest_fieldtest_fieldid_fk FOREIGN KEY (fieldid) REFERENCES fieldtest (fieldid),
+  CONSTRAINT usertest_statistictest_statid_fk FOREIGN KEY (statid) REFERENCES statistictest (statid)
 );
 
 SHOW FULL TABLES;
+
+DELETE FROM "statistictest" WHERE 1;
+DELETE FROM "fieldtest" WHERE 1;
+DELETE FROM "usertest" WHERE 1;
+DELETE FROM "celltest" WHERE 1;
