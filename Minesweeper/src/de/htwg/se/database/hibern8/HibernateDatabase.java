@@ -71,7 +71,9 @@ public class HibernateDatabase implements DataAccessObject{
                     hibernateUser.getFieldid(),
                     lines - BORDER,
                     columns - BORDER,
-                    hibernateField.getnMines()
+                    hibernateField.getnMines(),
+                    hibernateField.getIsGameOver() == 1 ? Boolean.TRUE : Boolean.FALSE,
+                    hibernateField.getIsVictory() == 1 ? Boolean.TRUE : Boolean.FALSE
             );
         }
 
@@ -133,7 +135,9 @@ public class HibernateDatabase implements DataAccessObject{
                 field.getnMines(),
                 lines,
                 columns,
-                hibernateUser
+                hibernateUser,
+                field.isGameOver() ? 1 : 0,
+                field.isVictory() ? 1 : 0
         );
         session.saveOrUpdate(hibernateField);
         hibernateUser.setField(hibernateField);
@@ -149,7 +153,7 @@ public class HibernateDatabase implements DataAccessObject{
                 hCell = new HibernateCell(
                         cell.getId(),
                         cell.getValue(),
-                        cell.getIsRevealed() ? 1 : 0,
+                        cell.isRevealed() ? 1 : 0,
                         i * 100 + j,
                         hibernateField.getFieldid(),
                         hibernateField

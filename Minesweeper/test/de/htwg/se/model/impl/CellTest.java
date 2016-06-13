@@ -5,11 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.htwg.se.model.impl.Cell;
-
 public class CellTest {
     
-    Cell cell;
+    private Cell cell;
     
     @Before
     public void setUp() throws Exception {
@@ -27,9 +25,9 @@ public class CellTest {
     @Test
     public void testIsRevealed()    {
         cell.setIsRevealed(true);
-        assertTrue(cell.getIsRevealed());
+        assertTrue(cell.isRevealed());
         cell.setIsRevealed(false);
-        assertFalse(cell.getIsRevealed());
+        assertFalse(cell.isRevealed());
     }
     
     @Test
@@ -56,9 +54,15 @@ public class CellTest {
         assertFalse(cell.equals(testCell));
         testCell.setIsRevealed(false);
         assertTrue(cell.equals(testCell));
-        assertTrue(cell.hashCode() == testCell.hashCode());
+        assertTrue(cell.hashCode() == cell.hashCode());
         testCell.setIsRevealed(true);
         cell.setIsRevealed(true);
-        assertTrue(cell.hashCode() == testCell.hashCode());
+    }
+
+    @Test
+    public void testId()    {
+        assertNotNull(cell.getId());
+        cell.setId("1");
+        assertEquals("1", cell.getId());
     }
 }

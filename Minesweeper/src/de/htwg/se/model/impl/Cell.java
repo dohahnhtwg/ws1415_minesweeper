@@ -29,10 +29,6 @@ public class Cell implements ICell {
     private String playingField;
 
 
-    public boolean isRevealed() {
-        return isRevealed;
-    }
-
     public void setRevealed(boolean revealed) {
         isRevealed = revealed;
     }
@@ -62,7 +58,7 @@ public class Cell implements ICell {
     }
     
     public String toString()    {
-        if(getIsRevealed())   {
+        if(isRevealed())   {
             if(value == -1)   {
                 return String.format(" %2c ", '*');
             } else {
@@ -90,7 +86,10 @@ public class Cell implements ICell {
 
     @Override
     public int hashCode() {
-        return Boolean.hashCode(isRevealed) + Integer.hashCode(value);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + value;
+        result = 31 * result + (isRevealed ? 1 : 0);
+        return result;
     }
 
     @Override
@@ -104,7 +103,7 @@ public class Cell implements ICell {
     }
 
     @Override
-    public boolean getIsRevealed() {
+    public boolean isRevealed() {
         return this.isRevealed;
     }
 

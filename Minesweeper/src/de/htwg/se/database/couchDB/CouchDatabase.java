@@ -10,7 +10,6 @@ import de.htwg.se.model.impl.Cell;
 import de.htwg.se.model.impl.Field;
 import de.htwg.se.model.impl.Statistic;
 import de.htwg.se.model.impl.User;
-import org.apache.commons.lang.NotImplementedException;
 import org.ektorp.*;
 import org.ektorp.http.HttpClient;
 import org.ektorp.http.StdHttpClient;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by GAAB on 11.04.2016.
+ * Created by dohahn on 11.04.2016.
  *
  */
 public class CouchDatabase implements DataAccessObject {
@@ -153,7 +152,7 @@ public class CouchDatabase implements DataAccessObject {
         CouchCell[][] field = new CouchCell[playingField.getColumns() + BORDER][playingField.getLines() + BORDER];
         for(int i=0; i < couchField.getColumns() + BORDER; i++)   {
             for(int j=0; j < couchField.getLines() + BORDER; j++)  {
-                field[i][j] = copyCell(playingField.getField()[i][j]);
+                field[i][j] = copyCell(playingField.getPlayingField()[i][j]);
             }
         }
         couchField.setPlayingField(field);
@@ -164,7 +163,7 @@ public class CouchDatabase implements DataAccessObject {
         CouchCell couchCell = new CouchCell();
         couchCell.setId(cell.getId());
         couchCell.setValue(cell.getValue());
-        couchCell.setRevealed(cell.getIsRevealed());
+        couchCell.setRevealed(cell.isRevealed());
         return couchCell;
     }
 

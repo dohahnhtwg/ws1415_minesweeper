@@ -25,14 +25,14 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 import static de.htwg.se.aview.gui.Constants.*;
 
 public final class NewGameWindow extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
-    public NewGameWindow(final IController controller) {
+    public NewGameWindow(final IMainController controller) {
 
         super();
         setTitle("New Game Mode");

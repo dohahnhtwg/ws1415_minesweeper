@@ -15,16 +15,21 @@ public class HibernateField implements Serializable {
     private Integer lines;
     private Integer columns;
     private HibernateUser user;
+    private Integer isVictory;
+    private Integer isGameOver;
     private Set<HibernateCell> cells =  new HashSet<>(0);
 
     public HibernateField() {}
 
-    public HibernateField(String fieldid, Integer nMines, Integer lines, Integer columns, HibernateUser user) {
+    public HibernateField(String fieldid, Integer nMines, Integer lines, Integer columns, HibernateUser user,
+                          Integer isGameOver, Integer isVictory) {
         this.fieldid = fieldid;
         this.nMines = nMines;
         this.lines = lines;
         this.columns = columns;
         this.user = user;
+        this.isGameOver = isGameOver;
+        this.isVictory = isVictory;
     }
 
     @Id
@@ -76,5 +81,23 @@ public class HibernateField implements Serializable {
 
     public void setCells(Set<HibernateCell> cells) {
         this.cells = cells;
+    }
+
+    @Column(name = "isvictory")
+    public Integer getIsVictory() {
+        return isVictory;
+    }
+
+    public void setIsVictory(Integer isVictory) {
+        this.isVictory = isVictory;
+    }
+
+    @Column(name = "isgameover")
+    public Integer getIsGameOver() {
+        return isGameOver;
+    }
+
+    public void setIsGameOver(Integer isGameOver) {
+        this.isGameOver = isGameOver;
     }
 }

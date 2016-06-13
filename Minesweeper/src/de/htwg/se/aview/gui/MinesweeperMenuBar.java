@@ -35,16 +35,16 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JOptionPane;
 
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 import de.htwg.se.model.IStatistic;
 
 class MinesweeperMenuBar extends JMenuBar {
     private static final long serialVersionUID = 1L;
 
     private JLabel loginStatus;
-    private final IController controller;
+    private final IMainController controller;
 
-    MinesweeperMenuBar(final IController controller) {
+    MinesweeperMenuBar(final IMainController controller) {
         this.controller = controller;
         JMenu fileMenu = new JMenu("Game");
         fileMenu.setMnemonic(KeyEvent.VK_G);

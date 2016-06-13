@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 
 public final class BottomInfoPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public final class BottomInfoPanel extends JPanel {
     static {
         timer = new JTextField("", Constants.THREE);
     }
-    public BottomInfoPanel(final IController controller) {
+    public BottomInfoPanel(final IMainController controller) {
         JTextField counter;
         JLabel counterLabel, timerLabel;
         new JPanel();

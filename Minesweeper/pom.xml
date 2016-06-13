@@ -13,11 +13,6 @@
     <testSourceDirectory>test</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.4.0</version>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
@@ -34,17 +29,6 @@
      <artifactId>junit</artifactId>
      <version>4.10</version>
      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.17</version>
-        <scope>compile</scope>
-      </dependency>
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>3.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -102,6 +86,17 @@
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.12.1.GA</version>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-actor_2.11</artifactId>
+      <version>2.4.6</version>
+    </dependency>
+    <!-- http://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11 -->
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-testkit_2.11</artifactId>
+      <version>2.4.6</version>
     </dependency>
   </dependencies>
 

@@ -19,14 +19,14 @@ package de.htwg.se.aview.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import de.htwg.se.controller.IController;
+import de.htwg.se.controller.IMainController;
 
 public final class ButtonHandler implements ActionListener {
 
     private int x, y;
-    private IController controller;
+    private IMainController controller;
 
-    public ButtonHandler(final int x, final int y, final IController controller) {
+    public ButtonHandler(final int x, final int y, final IMainController controller) {
         this.x = x;
         this.y = y;
         this.controller = controller;

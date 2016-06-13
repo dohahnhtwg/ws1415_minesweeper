@@ -10,9 +10,11 @@ import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import de.htwg.se.model.impl.User;
 
+import java.security.NoSuchAlgorithmException;
+
 public class UserTest {
 
-	IUser user;
+	private IUser user;
 	
 	@Before
     public void setUp()	{
@@ -108,5 +110,35 @@ public class UserTest {
 		
 		//Assert
 		assertSame(user.getName(), userName);
+	}
+
+	@Test
+	public void newUserNeedId()	{
+		user = new User();
+		assertNotNull(user.getId());
+	}
+
+	@Test
+	public void testSetId()	{
+		user.setId("1");
+		assertEquals("1", user.getId());
+	}
+
+	@Test
+	public void testSetSalt()	{
+		user.setSalt("test".getBytes());
+		assertEquals("test", new String(user.getSalt()));
+	}
+
+	@Test
+	public void testSetAlgorithm()	{
+		user.setAlgorithm("test");
+		assertEquals("test", user.getAlgorithm());
+	}
+
+	@Test
+	public void testSetEncryptedPassword()	{
+		user.setEncryptedPassword("test".getBytes());
+		assertEquals("test", new String(user.getEncryptedPassword()));
 	}
 }
