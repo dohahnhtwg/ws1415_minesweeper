@@ -1,25 +1,26 @@
-package de.htwg.se.aview.tui;
+package de.htwg.se.controller.impl;
 
 import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import de.htwg.se.aview.tui.Tui;
 import de.htwg.se.minesweeper.MinesweeperModule;
 
 /**
- * Created by GAAB on 21.05.2016.
- * Builder for tui
+ * Created by dohahn on 16.06.2016.
+ * Dependency Injector for MainControllerActor
  */
-public class TuiBuilder implements IndirectActorProducer {
+public class DependencyInjectorMainController implements IndirectActorProducer {
 
     @Override
     public Actor produce() {
         Injector injector = Guice.createInjector(new MinesweeperModule());
-        return injector.getInstance(Tui.class);
+        return injector.getInstance(MainController.class);
     }
 
     @Override
     public Class<? extends Actor> actorClass() {
-        return Tui.class;
+        return MainController.class;
     }
 }

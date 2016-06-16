@@ -33,7 +33,7 @@ public class MinesweeperModule extends AbstractModule {
         .to(MainController.class);
         bind(IField.class)
         .to(de.htwg.se.model.impl.Field.class);
-        bind(DataAccessObject.class).to(de.htwg.se.database.db4o.db4oDatabase.class);
+        bind(DataAccessObject.class).to(de.htwg.se.database.couchDB.CouchDatabase.class);
         
     }
 

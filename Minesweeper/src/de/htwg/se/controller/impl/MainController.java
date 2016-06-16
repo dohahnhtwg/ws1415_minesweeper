@@ -48,8 +48,8 @@ public class MainController extends UntypedActor implements IMainController {
     private Long elapsedTime = 0L;
 
     @Inject
-    public MainController()  {
-        this.database = new db4oDatabase();
+    public MainController(DataAccessObject database)  {
+        this.database = database;
         if (database.contains(new User("Default", "Default"))) {
             this.user = database.read("Default");
         } else {

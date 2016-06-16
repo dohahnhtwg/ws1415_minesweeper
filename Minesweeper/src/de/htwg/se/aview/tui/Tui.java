@@ -38,7 +38,7 @@ public class Tui extends UntypedActor {
 
     @Inject
     public Tui()   {
-        this.controller = getContext().actorOf(Props.create(MainController.class), "controller");
+        this.controller = getContext().actorOf(Props.create(DependencyInjectorMainController.class), "controller");
         createChainOfResponsibility();
         controller.tell(new UpdateRequest(), self());
     }
