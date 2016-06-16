@@ -52,6 +52,7 @@ public class MainController extends UntypedActor implements IMainController {
         this.database = database;
         if (database.contains(new User("Default", "Default"))) {
             this.user = database.read("Default");
+            System.out.println(this.user.getPlayingField().toString());
         } else {
             this.user = new User("Default", "Default");
             database.create(this.user);
@@ -122,9 +123,7 @@ public class MainController extends UntypedActor implements IMainController {
 
     //TODO make private
     public void finishGame() {
-
         database.update(user);
-
     }
 
     private void logIn(LoginRequest msg) {

@@ -5,6 +5,7 @@ import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.controller.messages.*;
 import de.htwg.se.controller.messages.FieldController.CreateRequest;
 import de.htwg.se.controller.messages.FieldController.FieldRequest;
+import de.htwg.se.controller.messages.FieldController.NewFieldMessage;
 import de.htwg.se.controller.messages.FieldController.RestartRequest;
 import de.htwg.se.controller.messages.MainController.FieldResponse;
 import de.htwg.se.model.ICell;
@@ -61,6 +62,9 @@ class FieldController extends UntypedActor {
         if(message instanceof RevealCellRequest)   {
             revealCell((RevealCellRequest)message);
             getSender().tell(new RevealCellResponse(field), self());
+        }
+        if(message instanceof NewFieldMessage)  {
+            this.field = ((NewFieldMessage)message).getField();
         }
         unhandled(message);
     }
