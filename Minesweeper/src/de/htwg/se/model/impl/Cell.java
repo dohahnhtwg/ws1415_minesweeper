@@ -26,7 +26,7 @@ public class Cell implements ICell {
     private String id;
     private int value;
     private boolean isRevealed = false;
-    private String playingField;
+    private String playingFieldId;
 
 
     public void setRevealed(boolean revealed) {
@@ -38,15 +38,11 @@ public class Cell implements ICell {
         this.value = value;
     }
 
-    public Cell(String playingField) {
-        this.playingField = playingField;
-    }
-
-    public Cell(String id, Integer value, Boolean isRevealed, String playingField) {
+    public Cell(String id, Integer value, Boolean isRevealed, String playingFieldId) {
         this.id = id;
         this.value = value;
         this.isRevealed = isRevealed;
-        this.playingField = playingField;
+        this.playingFieldId = playingFieldId;
     }
 
     public int getValue() {
@@ -56,7 +52,7 @@ public class Cell implements ICell {
     public void setValue(int newValue) {
         this.value = newValue;
     }
-    
+
     public String toString()    {
         if(isRevealed())   {
             if(value == -1)   {
@@ -110,13 +106,5 @@ public class Cell implements ICell {
     @Override
     public void setIsRevealed(boolean isRevealed) {
         this.isRevealed = isRevealed;
-    }
-
-    public String getPlayingField() {
-        return playingField;
-    }
-
-    public void setPlayingField(String playingField) {
-        this.playingField = playingField;
     }
 }
