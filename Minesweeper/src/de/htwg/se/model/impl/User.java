@@ -39,6 +39,19 @@ public class User implements IUser {
         statistic = new Statistic();
     }
 
+    public User(String name, String password, IField field) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        try {
+            this.salt = this.generateSalt();
+            this.encryptedPassword = generateEncryptedPassword(password);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException exc) {
+            exc.printStackTrace();
+        }
+        playingField = field;
+        statistic = new Statistic();
+    }
+
     @Override
     public String getId() {
         return id;

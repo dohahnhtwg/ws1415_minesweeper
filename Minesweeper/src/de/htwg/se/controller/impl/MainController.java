@@ -18,6 +18,8 @@ package de.htwg.se.controller.impl;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import akka.pattern.Patterns;
+import akka.util.Timeout;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -30,11 +32,13 @@ import de.htwg.se.controller.messages.FieldController.NewFieldMessage;
 import de.htwg.se.controller.messages.FieldController.RestartRequest;
 import de.htwg.se.controller.messages.MainController.*;
 import de.htwg.se.database.DataAccessObject;
-import de.htwg.se.database.db4o.db4oDatabase;
 import de.htwg.se.model.IField;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import de.htwg.se.model.impl.User;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
 
 
 @Singleton
@@ -142,12 +146,19 @@ public class MainController extends UntypedActor implements IMainController {
         if (msg.getUsername().isEmpty() || msg.getPassword().isEmpty()) {
             getContext().parent().tell(new NewAccountResponse(false), self());
         } else {
-            IUser userForDb = new User(msg.getUsername(), msg.getPassword());
-            if(database.contains(userForDb)) {
-                getContext().parent().tell(new NewAccountResponse(false), self());
-            } else {
-                database.create(userForDb);
-                getContext().parent().tell(new NewAccountResponse(true), self());
+            Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+            Future<Object> future = Patterns.ask(fieldController, new CreateRequest(9, 9, 10), timeout);
+            try {
+                FieldResponse result = (FieldResponse) Await.result(future, timeout.duration());
+                IUser userForDb = new User(msg.getUsername(), msg.getPassword(), result.getField());
+                if(database.contains(userForDb)) {
+                    getContext().parent().tell(new NewAccountResponse(false), self());
+                } else {
+                    database.create(userForDb);
+                    getContext().parent().tell(new NewAccountResponse(true), self());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
