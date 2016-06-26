@@ -1,9 +1,6 @@
 package de.htwg.se.aview.gui;
 
 import akka.actor.ActorRef;
-import akka.actor.UntypedActor;
-import de.htwg.se.aview.messages.TimeResponse;
-import de.htwg.se.controller.IMainController;
 import de.htwg.se.controller.messages.MainController.TimeRequest;
 
 import java.util.logging.Level;

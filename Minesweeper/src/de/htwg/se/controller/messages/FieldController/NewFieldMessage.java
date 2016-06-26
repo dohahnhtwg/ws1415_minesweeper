@@ -16,11 +16,11 @@ public class NewFieldMessage implements Serializable {
      */
     private IField field;
 
-    public NewFieldMessage(IField field)    {
+    public NewFieldMessage(IField field) {
         this.field = field;
     }
 
-    public IField getField()    {
+    public IField getField() {
         return field;
     }
 }

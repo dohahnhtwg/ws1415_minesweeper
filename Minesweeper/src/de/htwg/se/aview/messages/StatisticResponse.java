@@ -20,7 +20,7 @@ public class StatisticResponse implements Serializable {
         this.statistic = statistic;
     }
 
-    public IStatistic getStatistic()    {
+    public IStatistic getStatistic() {
         return statistic;
     }
 }

@@ -13,7 +13,7 @@ public class TimeResponse implements Serializable {
         this.currentTime = currentTime;
     }
 
-    public Long getCurrentTime()    {
+    public Long getCurrentTime() {
         return currentTime;
     }
 }

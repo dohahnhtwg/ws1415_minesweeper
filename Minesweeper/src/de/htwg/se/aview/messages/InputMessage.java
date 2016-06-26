@@ -18,7 +18,7 @@ public class InputMessage implements Serializable {
         this.input = input;
     }
 
-    public String getInput()    {
+    public String getInput() {
         return  input;
     }
 }

@@ -25,22 +25,22 @@ import de.htwg.se.aview.tui.Tui;
 
 public final class MinesweeperWeb {
 
-	private Tui tui;
-	
-	private MinesweeperWeb()   {      
+    private Tui tui;
+
+    private MinesweeperWeb()   {
         Injector injector = Guice.createInjector(new MinesweeperModule());
         tui = injector.getInstance(Tui.class);
     }
-	
-	public static MinesweeperWeb getInstance() {
+
+    public static MinesweeperWeb getInstance() {
         return new MinesweeperWeb();
     }
-	
-	public Tui getTui() {
-		return tui;
-	}
-	
-	public static void main(String[] args) {
+
+    public Tui getTui() {
+        return tui;
+    }
+
+    public static void main(String[] args) {
         Minesweeper.getInstance();
         
         Injector injector = Guice.createInjector(new MinesweeperModule());

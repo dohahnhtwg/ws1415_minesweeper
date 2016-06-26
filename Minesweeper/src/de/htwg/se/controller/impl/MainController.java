@@ -24,7 +24,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import de.htwg.se.aview.messages.*;
-import de.htwg.se.controller.IMainController;
 import de.htwg.se.controller.messages.*;
 import de.htwg.se.controller.messages.FieldController.CreateRequest;
 import de.htwg.se.controller.messages.FieldController.FieldRequest;
@@ -32,7 +31,6 @@ import de.htwg.se.controller.messages.FieldController.NewFieldMessage;
 import de.htwg.se.controller.messages.FieldController.RestartRequest;
 import de.htwg.se.controller.messages.MainController.*;
 import de.htwg.se.database.DataAccessObject;
-import de.htwg.se.model.IField;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import de.htwg.se.model.impl.User;
@@ -45,7 +43,7 @@ import java.util.Set;
 
 
 @Singleton
-public class MainController extends UntypedActor implements IMainController {
+public class MainController extends UntypedActor {
 
     private ActorRef fieldController;
     private IUser user;
@@ -72,7 +70,7 @@ public class MainController extends UntypedActor implements IMainController {
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if(message instanceof FinishGameMessage)    {
+        if(message instanceof FinishGameMessage) {
             finishGame();
             return;
         }
@@ -80,7 +78,7 @@ public class MainController extends UntypedActor implements IMainController {
             logIn((LoginRequest)message);
             return;
         }
-        if(message instanceof NewAccountRequest)    {
+        if(message instanceof NewAccountRequest) {
             addNewAccount((NewAccountRequest)message);
             return;
         }
@@ -101,7 +99,7 @@ public class MainController extends UntypedActor implements IMainController {
             undo((UndoRequest)message);
             return;
         }
-        if(message instanceof RevealCellRequest)    {
+        if(message instanceof RevealCellRequest) {
             revealCell((RevealCellRequest)message);
             return;
         }
@@ -113,7 +111,7 @@ public class MainController extends UntypedActor implements IMainController {
             subscribers.add(getSender());
             fieldController.tell(new FieldRequest(getSender()), self());
         }
-        if(message instanceof FieldResponse)    {
+        if(message instanceof FieldResponse) {
             FieldResponse response = (FieldResponse)message;
             if (response.getTarget() == null) {
                 // Broadcast
@@ -135,14 +133,13 @@ public class MainController extends UntypedActor implements IMainController {
         unhandled(message);
     }
 
-    //TODO make private
-    public void finishGame() {
+    private void finishGame() {
         database.update(user);
     }
 
     private void logIn(LoginRequest msg) {
         IUser userFromDb = database.read(msg.getUsername());
-        if(userFromDb == null)    {
+        if(userFromDb == null) {
             getContext().parent().tell(new LoginResponse(false), self());
         } else {
             user = userFromDb;
@@ -174,13 +171,11 @@ public class MainController extends UntypedActor implements IMainController {
         }
     }
 
-    //TODO make private after gui-actor rework
-    public void create() {
+    private void create() {
         fieldController.tell(new RestartRequest(), self());
     }
 
-    //TODO make private after gui-actor rework
-    public void create(int lines, int columns, int nMines) {
+    private void create(int lines, int columns, int nMines) {
         fieldController.tell(new CreateRequest(lines, columns, nMines), self());
     }
 
@@ -225,53 +220,10 @@ public class MainController extends UntypedActor implements IMainController {
         elapsedTime = System.currentTimeMillis() - elapsedTime;
     }
 
-    //TODO make private after gui-actor rework
-    public Long getCurrentTime() {
+    private Long getCurrentTime() {
         if (isStarted) {
             return (System.currentTimeMillis() - elapsedTime) / 1000;
         }
         return elapsedTime / 1000;
     }
-
-    /* No longer needed, use actor */
-
-    @Deprecated
-    public IField getPlayingField()  {
-        return null;
-    }
-
-    @Deprecated
-    public boolean isVictory() {
-        return false;
-    }
-
-    @Deprecated
-    public boolean isGameOver() {
-        return false;
-    }
-
-    @Deprecated
-    public boolean addNewAccount(String name, String pass) {
-        return false;
-    }
-
-    @Deprecated
-    public boolean logIn(String name, String pass) {
-        return false;
-    }
-
-    @Deprecated
-    public void revealField(int x, int y)  { }
-
-    @Deprecated
-    public void undo() { }
-
-    @Deprecated
-    public void redo() { }
-
-    @Deprecated
-    public IStatistic getUserStatistic() {
-        return statistic;
-    }
-
 }

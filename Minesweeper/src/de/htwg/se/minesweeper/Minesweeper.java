@@ -28,13 +28,13 @@ public final class Minesweeper {
     }
 
     static Minesweeper getInstance() {
-        if (instance == null)	{
-        	instance = new Minesweeper();
+        if (instance == null) {
+            instance = new Minesweeper();
         }
         return instance;
     }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         final ActorSystem system = ActorSystem.create("Minesweeper");
         system.actorOf(Props.create(MinesweeperActor.class), "minesweeper");
         system.awaitTermination();

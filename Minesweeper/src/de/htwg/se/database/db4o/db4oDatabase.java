@@ -16,7 +16,7 @@ public class db4oDatabase implements DataAccessObject {
     private final String DB4OFILENAME = ".\\db4oDatabase";
 
     @Inject
-    public db4oDatabase()    {
+    public db4oDatabase() {
         
     }
     
@@ -46,7 +46,7 @@ public class db4oDatabase implements DataAccessObject {
                     return user.getName().equals(username);
                 }
             });
-            if(users.isEmpty())    {
+            if(users.isEmpty()) {
                 return null;
             }
             return users.get(0);

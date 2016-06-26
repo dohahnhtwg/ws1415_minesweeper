@@ -27,7 +27,7 @@ public class FieldResponse implements Serializable {
         this.target = target;
     }
 
-    public IField getField()    {
+    public IField getField() {
         return field;
     }
 

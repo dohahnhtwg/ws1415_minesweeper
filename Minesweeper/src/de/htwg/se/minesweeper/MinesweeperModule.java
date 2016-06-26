@@ -18,8 +18,6 @@ package de.htwg.se.minesweeper;
 
 import com.google.inject.AbstractModule;
 
-import de.htwg.se.controller.IMainController;
-import de.htwg.se.controller.impl.MainController;
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.IField;
 
@@ -28,13 +26,11 @@ public class MinesweeperModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        
-        bind(IMainController.class)
-        .to(MainController.class);
+
         bind(IField.class)
         .to(de.htwg.se.model.impl.Field.class);
-        bind(DataAccessObject.class).to(de.htwg.se.database.couchDB.CouchDatabase.class);
-        
+        bind(DataAccessObject.class).to(de.htwg.se.database.db4o.db4oDatabase.class);
+
     }
 
 }

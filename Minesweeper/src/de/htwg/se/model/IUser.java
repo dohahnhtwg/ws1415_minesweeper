@@ -1,10 +1,10 @@
 package de.htwg.se.model;
 
 public interface IUser {
-	/**
-	 * Returns the user name
-	 * @return user name
-	 */
+    /**
+     * Returns the user name
+     * @return user name
+     */
     String getName();
     
     /**

@@ -28,7 +28,7 @@ class FieldController extends UntypedActor {
     private static final int BORDER = 2;
     private static final int THREE_CELL_LEN = 3;
 
-    public FieldController()    {
+    public FieldController() {
         field = new Field();
         create(DEFDIMENS, DEFDIMENS, DEFNMINES);
         undoManager = new UndoManager();
@@ -46,7 +46,7 @@ class FieldController extends UntypedActor {
             getSender().tell(new FieldResponse(field), self());
             return;
         }
-        if(message instanceof CreateRequest)    {
+        if(message instanceof CreateRequest) {
             CreateRequest request = (CreateRequest)message;
             create(request.getLines(), request.getColumns(), request.getnMines());
             getSender().tell(new FieldResponse(field), self());
@@ -76,7 +76,7 @@ class FieldController extends UntypedActor {
         create(field.getLines(), field.getColumns(), field.getnMines());
     }
 
-    private void create(int lines, int columns, int nMines)    {
+    private void create(int lines, int columns, int nMines) {
         field.setIsGameOver(false);
         field.setIsVictory(false);
         field.setLines(lines);
@@ -84,7 +84,7 @@ class FieldController extends UntypedActor {
         field.setnMines(nMines);
         ICell[][] field = new ICell[lines + BORDER][columns + BORDER];
         for (int i = 0; i < field.length; i++)   {
-            for (int j = 0; j < field[0].length; j ++)    {
+            for (int j = 0; j < field[0].length; j ++) {
                 field[i][j] = new Cell(0);
             }
         }
@@ -123,16 +123,16 @@ class FieldController extends UntypedActor {
         Long timeForHash = System.nanoTime();
         int hash = timeForHash.hashCode();
         Random rnd = new Random(hash);
-        for (int i = 0; i < nMines; i++)    {
+        for (int i = 0; i < nMines; i++) {
             generateMines(field, lines, columns, rnd);
         }
         generateMinesAround(field);
     }
 
-    private void generateMines(ICell[][] field, int lines, int columns, Random rnd)    {
+    private void generateMines(ICell[][] field, int lines, int columns, Random rnd) {
         int x = rnd.nextInt(lines /*- 1*/) + 1;
         int y = rnd.nextInt(columns /*- 1*/) + 1;
-        if (field[x][y].getValue() != -1)    {
+        if (field[x][y].getValue() != -1) {
             field[x][y].setValue(-1);
         } else  {
             generateMines(field, lines, columns, rnd);
@@ -142,18 +142,18 @@ class FieldController extends UntypedActor {
     private void generateMinesAround(ICell[][] field) {
         for (int i = 1; i < field.length - 1; i++)   {
             for (int j = 1; j < field[0].length - 1; j ++)   {
-                if (field[i][j].getValue() != -1)    {
+                if (field[i][j].getValue() != -1) {
                     field[i][j].setValue(nMinesAroundAPoint(field, i, j));
                 }
             }
         }
     }
 
-    private int nMinesAroundAPoint(ICell[][] field, int x, int y)    {
+    private int nMinesAroundAPoint(ICell[][] field, int x, int y) {
         int mines = 0;
         for (int i = 0; i < THREE_CELL_LEN; i++) {
             for (int j = 0; j < THREE_CELL_LEN; j++) {
-                if (field[x - 1 + i][y - 1 + j].getValue() == -1)    {
+                if (field[x - 1 + i][y - 1 + j].getValue() == -1) {
                     mines++;
                 }
             }
@@ -187,7 +187,7 @@ class FieldController extends UntypedActor {
         return fieldsAround;
     }
 
-    private boolean checkCellInField(Point cell)    {
+    private boolean checkCellInField(Point cell) {
         return (cell.getX() > 0 && cell.getY() > 0)
                 && (cell.getX() < field.getPlayingField().length - 1
                 && cell.getY() < field.getPlayingField()[(int) cell.getX()].length - 1);
@@ -198,7 +198,7 @@ class FieldController extends UntypedActor {
         int current = 0;
 
         for (int i = 0; i < field.getPlayingField().length; i++)   {
-            for (int j = 0; j < field.getPlayingField()[0].length; j ++)    {
+            for (int j = 0; j < field.getPlayingField()[0].length; j ++) {
                 if(field.getPlayingField()[i][j].isRevealed()) {
                     current++;
                 }

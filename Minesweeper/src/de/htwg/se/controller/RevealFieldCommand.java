@@ -23,13 +23,13 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import de.htwg.se.model.ICell;
 
-public class RevealFieldCommand extends AbstractUndoableEdit    {
+public class RevealFieldCommand extends AbstractUndoableEdit {
 
     private List<ICell> cellList;
     private List<Integer> undobuffer;
     private static final long serialVersionUID = 1L;
 
-    public RevealFieldCommand(List<ICell> cellList)    {
+    public RevealFieldCommand(List<ICell> cellList) {
         this.cellList = cellList;
         undobuffer = new LinkedList<Integer>();
     }

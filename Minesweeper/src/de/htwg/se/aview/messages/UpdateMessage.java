@@ -26,9 +26,9 @@ public class UpdateMessage implements Serializable {
         this.field = field;
     }
 
-    public IField getField()    { return  field; }
+    public IField getField() { return  field; }
 
-    public Long getCurrentTime()    {
+    public Long getCurrentTime() {
         return currentTime;
     }
 }

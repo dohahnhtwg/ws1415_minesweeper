@@ -39,7 +39,7 @@ public class Field implements IField{
         this.fieldID = UUID.randomUUID().toString();
     }
 
-    public Field(int lines, int columns, int nMines)    {
+    public Field(int lines, int columns, int nMines) {
         this.fieldID = UUID.randomUUID().toString();
         setLines(lines);
         setColumns(columns);
@@ -55,7 +55,7 @@ public class Field implements IField{
     }
 
     @Override
-    public String toString()    {
+    public String toString() {
         StringBuilder sb = new StringBuilder("\n");
         sb.append(String.format("%5s\n", "Line\n"));
         for (int i = 1; i <= lines; i++) {
@@ -122,7 +122,7 @@ public class Field implements IField{
 
     @Override
     public void setPlayingField(ICell[][] playingField) {
-        if(playingField == null)    {
+        if(playingField == null) {
             throw new IllegalArgumentException("Field cant be null");
         }
         validateFieldLines(playingField);
@@ -171,7 +171,7 @@ public class Field implements IField{
     }
 
     private void validateFieldLines(ICell[][] playingField) {
-        if(playingField.length - BORDER < 1)    {
+        if(playingField.length - BORDER < 1) {
             throw new IllegalArgumentException("Field needs at least one line and two border lines");
         }
     }

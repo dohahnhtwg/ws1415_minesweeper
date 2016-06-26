@@ -49,8 +49,8 @@ public class CouchDatabase implements DataAccessObject {
 
     @Override
     public IUser read(String username) {
-        for(CouchUser u : getAllUsers())    {
-            if(u.getName().equals(username))    {
+        for(CouchUser u : getAllUsers()) {
+            if(u.getName().equals(username)) {
                 return copyUser(u);
             }
         }

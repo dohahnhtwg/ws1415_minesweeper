@@ -23,7 +23,7 @@ public class NewSizeRequest implements Serializable {
      */
     private Integer mines;
 
-    public NewSizeRequest(Integer lines, Integer columns, Integer mines)    {
+    public NewSizeRequest(Integer lines, Integer columns, Integer mines) {
         this.lines = lines;
         this.columns = columns;
         this.mines = mines;

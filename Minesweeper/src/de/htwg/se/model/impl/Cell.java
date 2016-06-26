@@ -53,7 +53,7 @@ public class Cell implements ICell {
         this.value = newValue;
     }
 
-    public String toString()    {
+    public String toString() {
         if(isRevealed())   {
             if(value == -1)   {
                 return String.format(" %2c ", '*');

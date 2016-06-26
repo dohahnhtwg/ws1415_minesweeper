@@ -43,7 +43,7 @@ public class Tui extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if(message instanceof InputMessage)    {
+        if(message instanceof InputMessage) {
             String input = ((InputMessage) message).getInput();
             if(processInputLine(input)){
                 return;
@@ -51,11 +51,11 @@ public class Tui extends UntypedActor {
             getContext().parent().tell(new TerminateRequest(), self());
             return;
         }
-        if(message instanceof UpdateMessage)    {
+        if(message instanceof UpdateMessage) {
             update((UpdateMessage)message);
             return;
         }
-        if(message instanceof StatisticResponse)    {
+        if(message instanceof StatisticResponse) {
             IStatistic statistic = ((StatisticResponse)message).getStatistic();
             printStatistic(statistic);
             return;
@@ -63,7 +63,7 @@ public class Tui extends UntypedActor {
         if(message instanceof NewAccountResponse)   {
             handleNewAccountResponse((NewAccountResponse)message);
         }
-        if(message instanceof LoginResponse)    {
+        if(message instanceof LoginResponse) {
             handleLoginResponse((LoginResponse) message);
         }
         unhandled(message);
@@ -101,7 +101,7 @@ public class Tui extends UntypedActor {
         boolean proceed = true;
         
         if("q".equals(next)) {
-        	controller.tell(new FinishGameMessage(), self());
+            controller.tell(new FinishGameMessage(), self());
             proceed = false;
         } else if("l".equals(next)) {
             Thread thread = new Thread(new Runnable() {
@@ -129,14 +129,14 @@ public class Tui extends UntypedActor {
     private void startLoginSequence() {
         Scanner s = new Scanner(System.in);
         loggedIn = false;
-        while(!loggedIn)	{
+        while(!loggedIn) {
             LOGGER.info("(1) Log in");
             LOGGER.info("(2) Create account");
             String input = s.next();
-            if(input.equals("1"))	{
+            if(input.equals("1")) {
                 tryToLogIn(s);
             } else {
-                if(input.equals("2"))	{
+                if(input.equals("2")) {
                     startNewAccountSequence(s);
                 } else {
                     LOGGER.info("Please enter 1 or 2");
@@ -147,24 +147,24 @@ public class Tui extends UntypedActor {
     }
 
     private void startNewAccountSequence(Scanner s) {
-		LOGGER.info("Enter new username:");
-		String username = s.next();
-		LOGGER.info("Enter new password:");
-		String password = s.next();
+        LOGGER.info("Enter new username:");
+        String username = s.next();
+        LOGGER.info("Enter new password:");
+        String password = s.next();
         controller.tell(new NewAccountRequest(username, password), self());
-	}
+    }
 
-	private void tryToLogIn(Scanner s) {
-		LOGGER.info("Enter username:");
-		String username = s.next();
-		LOGGER.info("Enter password:");
-		String password = s.next();
+    private void tryToLogIn(Scanner s) {
+        LOGGER.info("Enter username:");
+        String username = s.next();
+        LOGGER.info("Enter password:");
+        String password = s.next();
         controller.tell(new LoginRequest(username, password), self());
-	}
+    }
 
     private void handleLoginResponse(LoginResponse loginResponse) {
         loggedIn = loginResponse.isSuccess();
-        if(loggedIn)	{
+        if(loggedIn) {
             LOGGER.info("Successfully logged in");
         } else {
             LOGGER.info("Invalid");
@@ -173,7 +173,7 @@ public class Tui extends UntypedActor {
 
     private void handleNewAccountResponse(NewAccountResponse response)  {
         boolean success = response.getSuccess();
-        if(success)	{
+        if(success) {
             LOGGER.info("Successfully created new account");
         } else {
             LOGGER.info("Account already exists");

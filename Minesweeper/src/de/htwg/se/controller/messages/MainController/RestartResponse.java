@@ -15,11 +15,11 @@ public class RestartResponse implements Serializable {
      */
     private IField field;
 
-    public RestartResponse(IField field)    {
+    public RestartResponse(IField field) {
         this.field = field;
     }
 
-    public IField getField()    {
+    public IField getField() {
         return field;
     }
 }
