@@ -1,21 +1,27 @@
 package de.htwg.se.aview.gui;
 
+import akka.actor.ActorRef;
+import akka.actor.UntypedActor;
+import de.htwg.se.aview.messages.TimeResponse;
 import de.htwg.se.controller.IMainController;
+import de.htwg.se.controller.messages.MainController.TimeRequest;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UpdaterThread implements Runnable {
-    private IMainController controller;
+    private ActorRef controller;
+    private ActorRef parentRef;
 
-    protected UpdaterThread(IMainController controller) {
+    protected UpdaterThread(ActorRef controller, ActorRef parentRef) {
+        this.parentRef = parentRef;
         this.controller = controller;
     }
 
     @Override
     public void run() {
         while (true) {
-            BottomInfoPanel.setTimer(controller.getCurrentTime());
+            controller.tell(new TimeRequest(), parentRef);
             try {
                 Thread.sleep(300);
             } catch (InterruptedException exc) {

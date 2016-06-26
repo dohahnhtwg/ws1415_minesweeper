@@ -22,23 +22,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import de.htwg.se.controller.IMainController;
-
 public final class BottomInfoPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-
     private static JTextField timer;
+    private JTextField counter;
     static {
         timer = new JTextField("", Constants.THREE);
     }
-    public BottomInfoPanel(final IMainController controller) {
-        JTextField counter;
+    public BottomInfoPanel() {
+        super();
         JLabel counterLabel, timerLabel;
         new JPanel();
         counterLabel = new JLabel("Mines");
         timerLabel = new JLabel("Seconds");
-        Integer nMines = controller.getPlayingField().getnMines();
-        counter = new JTextField(nMines.toString(), Constants.THREE);
+        counter = new JTextField("", Constants.THREE);
         timer = new JTextField("", Constants.THREE);
         counter.setBackground(Color.black);
         counter.setDisabledTextColor(Color.YELLOW);
@@ -55,7 +52,11 @@ public final class BottomInfoPanel extends JPanel {
         add(timer);
     }
 
-    public static void setTimer(final Long time) {
+    public void setTimer(final Long time) {
         timer.setText(time.toString());
+    }
+
+    public void setCounterText(String value) {
+        counter.setText(value);
     }
 }

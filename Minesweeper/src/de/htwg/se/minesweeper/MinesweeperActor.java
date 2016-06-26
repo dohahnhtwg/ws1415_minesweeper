@@ -3,8 +3,10 @@ package de.htwg.se.minesweeper;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import de.htwg.se.aview.gui.MinesweeperGUI;
 import de.htwg.se.aview.tui.Tui;
 import de.htwg.se.aview.messages.InputMessage;
+import de.htwg.se.controller.impl.DependencyInjectorMainController;
 import de.htwg.se.minesweeper.messages.TerminateRequest;
 import java.util.Scanner;
 
@@ -16,7 +18,10 @@ class MinesweeperActor extends UntypedActor {
 
     @Override
     public void preStart() {
-        final ActorRef tui = getContext().actorOf(Props.create(Tui.class), "tui");
+        ActorRef controller = getContext().actorOf(Props.create(DependencyInjectorMainController.class), "controller");
+        final ActorRef tui = getContext().actorOf(Props.create(Tui.class, controller), "tui");
+        getContext().actorOf(Props.create(MinesweeperGUI.class, controller), "gui");
+
         scanner = new Scanner(System.in);
         thread = new Thread(new Runnable() {
             @Override
@@ -38,7 +43,7 @@ class MinesweeperActor extends UntypedActor {
             proceed = false;
             thread.join();
             scanner.close();
-            getContext().system().terminate();
+            getContext().system().shutdown();
         }
     }
 

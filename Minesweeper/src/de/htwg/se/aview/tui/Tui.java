@@ -19,11 +19,9 @@ package de.htwg.se.aview.tui;
 import java.util.Scanner;
 
 import akka.actor.ActorRef;
-import akka.actor.Props;
 import akka.actor.UntypedActor;
 import com.google.inject.Inject;
 import de.htwg.se.aview.messages.*;
-import de.htwg.se.controller.impl.*;
 import de.htwg.se.controller.messages.MainController.*;
 import de.htwg.se.minesweeper.messages.TerminateRequest;
 import de.htwg.se.model.IStatistic;
@@ -37,17 +35,19 @@ public class Tui extends UntypedActor {
     private boolean loggedIn;
 
     @Inject
-    public Tui()   {
-        this.controller = getContext().actorOf(Props.create(DependencyInjectorMainController.class), "controller");
+    public Tui(final ActorRef controller)   {
+        this.controller = controller;
         createChainOfResponsibility();
-        controller.tell(new UpdateRequest(), self());
+        controller.tell(new RegisterRequest(), self());
     }
 
     @Override
     public void onReceive(Object message) throws Exception {
         if(message instanceof InputMessage)    {
             String input = ((InputMessage) message).getInput();
-            if(processInputLine(input)){return;}
+            if(processInputLine(input)){
+                return;
+            }
             getContext().parent().tell(new TerminateRequest(), self());
             return;
         }

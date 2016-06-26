@@ -16,27 +16,22 @@
 
 package de.htwg.se.aview.gui;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import de.htwg.se.controller.IMainController;
+import akka.actor.ActorRef;
+import de.htwg.se.controller.messages.MainController.NewSizeRequest;
+
 import static de.htwg.se.aview.gui.Constants.*;
 
 public final class NewGameWindow extends JDialog {
-
     private static final long serialVersionUID = 1L;
 
-    public NewGameWindow(final IMainController controller) {
-
-        super();
-        setTitle("New Game Mode");
-        setModal(true);
+    public NewGameWindow(final Frame owner, final ActorRef parentRef, final ActorRef controller) {
+        super(owner, "New Game Mode", true);
         JPanel panel = new JPanel(new GridLayout(ONE, THREE));
         JButton small, medium, large;
         small = new JButton("Small");
@@ -46,29 +41,29 @@ public final class NewGameWindow extends JDialog {
         medium.setPreferredSize(new Dimension(DEF_BUT_SIZEX, DEF_BUT_SIZEY));
         large.setPreferredSize(new Dimension(DEF_BUT_SIZEX, DEF_BUT_SIZEY));
         small.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ActionListener) {
-			    PlayingFieldPanel.zeroMarked();
-			    controller.create(SMALLSIZE, SMALLSIZE, SMALLMINES);
-			    setVisible(false);
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent ActionListener) {
+                PlayingFieldPanel.zeroMarked();
+                controller.tell(new NewSizeRequest(SMALLSIZE, SMALLSIZE, SMALLMINES), parentRef);
+                setVisible(false);
+            }
+        });
         medium.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ActionListener) {
-			    PlayingFieldPanel.zeroMarked();
-			    controller.create(MEDIUMSIZE, MEDIUMSIZE, MEDIUMMINES);
-			    setVisible(false);
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent ActionListener) {
+                PlayingFieldPanel.zeroMarked();
+                controller.tell(new NewSizeRequest(MEDIUMSIZE, MEDIUMSIZE, MEDIUMMINES), parentRef);
+                setVisible(false);
+            }
+        });
         large.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ActionListener) {
-			    PlayingFieldPanel.zeroMarked();
-			    controller.create(MEDIUMSIZE, LARGESIZE, LARGEMINES);
-			    setVisible(false);
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent ActionListener) {
+                PlayingFieldPanel.zeroMarked();
+                controller.tell(new NewSizeRequest(MEDIUMSIZE, LARGESIZE, LARGEMINES), parentRef);
+                setVisible(false);
+            }
+        });
 
         panel.add(small);
         panel.add(medium);

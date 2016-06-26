@@ -40,6 +40,9 @@ import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Singleton
 public class MainController extends UntypedActor implements IMainController {
@@ -50,6 +53,8 @@ public class MainController extends UntypedActor implements IMainController {
     private boolean isStarted = false;
     private DataAccessObject database;
     private Long elapsedTime = 0L;
+    private final Set<ActorRef> subscribers = new HashSet<>();
+
 
     @Inject
     public MainController(DataAccessObject database)  {
@@ -104,14 +109,20 @@ public class MainController extends UntypedActor implements IMainController {
             getContext().parent().tell(new StatisticResponse(statistic), self());
             return;
         }
-        if(message instanceof UpdateRequest)    {
-            fieldController.tell(new FieldRequest(), self());
-            return;
+        if (message instanceof RegisterRequest) {
+            subscribers.add(getSender());
+            fieldController.tell(new FieldRequest(getSender()), self());
         }
         if(message instanceof FieldResponse)    {
             FieldResponse response = (FieldResponse)message;
-            getContext().parent().tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
-            return;
+            if (response.getTarget() == null) {
+                // Broadcast
+                for (ActorRef target: subscribers) {
+                    target.tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
+                }
+            } else {
+                response.getTarget().tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
+            }
         }
         if(message instanceof RevealCellResponse)  {
             handleRevealCellResponse((RevealCellResponse)message);
@@ -198,7 +209,10 @@ public class MainController extends UntypedActor implements IMainController {
                 statistic.updateStatistic(true, elapsedTime);
             }
         }
-        getContext().parent().tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
+        // Broadcast
+        for (ActorRef target: subscribers) {
+            target.tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
+        }
     }
 
     private void startTimer() {

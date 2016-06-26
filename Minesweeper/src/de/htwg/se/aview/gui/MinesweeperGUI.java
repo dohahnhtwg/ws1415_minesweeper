@@ -21,57 +21,60 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
+import akka.actor.ActorRef;
+import akka.actor.UntypedActor;
 import com.google.inject.Inject;
 
-import de.htwg.se.controller.IMainController;
-import de.htwg.se.util.observer.Event;
-import de.htwg.se.util.observer.IObserver;
+import de.htwg.se.aview.messages.*;
+import de.htwg.se.controller.messages.MainController.FieldResponse;
+import de.htwg.se.controller.messages.MainController.FinishGameMessage;
+import de.htwg.se.controller.messages.MainController.RegisterRequest;
+import de.htwg.se.controller.messages.RevealCellResponse;
+import de.htwg.se.model.IField;
 
-public final class MinesweeperGUI extends JFrame implements IObserver {
+import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+
+public final class MinesweeperGUI extends UntypedActor {
     private static final long serialVersionUID = 1L;
-
-    private IMainController controller;
+    private ActorRef controller;
     private JPanel mainPanel;
     private JPanel sidePanel1, sidePanel2;
-    private JMenuBar menu;
+    private MinesweeperMenuBar menu;
     private BottomInfoPanel bip;
     private PlayingFieldPanel field;
+    private JFrame window = new JFrame("Minesweeper");
+
 
     @Inject
-    public MinesweeperGUI(final IMainController controller) {
+    public MinesweeperGUI(final ActorRef controller) {
         this.controller = controller;
-        new JFrame("Minesweeper");
+        window.setLocationByPlatform(true);
+        window.setResizable(false);
         mainPanel = new JPanel(new BorderLayout());
-        setLocationByPlatform(true);
-        setContentPane(mainPanel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        constructMinesweeperGUI(controller);
-        this.update(new Event() {
-        });
+        window.setContentPane(mainPanel);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            Logger.getLogger(MinesweeperGUI.class.getName()).log(Level.SEVERE, null, e);
+        }
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                controller.finishGame();
+                controller.tell(new FinishGameMessage(), self());
             }
         });
-        UpdaterThread updaterThread = new UpdaterThread(controller);
-        updaterThread.run();
+        controller.tell(new RegisterRequest(), self());
     }
 
-    public void constructMinesweeperGUI(final IMainController controller) {
-        int x = controller.getPlayingField().getLines();
-        int y = controller.getPlayingField().getColumns();
+    private void constructMinesweeperGUI(final ActorRef controller, IField playingField) {
         if (menu != null) {
             mainPanel.remove(menu);
         }
-        menu = new MinesweeperMenuBar(controller);
+
+        menu = new MinesweeperMenuBar(controller, self());
         mainPanel.add(menu, BorderLayout.NORTH);
         if (sidePanel1 != null) {
             mainPanel.remove(sidePanel1);
@@ -86,42 +89,62 @@ public final class MinesweeperGUI extends JFrame implements IObserver {
         if (field != null) {
             mainPanel.remove(field);
         }
-        field = new PlayingFieldPanel(x, y, controller);
+        field = new PlayingFieldPanel(playingField, controller, self());
         mainPanel.add(field, BorderLayout.CENTER);
         if (bip != null) {
             mainPanel.remove(bip);
         }
-        bip = new BottomInfoPanel(controller);
+        bip = new BottomInfoPanel();
         mainPanel.add(bip, BorderLayout.SOUTH);
-        setResizable(false);
-        setVisible(true); 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException
-                | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            Logger.getLogger(MinesweeperGUI.class.getName()).log(Level.SEVERE, null, e);
-        }
-        pack();
-        repaint();
+        window.setVisible(true);
+        window.pack();
+        window.repaint();
     }
 
+    private void update(UpdateMessage msg) {
+        constructMinesweeperGUI(controller, msg.getField());
+        window.repaint();
+        if(msg.getField().isVictory())  {
+            action("Congratulation, You won the game!", msg.getCurrentTime());
+            PlayingFieldPanel.zeroMarked();
+        }
+        if(msg.getField().isGameOver())   {
+            action("GAME OVER!!!", msg.getCurrentTime());
+            PlayingFieldPanel.zeroMarked();
+        }
+    }
+
+    private void action(final String text, Long time) {
+        JOptionPane.showMessageDialog(window, text + "\nTime: " + time + " Seconds",
+                "Game ended", JOptionPane.INFORMATION_MESSAGE);
+    }
 
     @Override
-    public void update(final Event e) {
-        constructMinesweeperGUI(controller);
-        repaint();
-        if (controller.isVictory()) {
-            action("Congratulation! You win the game!");
-            PlayingFieldPanel.zeroMarked();
+    public void onReceive(Object message) throws Exception {
+        if (message instanceof FieldResponse) {
+            constructMinesweeperGUI(controller, ((FieldResponse) message).getField());
+            UpdaterThread updaterThread = new UpdaterThread(controller, self());
+            updaterThread.run();
         }
-        if (controller.isGameOver()) {
-            action("GAME OVER!!!");
-            PlayingFieldPanel.zeroMarked();
+        if (message instanceof UpdateMessage) {
+            update((UpdateMessage) message);
+            bip.setCounterText(String.valueOf(((UpdateMessage) message).getField().getnMines()));
         }
-    }
-
-    private void action(final String text) {
-        JOptionPane.showMessageDialog(null, text + "\nTime: " + controller.getCurrentTime() + " Seconds",
-                "Game ended", JOptionPane.INFORMATION_MESSAGE);
+        if (message instanceof RevealCellResponse) {
+            field.updateField(((RevealCellResponse) message).getField());
+        }
+        if (message instanceof TimeResponse) {
+            bip.setTimer(((TimeResponse) message).getCurrentTime());
+        }
+        if (message instanceof StatisticResponse) {
+            menu.showStatisticPopup((StatisticResponse) message);
+        }
+        if (message instanceof LoginResponse) {
+            menu.handleLoginResponse((LoginResponse) message);
+        }
+        if (message instanceof NewAccountResponse) {
+            menu.handleNewAccountResponse((NewAccountResponse) message);
+        }
+        unhandled(message);
     }
 }

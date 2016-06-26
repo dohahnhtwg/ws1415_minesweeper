@@ -1,5 +1,6 @@
 package de.htwg.se.controller.impl;
 
+import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import de.htwg.se.controller.RevealFieldCommand;
 import de.htwg.se.controller.messages.*;
@@ -15,10 +16,8 @@ import de.htwg.se.model.impl.Field;
 
 import javax.swing.undo.UndoManager;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 class FieldController extends UntypedActor {
 
@@ -38,7 +37,8 @@ class FieldController extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         if(message instanceof FieldRequest) {
-            getSender().tell(new FieldResponse(field), self());
+            ActorRef target = ((FieldRequest) message).getTarget();
+            getSender().tell(new FieldResponse(field, target), self());
             return;
         }
         if(message instanceof RestartRequest)   {
@@ -65,6 +65,9 @@ class FieldController extends UntypedActor {
         }
         if(message instanceof NewFieldMessage)  {
             this.field = ((NewFieldMessage)message).getField();
+            if (this.field.getPlayingField() == null) {
+                create(DEFDIMENS, DEFDIMENS, DEFNMINES);
+            }
         }
         unhandled(message);
     }

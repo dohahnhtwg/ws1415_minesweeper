@@ -37,7 +37,6 @@ public final class Constants {
     public static final int MEDIUMSIZE = 16;
     public static final int MEDIUMMINES = 40;
     public static final int ONE = 1;
-    public static final int SLEEP_TIME = 999;
     public static final int SMALLSIZE = 9;
     public static final int SMALLMINES = 10;
     public static final int TWO = 2;
@@ -45,34 +44,41 @@ public final class Constants {
     public static final int ZERO = 0;
     public static final int BOUNDS = 300;
     private static ImageIcon[] icons = null;
-    private Constants() {
+    private static ImageIcon mineIcon;
+    private static String[] imgPaths = {
+            "/images/flag.png",
+            "/images/question_mark.png",
+            null};
 
-    }
-    public static ImageIcon getIcon(int index) {
-        String[] imgPaths = {
-                "/images/flag.png",
-                "/images/question_mark.png",
-                "/images/Empty_Icon.png"};
-        if (icons == null) {
-            icons = new ImageIcon[imgPaths.length];
-            for (int i= 0; i < imgPaths.length; i++) {
-                ImageIcon icon = new ImageIcon(Constants.class.getResource(imgPaths[i]));
-                Image img = icon.getImage();
-                Image newimg = img.getScaledInstance(Constants.DEFBUTTONSIZE - 10,
-                        Constants.DEFBUTTONSIZE - 10,
-                        SCALE_SMOOTH);
-                icons[i] = new ImageIcon(newimg);
-            }
+    private Constants() {}
+
+    static {
+        icons = new ImageIcon[imgPaths.length];
+        for (int i= 0; i < imgPaths.length - 1; i++) {
+            ImageIcon icon = new ImageIcon(Constants.class.getResource(imgPaths[i]));
+            Image img = icon.getImage();
+            Image newimg = img.getScaledInstance(Constants.DEFBUTTONSIZE - 10,
+                    Constants.DEFBUTTONSIZE - 10,
+                    SCALE_SMOOTH);
+            icons[i] = new ImageIcon(newimg);
         }
-        return Constants.icons[index % imgPaths.length];
-    }
 
-    public static ImageIcon getMineIcon() {
         ImageIcon icon = new ImageIcon(Constants.class.getResource("/images/minesweepericon.png"));
         Image img = icon.getImage();
         Image newimg = img.getScaledInstance(Constants.DEFBUTTONSIZE - 10,
                 Constants.DEFBUTTONSIZE - 10,
                 SCALE_SMOOTH);
-        return new ImageIcon(newimg);
+        mineIcon = new ImageIcon(newimg);
+    }
+
+    static ImageIcon getIcon(int index) {
+        if (index == imgPaths.length) {
+            return null;
+        }
+        return Constants.icons[index % imgPaths.length];
+    }
+
+    static ImageIcon getMineIcon() {
+        return mineIcon;
     }
 }
