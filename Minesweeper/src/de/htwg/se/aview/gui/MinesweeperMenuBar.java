@@ -37,11 +37,11 @@ import de.htwg.se.model.IStatistic;
 class MinesweeperMenuBar extends JMenuBar {
     private static final long serialVersionUID = 1L;
     private JLabel loginStatus;
-    private JButton loginButton;
     private ActorRef controller;
     private ActorRef parent;
     private JFrame loginFrame;
     private String loginName = "";
+    private JButton login;
 
     MinesweeperMenuBar(final ActorRef controller, final ActorRef parent) {
         super();
@@ -84,7 +84,7 @@ class MinesweeperMenuBar extends JMenuBar {
         add(fileMenu);
         add(helpMenu);
         this.loginStatus = new JLabel("");
-        JButton login = new JButton("Login");
+        login = new JButton("Login");
         add(Box.createHorizontalGlue());
         add(this.loginStatus);
         add(login);
@@ -92,7 +92,12 @@ class MinesweeperMenuBar extends JMenuBar {
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginFrame.setVisible(true);
+                if (login.getText().equals("Logout")) {
+                    controller.tell(new LoginRequest("Default", "Default"), parent);
+                    loginName = "";
+                } else {
+                    loginFrame.setVisible(true);
+                }
             }
         });
         undo.addActionListener(new ActionListener() {
@@ -168,18 +173,18 @@ class MinesweeperMenuBar extends JMenuBar {
         IStatistic stat = statistic.getStatistic();
         int games = stat.getGamesPlayed();
         int wins = stat.getGamesWon();
-        String playedTime = stat.getTimeSpent() == 0 ? "-" :
+        String playedTime = stat.getTimeSpent() == 0 ? "0" :
                 String.valueOf(stat.getTimeSpent() / 1000) + "s";
         String minTimePlayed = stat.getMinTime() == Long.MAX_VALUE ? "-" :
-                String.valueOf(stat.getMinTime() / 1000);
-        double percentage = (games != 0) ? (wins * Constants.DEF_BUT_SIZEX/(games)) : 0;
+                String.valueOf(stat.getMinTime() / 1000) + "s";
+        double percentage = games != 0 ? (wins * Constants.DEF_BUT_SIZEX / games) : 0;
         JOptionPane.showMessageDialog(null,
                 "<html><body><table style='width:100%'>" +
                         "<tr><td>Played Time:</td><td>" + playedTime + "</td></tr>" +
-                        "<tr><td>Fastest win:</td><td>" + minTimePlayed + "s</td></tr>" +
+                        "<tr><td>Fastest win:</td><td>" + minTimePlayed + "</td></tr>" +
                         "<tr><td>Played Games:</td><td>" + games + "</td></tr>" +
                         "<tr><td>Wins:</td><td>" + wins + "</td></tr>" +
-                        "<tr><td>Percentage:</td><td>" + percentage + "%</td></tr>" +
+                        "<tr><td>Win percentage:</td><td>" + percentage + "%</td></tr>" +
                         "</table></body></html>",
                 "Statistic", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -203,7 +208,7 @@ class MinesweeperMenuBar extends JMenuBar {
         passwordText.setBounds(100, 40, 160, 25);
         panel.add(passwordText);
 
-        loginButton = new JButton("Login");
+        JButton loginButton = new JButton("Login");
         loginButton.setBounds(10, 80, 80, 25);
         panel.add(loginButton);
 
@@ -216,6 +221,7 @@ class MinesweeperMenuBar extends JMenuBar {
             public void actionPerformed(ActionEvent e) {
                 loginName = userText.getText();
                 char[] password = passwordText.getPassword();
+                passwordText.setText("");
                 if (loginName.length() == 0 || password.length == 0) {
                     JOptionPane.showMessageDialog(frame, "Login and password can not be empty",
                             "Login", JOptionPane.ERROR_MESSAGE);
@@ -223,6 +229,7 @@ class MinesweeperMenuBar extends JMenuBar {
                 }
                 controller.tell(new LoginRequest(loginName, String.valueOf(password)), parent);
                 Arrays.fill(password, '0');
+                loginFrame.setVisible(false);
             }
         });
         registerButton.addActionListener(new ActionListener() {
@@ -243,13 +250,17 @@ class MinesweeperMenuBar extends JMenuBar {
 
     public void handleLoginResponse(LoginResponse loginResponse) {
         if (loginResponse.isSuccess()) {
-            loginStatus.setText("<html><body>Logged in as <b style=\"color:red\">" + loginName + "</b></body></html>");
-            loginButton.setText("Logout");
+            if (loginName.equals("")) {
+                login.setText("Login");
+                loginStatus.setText("");
+            } else {
+                login.setText("Logout");
+                loginStatus.setText("<html><body>Logged in as <b style=\"color:red\">" + loginName + "</b></body></html>");
+            }
         } else {
             JOptionPane.showMessageDialog(loginFrame, "Wrong username or password",
                     "Login", JOptionPane.WARNING_MESSAGE);
         }
-        loginFrame.setVisible(false);
     }
 
     public void handleNewAccountResponse(NewAccountResponse newAccountResponse) {
@@ -260,7 +271,6 @@ class MinesweeperMenuBar extends JMenuBar {
             JOptionPane.showMessageDialog(loginFrame, "Registration failed. User already exists or wrong input data",
                     "Registration", JOptionPane.WARNING_MESSAGE);
         }
-        loginFrame.setVisible(false);
     }
 
     private void createLoginFrame() {

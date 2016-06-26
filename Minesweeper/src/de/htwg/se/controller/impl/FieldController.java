@@ -41,7 +41,7 @@ class FieldController extends UntypedActor {
             getSender().tell(new FieldResponse(field, target), self());
             return;
         }
-        if(message instanceof RestartRequest)   {
+        if(message instanceof RestartRequest) {
             restart();
             getSender().tell(new FieldResponse(field), self());
             return;
@@ -51,19 +51,19 @@ class FieldController extends UntypedActor {
             create(request.getLines(), request.getColumns(), request.getnMines());
             getSender().tell(new FieldResponse(field), self());
         }
-        if(message instanceof RedoRequest)  {
+        if(message instanceof RedoRequest) {
             redo();
             getSender().tell(new FieldResponse(field), self());
         }
-        if(message instanceof UndoRequest)  {
+        if(message instanceof UndoRequest) {
             undo();
             getSender().tell(new FieldResponse(field), self());
         }
-        if(message instanceof RevealCellRequest)   {
+        if(message instanceof RevealCellRequest) {
             revealCell((RevealCellRequest)message);
             getSender().tell(new RevealCellResponse(field), self());
         }
-        if(message instanceof NewFieldMessage)  {
+        if(message instanceof NewFieldMessage) {
             this.field = ((NewFieldMessage)message).getField();
             if (this.field.getPlayingField() == null) {
                 create(DEFDIMENS, DEFDIMENS, DEFNMINES);

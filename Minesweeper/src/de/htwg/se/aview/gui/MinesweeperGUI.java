@@ -40,27 +40,43 @@ public final class MinesweeperGUI extends UntypedActor {
     private static final long serialVersionUID = 1L;
     private ActorRef controller;
     private JPanel mainPanel;
-    private JPanel sidePanel1, sidePanel2;
     private MinesweeperMenuBar menu;
     private BottomInfoPanel bip;
     private PlayingFieldPanel field;
-    private JFrame window = new JFrame("Minesweeper");
-
+    private Thread timer;
+    private JFrame window;
 
     @Inject
     public MinesweeperGUI(final ActorRef controller) {
         this.controller = controller;
-        window.setLocationByPlatform(true);
-        window.setResizable(false);
-        mainPanel = new JPanel(new BorderLayout());
-        window.setContentPane(mainPanel);
-        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException
                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
             Logger.getLogger(MinesweeperGUI.class.getName()).log(Level.SEVERE, null, e);
         }
+        window = new JFrame("Minesweeper");
+        window.setLocationByPlatform(true);
+        window.setResizable(false);
+        mainPanel = new JPanel(new BorderLayout());
+        window.setContentPane(mainPanel);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+
+        menu = new MinesweeperMenuBar(controller, self());
+        mainPanel.add(menu, BorderLayout.NORTH);
+        JPanel sidePanel1 = new JPanel();
+        mainPanel.add(sidePanel1, BorderLayout.EAST);
+        JPanel sidePanel2 = new JPanel();
+        mainPanel.add(sidePanel2, BorderLayout.WEST);
+        bip = new BottomInfoPanel();
+        mainPanel.add(bip, BorderLayout.SOUTH);
+
+        if (timer != null) {
+            timer.interrupt();
+        }
+        timer = new Thread(new UpdaterThread(controller, self()));
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 controller.tell(new FinishGameMessage(), self());
@@ -70,32 +86,13 @@ public final class MinesweeperGUI extends UntypedActor {
     }
 
     private void constructMinesweeperGUI(final ActorRef controller, IField playingField) {
-        if (menu != null) {
-            mainPanel.remove(menu);
-        }
 
-        menu = new MinesweeperMenuBar(controller, self());
-        mainPanel.add(menu, BorderLayout.NORTH);
-        if (sidePanel1 != null) {
-            mainPanel.remove(sidePanel1);
-        }
-        sidePanel1 = new JPanel();
-        mainPanel.add(sidePanel1, BorderLayout.EAST);
-        if (sidePanel2 != null) {
-            mainPanel.remove(sidePanel2);
-        }
-        sidePanel2 = new JPanel();
-        mainPanel.add(sidePanel2, BorderLayout.WEST);
         if (field != null) {
             mainPanel.remove(field);
         }
         field = new PlayingFieldPanel(playingField, controller, self());
         mainPanel.add(field, BorderLayout.CENTER);
-        if (bip != null) {
-            mainPanel.remove(bip);
-        }
-        bip = new BottomInfoPanel();
-        mainPanel.add(bip, BorderLayout.SOUTH);
+
         window.setVisible(true);
         window.pack();
         window.repaint();
@@ -103,14 +100,15 @@ public final class MinesweeperGUI extends UntypedActor {
 
     private void update(UpdateMessage msg) {
         constructMinesweeperGUI(controller, msg.getField());
-        window.repaint();
         if(msg.getField().isVictory())  {
             action("Congratulation, You won the game!", msg.getCurrentTime());
             PlayingFieldPanel.zeroMarked();
+            timer.interrupt();
         }
         if(msg.getField().isGameOver())   {
             action("GAME OVER!!!", msg.getCurrentTime());
             PlayingFieldPanel.zeroMarked();
+            timer.interrupt();
         }
     }
 
@@ -123,12 +121,14 @@ public final class MinesweeperGUI extends UntypedActor {
     public void onReceive(Object message) throws Exception {
         if (message instanceof FieldResponse) {
             constructMinesweeperGUI(controller, ((FieldResponse) message).getField());
-            UpdaterThread updaterThread = new UpdaterThread(controller, self());
-            updaterThread.run();
         }
         if (message instanceof UpdateMessage) {
             update((UpdateMessage) message);
             bip.setCounterText(String.valueOf(((UpdateMessage) message).getField().getnMines()));
+            bip.setTimer(((UpdateMessage) message).getCurrentTime());
+            if (!timer.isAlive()) {
+                timer.start();
+            }
         }
         if (message instanceof RevealCellResponse) {
             field.updateField(((RevealCellResponse) message).getField());

@@ -21,6 +21,7 @@ import java.util.Scanner;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import com.google.inject.Inject;
+import de.htwg.se.aview.gui.Constants;
 import de.htwg.se.aview.messages.*;
 import de.htwg.se.controller.messages.MainController.*;
 import de.htwg.se.minesweeper.messages.TerminateRequest;
@@ -114,16 +115,21 @@ public class Tui extends UntypedActor {
         } else if ("s".equals(next)) {
             controller.tell(new StatisticRequest(), self());
         } else if(!handlerNew.handleRequest(next, controller, self()))  {
-            LOGGER.info("illegal argument");
+            LOGGER.info("illegal argument '" + next + "'");
         }
         return proceed;
     }
 
     private void printStatistic(IStatistic s) {
-        LOGGER.info("Number of all played games: " + s.getGamesPlayed());
-        LOGGER.info("Number of won games: " + s.getGamesWon());
-        LOGGER.info("Amount of played time: " + s.getTimeSpent());
-        LOGGER.info("Minimal time spent for a game: " + s.getMinTime());
+        int games = s.getGamesPlayed();
+        int wins = s.getGamesWon();
+        LOGGER.info("Number of all played games: " + games);
+        LOGGER.info("Number of won games: " + wins);
+        LOGGER.info("Amount of played time: " + (s.getTimeSpent() == 0 ? "0" :
+                String.valueOf(s.getTimeSpent() / 1000) + "s"));
+        LOGGER.info("Minimal time spent for a game: " + (s.getMinTime() == Long.MAX_VALUE ? "-" :
+                String.valueOf(s.getMinTime() / 1000) + "s"));
+        LOGGER.info("Win percentage: " + (games != 0 ? (wins * Constants.DEF_BUT_SIZEX / games) : 0) + "%");
     }
 
     private void startLoginSequence() {

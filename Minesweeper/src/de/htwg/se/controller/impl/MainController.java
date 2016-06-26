@@ -104,7 +104,9 @@ public class MainController extends UntypedActor {
             return;
         }
         if(message instanceof StatisticRequest) {
-            getContext().parent().tell(new StatisticResponse(statistic), self());
+            for (ActorRef target: subscribers) {
+                target.tell(new StatisticResponse(statistic), self());
+            }
             return;
         }
         if (message instanceof RegisterRequest) {
@@ -114,7 +116,6 @@ public class MainController extends UntypedActor {
         if(message instanceof FieldResponse) {
             FieldResponse response = (FieldResponse)message;
             if (response.getTarget() == null) {
-                // Broadcast
                 for (ActorRef target: subscribers) {
                     target.tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
                 }
@@ -126,8 +127,8 @@ public class MainController extends UntypedActor {
             handleRevealCellResponse((RevealCellResponse)message);
             return;
         }
-        if(message instanceof TimeResponse) {
-            getContext().parent().tell(new TimeResponse(getCurrentTime()), self());
+        if(message instanceof TimeRequest) {
+            sender().tell(new TimeResponse(getCurrentTime()), self());
             return;
         }
         unhandled(message);
@@ -140,19 +141,21 @@ public class MainController extends UntypedActor {
     private void logIn(LoginRequest msg) {
         IUser userFromDb = database.read(msg.getUsername());
         if(userFromDb == null) {
-            getContext().parent().tell(new LoginResponse(false), self());
+            sender().tell(new LoginResponse(false), self());
         } else {
             user = userFromDb;
             fieldController.tell(new NewFieldMessage(userFromDb.getPlayingField()), self());
             statistic = userFromDb.getStatistic();
-            getContext().parent().tell(new LoginResponse(true), self());
+            for (ActorRef target: subscribers) {
+                target.tell(new LoginResponse(true), self());
+            }
             fieldController.tell(new FieldRequest(), self());
         }
     }
 
     private void addNewAccount(NewAccountRequest msg) {
         if (msg.getUsername().isEmpty() || msg.getPassword().isEmpty()) {
-            getContext().parent().tell(new NewAccountResponse(false), self());
+            sender().tell(new NewAccountResponse(false), self());
         } else {
             Timeout timeout = new Timeout(Duration.create(5, "seconds"));
             Future<Object> future = Patterns.ask(fieldController, new CreateRequest(9, 9, 10), timeout);
@@ -160,10 +163,14 @@ public class MainController extends UntypedActor {
                 FieldResponse result = (FieldResponse) Await.result(future, timeout.duration());
                 IUser userForDb = new User(msg.getUsername(), msg.getPassword(), result.getField());
                 if(database.contains(userForDb)) {
-                    getContext().parent().tell(new NewAccountResponse(false), self());
+                    for (ActorRef target: subscribers) {
+                        target.tell(new NewAccountResponse(false), self());
+                    }
                 } else {
                     database.create(userForDb);
-                    getContext().parent().tell(new NewAccountResponse(true), self());
+                    for (ActorRef target: subscribers) {
+                        target.tell(new NewAccountResponse(true), self());
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -204,7 +211,6 @@ public class MainController extends UntypedActor {
                 statistic.updateStatistic(true, elapsedTime);
             }
         }
-        // Broadcast
         for (ActorRef target: subscribers) {
             target.tell(new UpdateMessage(response.getField(), getCurrentTime()), self());
         }
