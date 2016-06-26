@@ -11,7 +11,9 @@ CREATE TABLE fieldtest (
   fieldid VARCHAR(50) PRIMARY KEY NOT NULL,
   nmines INT(6),
   nlines INT(6),
-  ncolumns INT(6)
+  ncolumns INT(6),
+  isgameover TINYINT(1) DEFAULT '0',
+  isvictory TINYINT(1) DEFAULT '0'
 );
 
 CREATE TABLE statistictest (

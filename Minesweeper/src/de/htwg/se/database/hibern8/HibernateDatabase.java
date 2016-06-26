@@ -147,19 +147,21 @@ public class HibernateDatabase implements DataAccessObject{
         ICell cell;
         HibernateCell hCell;
         // Cell data
-        for (int i = 0; i < lines + BORDER; i++) {
-            for (int j = 0; j < columns + BORDER; j++) {
-                cell = field.getPlayingField()[i][j];
-                hCell = new HibernateCell(
-                        cell.getId(),
-                        cell.getValue(),
-                        cell.isRevealed() ? 1 : 0,
-                        i * 100 + j,
-                        hibernateField.getFieldid(),
-                        hibernateField
-                );
-                hibernateField.getCells().add(hCell);
-                session.saveOrUpdate(hCell);
+        if (field.getPlayingField() != null) {
+            for (int i = 0; i < lines + BORDER; i++) {
+                for (int j = 0; j < columns + BORDER; j++) {
+                    cell = field.getPlayingField()[i][j];
+                    hCell = new HibernateCell(
+                            cell.getId(),
+                            cell.getValue(),
+                            cell.isRevealed() ? 1 : 0,
+                            i * 100 + j,
+                            hibernateField.getFieldid(),
+                            hibernateField
+                    );
+                    hibernateField.getCells().add(hCell);
+                    session.saveOrUpdate(hCell);
+                }
             }
         }
         session.saveOrUpdate(hibernateField);
