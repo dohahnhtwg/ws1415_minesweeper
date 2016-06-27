@@ -33,6 +33,7 @@ import de.htwg.se.controller.messages.MainController.*;
 import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
+import de.htwg.se.model.impl.Field;
 import de.htwg.se.model.impl.User;
 import de.htwg.se.net.ApacheHttpClientPost;
 import de.htwg.se.net.Highscore;
@@ -162,6 +163,7 @@ public class MainController extends UntypedActor {
             sender().tell(new NewAccountResponse(false), self());
         } else {
             Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+            fieldController.tell(new NewFieldMessage(new Field()), self());
             Future<Object> future = Patterns.ask(fieldController, new CreateRequest(9, 9, 10), timeout);
             try {
                 FieldResponse result = (FieldResponse) Await.result(future, timeout.duration());
