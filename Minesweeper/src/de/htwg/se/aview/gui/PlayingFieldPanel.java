@@ -148,4 +148,29 @@ public final class PlayingFieldPanel extends JPanel {
             }
         }
     }
+
+    void revealField() {
+        int x = playingField.getLines();
+        int y = playingField.getColumns();
+        ICell cell;
+        String value;
+        for (int i = ZERO; i < x; i++) {
+            for (int j = ZERO; j < y; j++) {
+                cell = playingField.getPlayingField()[i + ONE][j + ONE];
+                value = cell.toString();
+                buttons[i][j].setEnabled(true);
+                if (value.equals("  * ")) {
+                    buttons[i][j].setIcon(Constants.getExplodedMineIcon());
+                } else if (cell.getValue() == -1) {
+                    if (buttons[i][j].getIcon() != null) {
+                        continue;
+                    }
+                    buttons[i][j].setIcon(Constants.getMineIcon());
+                } else {
+                    buttons[i][j].setEnabled(false);
+                    buttons[i][j].setText(String.valueOf(cell.getValue() != 0 ? cell.getValue() : "" ));
+                }
+            }
+        }
+    }
 }

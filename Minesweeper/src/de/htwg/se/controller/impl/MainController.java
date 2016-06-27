@@ -34,6 +34,8 @@ import de.htwg.se.database.DataAccessObject;
 import de.htwg.se.model.IStatistic;
 import de.htwg.se.model.IUser;
 import de.htwg.se.model.impl.User;
+import de.htwg.se.net.ApacheHttpClientPost;
+import de.htwg.se.net.Highscore;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -45,6 +47,7 @@ import java.util.Set;
 @Singleton
 public class MainController extends UntypedActor {
 
+    private final ApacheHttpClientPost restClient;
     private ActorRef fieldController;
     private IUser user;
     private IStatistic statistic;
@@ -66,6 +69,7 @@ public class MainController extends UntypedActor {
         this.fieldController = getContext().actorOf(Props.create(FieldController.class), "fieldController");
         fieldController.tell(new NewFieldMessage(this.user.getPlayingField()), self());
         this.statistic = this.user.getStatistic();
+        this.restClient = new ApacheHttpClientPost();
     }
 
     @Override
@@ -202,13 +206,17 @@ public class MainController extends UntypedActor {
     }
 
     private void handleRevealCellResponse(RevealCellResponse response) {
-        if(response.getField().isGameOver()) {
+        if(response.getField().isGameOver() || response.getField().isVictory()) {
             stopTimer();
-            statistic.updateStatistic(false, elapsedTime);
-        } else {
-            if(response.getField().isVictory())  {
-                stopTimer();
-                statistic.updateStatistic(true, elapsedTime);
+            statistic.updateStatistic(response.getField().isVictory(), elapsedTime);
+            if (statistic.getMinTime() < Long.MAX_VALUE && response.getField().isVictory()) {
+
+                Highscore highscore = new Highscore(
+                        "Minesweeper",
+                        user.getName(),
+                        String.valueOf((1000 - statistic.getMinTime() / 1000) * response.getField().getnMines())
+                );
+                restClient.post(highscore);
             }
         }
         for (ActorRef target: subscribers) {

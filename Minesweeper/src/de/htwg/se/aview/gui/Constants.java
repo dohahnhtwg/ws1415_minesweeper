@@ -45,6 +45,7 @@ public final class Constants {
     public static final int BOUNDS = 300;
     private static ImageIcon[] icons = null;
     private static ImageIcon mineIcon;
+    private static ImageIcon exploded_mineIcon;
     private static String[] imgPaths = {
             "/images/flag.png",
             "/images/question_mark.png",
@@ -69,6 +70,13 @@ public final class Constants {
                 Constants.DEFBUTTONSIZE - 10,
                 SCALE_SMOOTH);
         mineIcon = new ImageIcon(newimg);
+
+        icon = new ImageIcon(Constants.class.getResource("/images/minesweepericon_exploded.png"));
+        img = icon.getImage();
+        newimg = img.getScaledInstance(Constants.DEFBUTTONSIZE - 10,
+                Constants.DEFBUTTONSIZE - 10,
+                SCALE_SMOOTH);
+        exploded_mineIcon = new ImageIcon(newimg);
     }
 
     static ImageIcon getIcon(int index) {
@@ -80,5 +88,9 @@ public final class Constants {
 
     static ImageIcon getMineIcon() {
         return mineIcon;
+    }
+
+    public static ImageIcon getExplodedMineIcon() {
+        return exploded_mineIcon;
     }
 }

@@ -23,7 +23,7 @@ public class UpdaterThread implements Runnable {
             try {
                 Thread.sleep(300);
             } catch (InterruptedException exc) {
-                Logger.getLogger(BottomInfoPanel.class.getName()).log(Level.OFF, null, exc);
+//                Logger.getLogger(BottomInfoPanel.class.getName()).log(Level.OFF, null, exc);
             }
         }
     }

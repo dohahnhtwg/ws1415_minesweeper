@@ -92,11 +92,25 @@
       <artifactId>akka-actor_2.11</artifactId>
       <version>2.4.6</version>
     </dependency>
-    <!-- http://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11 -->
     <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-testkit_2.11</artifactId>
       <version>2.4.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+      <version>4.4.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.2</version>
     </dependency>
   </dependencies>
 

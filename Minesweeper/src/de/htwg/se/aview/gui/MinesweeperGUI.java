@@ -104,11 +104,13 @@ public final class MinesweeperGUI extends UntypedActor {
             action("Congratulation, You won the game!", msg.getCurrentTime());
             PlayingFieldPanel.zeroMarked();
             timer.interrupt();
+            field.revealField();
         }
         if(msg.getField().isGameOver())   {
             action("GAME OVER!!!", msg.getCurrentTime());
             PlayingFieldPanel.zeroMarked();
             timer.interrupt();
+            field.revealField();
         }
     }
 
