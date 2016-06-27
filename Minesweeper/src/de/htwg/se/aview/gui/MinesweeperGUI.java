@@ -32,6 +32,7 @@ import de.htwg.se.controller.messages.MainController.FieldResponse;
 import de.htwg.se.controller.messages.MainController.FinishGameMessage;
 import de.htwg.se.controller.messages.MainController.RegisterRequest;
 import de.htwg.se.controller.messages.RevealCellResponse;
+import de.htwg.se.minesweeper.messages.TerminateRequest;
 import de.htwg.se.model.IField;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
@@ -146,6 +147,9 @@ public final class MinesweeperGUI extends UntypedActor {
         }
         if (message instanceof NewAccountResponse) {
             menu.handleNewAccountResponse((NewAccountResponse) message);
+        }
+        if(message instanceof TerminateRequest) {
+            getContext().parent().tell(message, self());
         }
         unhandled(message);
     }

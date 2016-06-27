@@ -26,6 +26,7 @@ import akka.actor.ActorRef;
 import de.htwg.se.aview.messages.LoginResponse;
 import de.htwg.se.aview.messages.NewAccountResponse;
 import de.htwg.se.aview.messages.StatisticResponse;
+import de.htwg.se.controller.messages.MainController.FinishGameMessage;
 import de.htwg.se.controller.messages.MainController.LoginRequest;
 import de.htwg.se.controller.messages.MainController.NewAccountRequest;
 import de.htwg.se.controller.messages.MainController.StatisticRequest;
@@ -123,7 +124,13 @@ class MinesweeperMenuBar extends JMenuBar {
                         "Confirm Exit",
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (n == JOptionPane.YES_OPTION) {
-                    controller.tell(new TerminateRequest(), parent);
+                    controller.tell(new FinishGameMessage(), parent);
+                    parent.tell(new TerminateRequest(), parent);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
                     System.exit(0);
                 }
             }
