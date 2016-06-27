@@ -15,9 +15,6 @@
  */
 
 package de.htwg.se.aview.tui;
-
-import java.util.Scanner;
-
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import com.google.inject.Inject;
@@ -28,18 +25,24 @@ import de.htwg.se.minesweeper.messages.TerminateRequest;
 import de.htwg.se.model.IStatistic;
 import org.apache.log4j.Logger;
 
+import static de.htwg.se.aview.tui.LoginState.*;
+import static de.htwg.se.aview.tui.LoginState.CREATE_ACCOUNT_SELECTED_USER;
+
 public class Tui extends UntypedActor {
 
     private ActorRef controller;
     private static final Logger LOGGER = Logger.getLogger("aview.TextGUI");
     private IHandler handlerNew;
-    private boolean loggedIn;
+    private LoginState loginState;
+    private String user = null;
+    private boolean inLoginSequence = false;
 
     @Inject
     public Tui(final ActorRef controller)   {
         this.controller = controller;
         createChainOfResponsibility();
         controller.tell(new RegisterRequest(), self());
+        loginState = LOGIN_SELECTED;
     }
 
     @Override
@@ -97,21 +100,19 @@ public class Tui extends UntypedActor {
         LOGGER.info("Possible commands: q = quit, n = new Game, sS = small Field, sM = medium Field, sL = Large Field, yy-xx = reveal Field, u = undo, r = redo, l = login, s = statistic");
     }
 
-    /* public because of web */
     public boolean processInputLine(String next) {
         boolean proceed = true;
-        
+        if(inLoginSequence)   {
+            startLoginSequence(next);
+            return true;
+        }
         if("q".equals(next)) {
             controller.tell(new FinishGameMessage(), self());
             proceed = false;
         } else if("l".equals(next)) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    startLoginSequence();
-                }
-            });
-            thread.start();
+            inLoginSequence = true;
+            LOGGER.info("(1) Log in");
+            LOGGER.info("(2) Create account");
         } else if ("s".equals(next)) {
             controller.tell(new StatisticRequest(), self());
         } else if(!handlerNew.handleRequest(next, controller, self()))  {
@@ -132,45 +133,76 @@ public class Tui extends UntypedActor {
         LOGGER.info("Win percentage: " + (games != 0 ? (wins * Constants.DEF_BUT_SIZEX / games) : 0) + "%");
     }
 
-    private void startLoginSequence() {
-        Scanner s = new Scanner(System.in);
-        loggedIn = false;
-        while(!loggedIn) {
-            LOGGER.info("(1) Log in");
-            LOGGER.info("(2) Create account");
-            String input = s.next();
-            if(input.equals("1")) {
-                tryToLogIn(s);
-            } else {
-                if(input.equals("2")) {
-                    startNewAccountSequence(s);
-                } else {
-                    LOGGER.info("Please enter 1 or 2");
+    private void startLoginSequence(String input) {
+        switch (loginState) {
+            case LOGIN_SELECTED:
+                switch (input) {
+                    case "1":
+                        loginState = LOG_IN_SELECTED_USER;
+                        LOGGER.info("Enter username:");
+                        break;
+                    case "2":
+                        loginState = CREATE_ACCOUNT_SELECTED_USER;
+                        LOGGER.info("Enter new username:");
+                        break;
+                    default:
+                        LOGGER.info("Please enter 1 or 2");
+                        break;
                 }
-            }
+                break;
+            case LOG_IN_SELECTED_USER:
+                tryToLogIn(input);
+                break;
+            case LOG_IN_SELECTED_PASS:
+                tryToLogIn(input);
+                break;
+            case CREATE_ACCOUNT_SELECTED_USER:
+                startNewAccountSequence(input);
+                break;
+            case CREATE_ACCOUNT_SELECTED_PASS:
+                startNewAccountSequence(input);
+                break;
+            default:
+                throw new IllegalStateException("Your LoginSequence is confused, it hurt itself in confusion");
         }
-        s.close();
     }
 
-    private void startNewAccountSequence(Scanner s) {
-        LOGGER.info("Enter new username:");
-        String username = s.next();
-        LOGGER.info("Enter new password:");
-        String password = s.next();
-        controller.tell(new NewAccountRequest(username, password), self());
+    private void startNewAccountSequence(String input) {
+        switch(loginState)  {
+            case CREATE_ACCOUNT_SELECTED_USER:
+                user = input;
+                loginState = CREATE_ACCOUNT_SELECTED_PASS;
+                LOGGER.info("Enter new password:");
+                break;
+            case CREATE_ACCOUNT_SELECTED_PASS:
+                loginState = LOGIN_SELECTED;
+                inLoginSequence = false;
+                controller.tell(new NewAccountRequest(user, input), self());
+                break;
+            default:
+                throw new IllegalStateException("Your LoginSequence is confused, it hurt itself in confusion");
+        }
     }
 
-    private void tryToLogIn(Scanner s) {
-        LOGGER.info("Enter username:");
-        String username = s.next();
-        LOGGER.info("Enter password:");
-        String password = s.next();
-        controller.tell(new LoginRequest(username, password), self());
+    private void tryToLogIn(String input) {
+        switch(loginState)  {
+            case LOG_IN_SELECTED_USER:
+                user = input;
+                loginState = LOG_IN_SELECTED_PASS;
+                LOGGER.info("Enter password:");
+                break;
+            case LOG_IN_SELECTED_PASS:
+                loginState = LOGIN_SELECTED;
+                inLoginSequence = false;
+                controller.tell(new LoginRequest(user, input), self());
+                break;
+            default:
+                throw new IllegalStateException("Your LoginSequence is confused, it hurt itself in confusion");
+        }
     }
 
     private void handleLoginResponse(LoginResponse loginResponse) {
-        loggedIn = loginResponse.isSuccess();
-        if(loggedIn) {
+        if(loginResponse.isSuccess()) {
             LOGGER.info("Successfully logged in");
         } else {
             LOGGER.info("Invalid");
